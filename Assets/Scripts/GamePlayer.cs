@@ -84,7 +84,7 @@ public class Game : MonoBehaviour
         PlayerPrefs.Save();
         backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
         screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
-        GameObject.Find("HighScoreText").GetComponent<TMP_Text>().text = $"High Score: {highscore}";
+        highScoreText.text = $"High Score: {highscore}";
         if (PlayerPrefs.GetInt("Setting2", 0) == 1)
         {
             GameObject leftArrow = new("LeftArrow");
@@ -295,16 +295,16 @@ public class Game : MonoBehaviour
             if (boostLeft > 0f)
             {
                 boostLeft -= Time.deltaTime;
-                boostText.GetComponent<TMP_Text>().text = "Boost expires in " + $"{boostLeft:0.0}" + "s";
+                boostText.text = "Boost expires in " + $"{boostLeft:0.0}" + "s";
             }
             else if (slownessLeft > 0f)
             {
                 slownessLeft -= Time.deltaTime;
-                boostText.GetComponent<TMP_Text>().text = "Slowness expires in " + $"{slownessLeft:0.0}" + "s";
+                boostText.text = "Slowness expires in " + $"{slownessLeft:0.0}" + "s";
             }
             else
             {
-                boostText.GetComponent<TMP_Text>().text = "";
+                boostText.text = "";
             }
         }
     }
