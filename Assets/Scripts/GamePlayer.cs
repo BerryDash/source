@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    public float spawnRate = 1f;
+    private float spawnRate = 1f;
     private float nextSpawnTime = 0f;
     private int score = 0;
     private int highscore = 0;
@@ -15,6 +16,9 @@ public class Game : MonoBehaviour
     private Rigidbody2D rb;
     public GameObject pausePanel;
     public AudioSource songLoop;
+    public TMP_Text scoreText;
+    public TMP_Text highScoreText;
+    public TMP_Text boostText;
 
     void Awake()
     {
@@ -27,9 +31,7 @@ public class Game : MonoBehaviour
     void Start()
     {
         screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
-
-        GameObject highScoreText = GameObject.Find("HighScoreText");
-        highScoreText.GetComponent<TextMesh>().text = $"High Score: {highscore}";
+        highScoreText.text = $"High Score: {highscore}";
 
         if (PlayerPrefs.GetInt("Setting2", 0) == 1 || Application.isMobilePlatform)
         {
@@ -245,21 +247,20 @@ public class Game : MonoBehaviour
         if (pausePanel.activeSelf) return;
         MoveBird();
         SpawnBerries();
-        GameObject boostText = GameObject.Find("BoostText");
 
         if (boostLeft > 0)
         {
             boostLeft -= Time.deltaTime;
-            boostText.GetComponent<TextMesh>().text = "Boost expires in " + string.Format("{0:0.0}", boostLeft) + "s";
+            boostText.text = "Boost expires in " + string.Format("{0:0.0}", boostLeft) + "s";
         }
         else if (slownessLeft > 0)
         {
             slownessLeft -= Time.deltaTime;
-            boostText.GetComponent<TextMesh>().text = "Slowness expires in " + string.Format("{0:0.0}", slownessLeft) + "s";
+            boostText.text = "Slowness expires in " + string.Format("{0:0.0}", slownessLeft) + "s";
         }
         else
         {
-            boostText.GetComponent<TextMesh>().text = "";
+            boostText.text = "";
         }
 
         if (Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.JoystickButton7) || Input.GetKey(KeyCode.Joystick2Button7))
@@ -470,16 +471,14 @@ public class Game : MonoBehaviour
 
     void UpdateScore(int score)
     {
-        GameObject scoreText = GameObject.Find("ScoreText");
-        GameObject highScoreText = GameObject.Find("HighScoreText");
         if (score > highscore)
         {
             highscore = score;
         }
         PlayerPrefs.SetInt("HighScore", highscore);
         PlayerPrefs.Save();
-        scoreText.GetComponent<TextMesh>().text = "Score: " + score;
-        highScoreText.GetComponent<TextMesh>().text = "High Score: " + highscore;
+        scoreText.text = "Score: " + score;
+        highScoreText.text = "High Score: " + highscore;
     }
 
     private void CheckIfGrounded()
