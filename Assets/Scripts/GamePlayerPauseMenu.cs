@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseMenu : MonoBehaviour
+public class GamePlayerPauseMenu : MonoBehaviour
 {
     public Button backButton;
     public Button continueButton;

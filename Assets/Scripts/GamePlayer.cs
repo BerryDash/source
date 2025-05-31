@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-public class Game : MonoBehaviour
+public class GamePlayer : MonoBehaviour
 {
     private readonly float spawnRate = 1f;
     private float nextSpawnTime;
