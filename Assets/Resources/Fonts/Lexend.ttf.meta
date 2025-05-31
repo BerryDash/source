@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d4131da167da9f44090ba0aeb1f474a8
+guid: 197a1c206fec1cc4bb588221f239af3e
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Roboto
+  - Lexend
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Play
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -314,8 +314,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Icons
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -339,8 +339,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -450,8 +450,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Account
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -475,8 +475,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1280,7 +1280,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 160}
-  m_SizeDelta: {x: 600, y: 150}
+  m_SizeDelta: {x: 750, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1389518478
 MonoBehaviour:
@@ -1304,8 +1304,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Berry Dash
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1329,8 +1329,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 102
-  m_fontSizeBase: 102
+  m_fontSize: 96
+  m_fontSizeBase: 96
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1440,8 +1440,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: v1.34
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1925,8 +1925,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: X
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2061,8 +2061,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Leaderboards
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2086,8 +2086,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2197,8 +2197,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
-  m_sharedMaterial: {fileID: -5627973719896557406, guid: 5f490b711f3b3c0469b482d24d4420a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
+  m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2222,8 +2222,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
