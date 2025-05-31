@@ -3,44 +3,95 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    private float spawnRate = 1f;
-    private float nextSpawnTime = 0f;
-    private int score = 0;
-    private int highscore = 0;
-    private float boostLeft = 0f;
-    private float slownessLeft = 0f;
-    private float screenWidth = 0f;
-    private bool isGrounded = false;
-    private readonly float groundYPosition = -4.1359f;
-    private GameObject bird;
-    private Rigidbody2D rb;
-    public GameObject pausePanel;
-    public AudioSource songLoop;
+    float spawnRate = 1f;
+    float nextSpawnTime;
+    int score;
+    int highscore;
+    float boostLeft;
+    float slownessLeft;
+    float screenWidth;
+    bool isGrounded;
     public TMP_Text scoreText;
     public TMP_Text highScoreText;
     public TMP_Text boostText;
+    public GameObject bird;
+    public GameObject pausePanel;
+    public Rigidbody2D rb;
+    public AudioSource backgroundMusic;
+    //public TMP_Text fpsCounter;
+    float nextUpdate;
+    float fps;
+    //public SpriteRenderer overlayRender;
 
     void Awake()
     {
-        bird = GameObject.Find("Bird");
-        rb = bird.GetComponent<Rigidbody2D>();
-
         highscore = PlayerPrefs.GetInt("HighScore", 0);
     }
 
     void Start()
     {
-        screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
-        highScoreText.text = $"High Score: {highscore}";
-
-        if (PlayerPrefs.GetInt("Setting2", 0) == 1 || Application.isMobilePlatform)
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SpriteRenderer component = bird.GetComponent<SpriteRenderer>();
+        int num = PlayerPrefs.GetInt("icon", 1);
+        int num2 = PlayerPrefs.GetInt("overlay", 1);
+        if (num == 1)
         {
-            GameObject leftArrow = new("LeftArrow");
-            GameObject rightArrow = new("RightArrow");
-            GameObject jumpArrow = new("JumpArrow");
-            GameObject restartButton = new("RestartButton");
-            GameObject backButton = new("BackButton");
-
+            if (PlayerPrefs.GetInt("userID", 0) == 1)
+            {
+                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-1");
+            }
+            else if (PlayerPrefs.GetInt("userID", 0) == 2)
+            {
+                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-2");
+            }
+            else if (PlayerPrefs.GetInt("userID", 0) == 4)
+            {
+                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-3");
+            }
+            else if (PlayerPrefs.GetInt("userID", 0) == 6)
+            {
+                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-4");
+            }
+            else
+            {
+                component.sprite = Resources.Load<Sprite>("icons/icons/bird_1");
+            }
+        }
+        else
+        {
+            component.sprite = Resources.Load<Sprite>("icons/icons/bird_" + num);
+        }
+        if (num2 == 8)
+        {
+            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_8");
+            //overlayRender.transform.localPosition = new Vector3(-0.35f, 0.3f, 0f);
+        }
+        else
+        {
+            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_" + num2);
+        }
+        if (component.sprite == null)
+        {
+            component.sprite = Resources.Load<Sprite>("icons/icons/bird_1");
+            PlayerPrefs.SetInt("icon", 1);
+        }
+        //if (overlayRender.sprite == null && num2 != 0)
+        //{
+            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_1");
+            //PlayerPrefs.SetInt("overlay", 1);
+        //}
+        PlayerPrefs.Save();
+        backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
+        screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
+        GameObject.Find("HighScoreText").GetComponent<TMP_Text>().text = $"High Score: {highscore}";
+        if (PlayerPrefs.GetInt("Setting2", 0) == 1)
+        {
+            GameObject leftArrow = new GameObject("LeftArrow");
+            GameObject rightArrow = new GameObject("RightArrow");
+            GameObject jumpArrow = new GameObject("JumpArrow");
+            GameObject restartButton = new GameObject("RestartButton");
+            GameObject backButton = new GameObject("BackButton");
             leftArrow.AddComponent<SpriteRenderer>();
             rightArrow.AddComponent<SpriteRenderer>();
             jumpArrow.AddComponent<SpriteRenderer>();
@@ -53,127 +104,120 @@ public class Game : MonoBehaviour
             restartButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Restart");
             backButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Back");
 
-            leftArrow.transform.rotation = Quaternion.Euler(0, 0, 90);
-            rightArrow.transform.rotation = Quaternion.Euler(0, 0, -90);
+            leftArrow.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            rightArrow.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
 
-            leftArrow.transform.position = new Vector3(-screenWidth / 2.5f, -4f, 0);
-            rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0);
-            restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0);
-            backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0);
+            leftArrow.transform.position = new Vector3(-screenWidth / 2.5f, -4f, 0f);
+            rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
+            restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+            backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
             if (PlayerPrefs.GetInt("Setting3", 0) == 1)
             {
-                leftArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                rightArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                jumpArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                restartButton.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                backButton.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0);
+                leftArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                rightArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                restartButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                backButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0f);
             }
             else
             {
-                leftArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                rightArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                jumpArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                restartButton.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                backButton.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0);
+                leftArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                rightArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                jumpArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                restartButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                backButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0f);
             }
         }
     }
 
     void MoveBird()
     {
-        float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+        float screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
         float baseSpeed = 0.18f * (screenWidth / 20.19257f);
         bool doMoveRight = false;
         bool doMoveLeft = false;
         bool doJump = false;
-
+        bool flag4 = false;
+        bool flag5 = false;
         float movespeed = baseSpeed;
-
-        if (boostLeft > 0)
+        if (boostLeft > 0f)
         {
             movespeed = baseSpeed * 1.39f;
         }
-        else if (slownessLeft > 0)
+        else if (slownessLeft > 0f)
         {
             movespeed = baseSpeed * 0.56f;
         }
-
         CheckIfGrounded();
-
-        float horizontalInput = Input.GetAxis("Horizontal");
-
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
         if (!Application.isMobilePlatform)
         {
-            if (horizontalInput < 0 || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            if (horizontalInput < 0f || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 doMoveLeft = true;
             }
-            if (horizontalInput > 0 || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            if (horizontalInput > 0f || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 doMoveRight = true;
             }
-            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || (Input.GetMouseButton(0) && PlayerPrefs.GetInt("Setting2", 0) == 0) || Input.GetKey(KeyCode.JoystickButton0))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || (Input.GetMouseButton(0) && PlayerPrefs.GetInt("Setting2", 0) == 0) || Input.GetKey(KeyCode.JoystickButton0))
             {
                 doJump = true;
             }
             if (Input.GetKey(KeyCode.R))
             {
-                Respawn();
+                flag5 = true;
             }
         }
-        if (PlayerPrefs.GetInt("Setting2", 0) != 0 || Application.isMobilePlatform)
+        if (PlayerPrefs.GetInt("Setting2", 0) == 1)
         {
             GameObject leftArrow = GameObject.Find("LeftArrow");
             GameObject rightArrow = GameObject.Find("RightArrow");
             GameObject jumpArrow = GameObject.Find("JumpArrow");
             GameObject restartButton = GameObject.Find("RestartButton");
             GameObject backButton = GameObject.Find("BackButton");
-
-            if (Application.isMobilePlatform)
+            if (!Application.isMobilePlatform)
             {
-                foreach (Touch touch in Input.touches)
+                if (Input.GetMouseButton(0))
                 {
-                    Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
-                    touchPosition.z = 0;
-
-                    if (touch.phase == TouchPhase.Stationary || touch.phase == TouchPhase.Moved)
+                    Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    touchPosition.z = 0f;
+                    if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                        {
-                            doMoveLeft = true;
-                        }
-                        else if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                        {
-                            doMoveRight = true;
-                        }
-                        else if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                        {
-                            doJump = true;
-                        }
+                        doMoveLeft = true;
                     }
-
-                    if (touch.phase == TouchPhase.Began)
+                    if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                        {
-                            Respawn();
-                        }
-                        else if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                        {
-                            Pause();
-                        }
+                        doMoveRight = true;
+                    }
+                    if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
+                    {
+                        doJump = true;
+                    }
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 point2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    point2.z = 0f;
+                    if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(point2))
+                    {
+                        flag5 = true;
+                    }
+                    if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(point2))
+                    {
+                        flag4 = true;
                     }
                 }
             }
             else
             {
-                if (Input.GetMouseButton(0))
+                for (int i = 0; i < Input.touchCount; i++)
                 {
-                    Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    clickPosition.z = 0;
-
+                    Touch touchPosition = Input.GetTouch(i);
+                    Vector3 clickPosition = Camera.main.ScreenToWorldPoint(touchPosition.position);
+                    clickPosition.z = 0f;
                     if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
                         doMoveLeft = true;
@@ -186,52 +230,52 @@ public class Game : MonoBehaviour
                     {
                         doJump = true;
                     }
-                }
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Vector3 clickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    clickPosition.z = 0;
-
                     if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
-                        Respawn();
+                        flag5 = true;
                     }
                     if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
-                        Pause();
+                        flag4 = true;
                     }
                 }
             }
         }
-
         if (doMoveLeft && !doMoveRight)
         {
-            bird.transform.position += new Vector3(-movespeed, 0, 0);
+            bird.transform.position += new Vector3(-movespeed, 0f, 0f);
             ClampPosition(screenWidth, bird);
             bird.transform.localScale = new Vector3(1.35f, 1.35f, 1.35f);
-            doMoveLeft = false;
         }
         if (doMoveRight && !doMoveLeft)
         {
-            bird.transform.position += new Vector3(movespeed, 0, 0);
+            bird.transform.position += new Vector3(movespeed, 0f, 0f);
             ClampPosition(screenWidth, bird);
             bird.transform.localScale = new Vector3(-1.35f, 1.35f, 1.35f);
         }
         if (doJump && isGrounded)
         {
-            if (boostLeft > 0)
+            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+            if (boostLeft > 0f)
             {
-                rb.linearVelocity = Vector2.up * 12;
+                rb.linearVelocity = Vector2.up * 12f;
             }
-            else if (slownessLeft > 0)
+            else if (slownessLeft > 0f)
             {
-                rb.linearVelocity = Vector2.up * 6;
+                rb.linearVelocity = Vector2.up * 6f;
             }
             else
             {
-                rb.linearVelocity = Vector2.up * 9;
+                rb.linearVelocity = Vector2.up * 9f;
             }
+        }
+        if (flag4)
+        {
+            TogglePause();
+        }
+        if (flag5)
+        {
+            Respawn();
         }
     }
 
@@ -244,41 +288,39 @@ public class Game : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (pausePanel.activeSelf) return;
-        MoveBird();
         SpawnBerries();
-
-        if (boostLeft > 0)
+        if (!pausePanel.activeSelf)
         {
-            boostLeft -= Time.deltaTime;
-            boostText.text = "Boost expires in " + string.Format("{0:0.0}", boostLeft) + "s";
-        }
-        else if (slownessLeft > 0)
-        {
-            slownessLeft -= Time.deltaTime;
-            boostText.text = "Slowness expires in " + string.Format("{0:0.0}", slownessLeft) + "s";
-        }
-        else
-        {
-            boostText.text = "";
-        }
-
-        if (Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.JoystickButton7) || Input.GetKey(KeyCode.Joystick2Button7))
-        {
-            Pause();
+            MoveBird();
+            if (boostLeft > 0f)
+            {
+                boostLeft -= Time.deltaTime;
+                boostText.GetComponent<TMP_Text>().text = "Boost expires in " + $"{boostLeft:0.0}" + "s";
+            }
+            else if (slownessLeft > 0f)
+            {
+                slownessLeft -= Time.deltaTime;
+                boostText.GetComponent<TMP_Text>().text = "Slowness expires in " + $"{slownessLeft:0.0}" + "s";
+            }
+            else
+            {
+                boostText.GetComponent<TMP_Text>().text = "";
+            }
         }
     }
 
     void SpawnBerries()
     {
-        if (Time.time >= nextSpawnTime)
+        if (!(Time.time >= nextSpawnTime))
         {
-            nextSpawnTime = Time.time + 1f / spawnRate;
-
-            float spawnProbability = Random.value;
+            return;
+        }
+        nextSpawnTime = Time.time + 1f / spawnRate;
+        float spawnProbability = Random.value;
+        if (!pausePanel.activeSelf)
+        {
             GameObject newBerry;
             SpriteRenderer spriteRenderer;
-
             if (spawnProbability <= 0.6f)
             {
                 newBerry = new GameObject("Berry");
@@ -307,27 +349,30 @@ public class Game : MonoBehaviour
                 spriteRenderer.sprite = Resources.Load<Sprite>("Berries/UltraBerry");
                 newBerry.tag = "UltraBerry";
             }
-
             spriteRenderer.sortingOrder = -5;
 
             float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
             float spawnPositionX = Random.Range(-screenWidth / 2.17f, screenWidth / 2.17f);
-            newBerry.transform.position = new Vector3(spawnPositionX, Camera.main.orthographicSize + 1, 0);
+            newBerry.transform.position = new Vector3(spawnPositionX, Camera.main.orthographicSize + 1f, 0f);
 
             Rigidbody2D rb = newBerry.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0;
-            rb.linearVelocity = new Vector2(0, -3);
+            rb.gravityScale = 0f;
+            rb.linearVelocity = new Vector2(0f, -4f);
         }
     }
 
     void Update()
     {
-        if (pausePanel.activeSelf) return;
-        CheckIfGrounded();
-        if (screenWidth != Camera.main.orthographicSize * 2 * Camera.main.aspect)
+        if (PlayerPrefs.GetInt("Setting4", 0) == 1 && Time.time > nextUpdate)
         {
-            screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
-            ClampPosition(screenWidth, GameObject.Find("Bird"));
+            fps = 1f / Time.deltaTime;
+            //fpsCounter.text = "FPS: " + Mathf.Round(fps);
+            nextUpdate = Time.time + 0.25f;
+        }
+        if (screenWidth != Camera.main.orthographicSize * 2f * Camera.main.aspect)
+        {
+            screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
+            ClampPosition(screenWidth, bird);
             if (PlayerPrefs.GetInt("Setting2", 0) == 1)
             {
                 GameObject leftArrow = GameObject.Find("LeftArrow");
@@ -335,28 +380,27 @@ public class Game : MonoBehaviour
                 GameObject jumpArrow = GameObject.Find("JumpArrow");
                 GameObject restartButton = GameObject.Find("RestartButton");
                 GameObject backButton = GameObject.Find("BackButton");
-
-                leftArrow.transform.position = new Vector3(-screenWidth / 2.5f, -4f, 0);
-                rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0);
-                restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0);
-                backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0);
+                leftArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
+                rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
+                restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+                backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
                 if (PlayerPrefs.GetInt("Setting3", 0) == 1)
                 {
-                    leftArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                    rightArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                    jumpArrow.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                    restartButton.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                    backButton.transform.localScale = new Vector3(screenWidth / 14, screenWidth / 14, 1);
-                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0);
+                    leftArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    rightArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    jumpArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    restartButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    backButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0f);
                 }
                 else
                 {
-                    leftArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                    rightArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                    jumpArrow.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                    restartButton.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                    backButton.transform.localScale = new Vector3(screenWidth / 20, screenWidth / 20, 1);
-                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0);
+                    leftArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    rightArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    jumpArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    restartButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    backButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0f);
                 }
             }
         }
@@ -364,88 +408,128 @@ public class Game : MonoBehaviour
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
         GameObject[] slownessberries = GameObject.FindGameObjectsWithTag("SlowBerry");
-
-        foreach (GameObject berry in berries)
+        if (!pausePanel.activeSelf)
         {
-            if (berry.transform.position.y < -Camera.main.orthographicSize - 1)
+            CheckIfGrounded();
+            GameObject[] array5 = berries;
+            foreach (GameObject berry in array5)
             {
-                Destroy(berry);
-            }
-            else if (Vector3.Distance(bird.transform.position, berry.transform.position) < 1.5f) {
-                AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Eat"), Camera.main.transform.position);
-                Destroy(berry);
-                score++;
-                UpdateScore(score);
-            }
-        }
-
-        foreach (GameObject poisonberry in poisonberries)
-        {
-            if (poisonberry.transform.position.y < -Camera.main.orthographicSize - 1)
-            {
-                Destroy(poisonberry);
-            }
-            else if (Vector3.Distance(bird.transform.position, poisonberry.transform.position) < 1.5f) {
-                AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Death"), Camera.main.transform.position);
-                Respawn();
-            }
-        }
-
-        foreach (GameObject ultraberry in ultraberries)
-        {
-            if (ultraberry.transform.position.y < -Camera.main.orthographicSize - 1)
-            {
-                Destroy(ultraberry);
-            }
-            else if (Vector3.Distance(bird.transform.position, ultraberry.transform.position) < 1.5f) {
-                AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Powerup"), Camera.main.transform.position, 0.5f);
-                Destroy(ultraberry);
-                if (slownessLeft > 0)
+                if (berry.transform.position.y < 0f - Camera.main.orthographicSize - 1f)
                 {
-                    slownessLeft = 0;
-                    score += 1;
+                    Destroy(berry);
+                }
+                else if (Vector3.Distance(bird.transform.position, berry.transform.position) < 1.5f)
+                {
+                    AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Eat"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+                    Destroy(berry);
+                    score++;
                     UpdateScore(score);
                 }
-                else
+                berry.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+            }
+            array5 = poisonberries;
+            foreach (GameObject gameObject7 in array5)
+            {
+                if (gameObject7.transform.position.y < 0f - Camera.main.orthographicSize - 1f)
                 {
-                    boostLeft += 10f;
-                    score += 5;
-                    UpdateScore(score);
+                    Destroy(gameObject7);
                 }
+                else if (Vector3.Distance(bird.transform.position, gameObject7.transform.position) < 1.5f)
+                {
+                    AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Death"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+                    Respawn();
+                }
+                gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+            }
+            array5 = ultraberries;
+            foreach (GameObject gameObject8 in array5)
+            {
+                if (gameObject8.transform.position.y < 0f - Camera.main.orthographicSize - 1f)
+                {
+                    Destroy(gameObject8);
+                }
+                else if (Vector3.Distance(bird.transform.position, gameObject8.transform.position) < 1.5f)
+                {
+                    AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Powerup"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+                    Destroy(gameObject8);
+                    if (slownessLeft > 0f)
+                    {
+                        slownessLeft = 0f;
+                        score++;
+                        UpdateScore(score);
+                    }
+                    else
+                    {
+                        boostLeft += 10f;
+                        score += 5;
+                        UpdateScore(score);
+                    }
+                }
+                gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+            }
+            array5 = slownessberries;
+            foreach (GameObject gameObject9 in array5)
+            {
+                if (gameObject9.transform.position.y < 0f - Camera.main.orthographicSize - 1f)
+                {
+                    Destroy(gameObject9);
+                }
+                else if (Vector3.Distance(bird.transform.position, gameObject9.transform.position) < 1.5f)
+                {
+                    AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Downgrade"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+                    Destroy(gameObject9);
+                    boostLeft = 0f;
+                    slownessLeft = 10f;
+                    if (score > 0)
+                    {
+                        score--;
+                        UpdateScore(score);
+                    }
+                }
+                gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
             }
         }
-
-        foreach (GameObject slownessberry in slownessberries)
+        else
         {
-            if (slownessberry.transform.position.y < -Camera.main.orthographicSize - 1)
+            rb.gravityScale = 0f;
+            rb.linearVelocity = Vector2.zero;
+            GameObject[] array5 = berries;
+            for (int i = 0; i < array5.Length; i++)
             {
-                Destroy(slownessberry);
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             }
-            else if (Vector3.Distance(bird.transform.position, slownessberry.transform.position) < 1.5f) {
-                AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Slowness"), Camera.main.transform.position, 0.5f);
-                Destroy(slownessberry);
-                boostLeft = 0f;
-                slownessLeft = 10f;
-                if (score > 0)
-                {
-                    score -= 1;
-                    UpdateScore(score);
-                }
+            array5 = poisonberries;
+            for (int i = 0; i < array5.Length; i++)
+            {
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
             }
+            array5 = ultraberries;
+            for (int i = 0; i < array5.Length; i++)
+            {
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+            array5 = slownessberries;
+            for (int i = 0; i < array5.Length; i++)
+            {
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+        }
+        if (!Application.isMobilePlatform && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7)))
+        {
+            TogglePause();
         }
     }
 
     void Respawn()
     {
-        bird.transform.position = new Vector3(0, groundYPosition, 0);
+        bird.transform.position = new Vector3(0f, -4.3f, 0f);
         bird.transform.localScale = new Vector3(1.35f, 1.35f, 1.35f);
-        rb.gravityScale = 0;
+        rb.gravityScale = 0f;
         rb.linearVelocity = Vector2.zero;
         score = 0;
-        boostLeft = 0;
-        slownessLeft = 0;
+        boostLeft = 0f;
+        slownessLeft = 0f;
         UpdateScore(score);
-
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
@@ -481,63 +565,60 @@ public class Game : MonoBehaviour
         highScoreText.text = "High Score: " + highscore;
     }
 
-    private void CheckIfGrounded()
+    void CheckIfGrounded()
     {
         GameObject jumpArrow = GameObject.Find("JumpArrow");
-        isGrounded = bird.transform.position.y <= groundYPosition + 0.05f;
+        isGrounded = bird.transform.position.y <= -4.1299996f;
 
-        rb.gravityScale = isGrounded ? 0 : 1.5f;
+        rb.gravityScale = (isGrounded ? 0f : 1.5f);
 
-        if (bird.transform.position.y < groundYPosition)
+        if (bird.transform.position.y < -4.18f)
         {
-            bird.transform.position = new Vector2(bird.transform.position.x, groundYPosition);
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+            bird.transform.position = new Vector2(bird.transform.position.x, -4.18f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         }
-
-        if (jumpArrow != null)
+        if (jumpArrow != null && jumpArrow.GetComponent<Renderer>() != null)
         {
-            Renderer jumpArrowRenderer = jumpArrow.GetComponent<Renderer>();
-            if (jumpArrowRenderer != null)
-            {
-                jumpArrowRenderer.material.color = isGrounded ? Color.white : Color.red;
-            }
+            jumpArrow.GetComponent<Renderer>().material.color = (isGrounded ? Color.white : Color.red);
         }
+    }
+
+    void TogglePause()
+    {
+        if (pausePanel.activeSelf)
+        {
+            DisablePause();
+        }
+        else
+        {
+            EnablePause();
+        }
+    }
+
+    void EnablePause()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        backgroundMusic.Pause();
+        pausePanel.SetActive(value: true);
+    }
+
+    void DisablePause()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        backgroundMusic.Play();
+        pausePanel.SetActive(value: false);
+    }
+
+    void OnApplicationPause()
+    {
+        EnablePause();
     }
 
     void OnApplicationQuit()
     {
-        PlayerPrefs.SetInt("HighScore", highscore);
-        PlayerPrefs.Save();
-    }
-
-    void Pause()
-    {
-        songLoop.Pause();
-        pausePanel.SetActive(true);
-
-        GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
-        GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
-        GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
-        GameObject[] slownessberries = GameObject.FindGameObjectsWithTag("SlowBerry");
-
-        rb.gravityScale = 0f;
-        rb.linearVelocity = Vector2.zero;
-
-        foreach (GameObject b in berries)
-        {
-            b.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-        }
-        foreach (GameObject pb in poisonberries)
-        {
-            pb.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-        }
-        foreach (GameObject ub in ultraberries)
-        {
-            ub.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-        }
-        foreach (GameObject sb in slownessberries)
-        {
-            sb.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-        }
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }
