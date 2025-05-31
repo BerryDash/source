@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-    float spawnRate = 1f;
-    float nextSpawnTime;
-    int score;
-    int highscore;
-    float boostLeft;
-    float slownessLeft;
-    float screenWidth;
-    bool isGrounded;
+    private readonly float spawnRate = 1f;
+    private float nextSpawnTime;
+    private int score;
+    private int highscore;
+    private float boostLeft;
+    private float slownessLeft;
+    private float screenWidth;
+    private bool isGrounded;
     public TMP_Text scoreText;
     public TMP_Text highScoreText;
     public TMP_Text boostText;
@@ -18,10 +18,10 @@ public class Game : MonoBehaviour
     public GameObject pausePanel;
     public Rigidbody2D rb;
     public AudioSource backgroundMusic;
-    //public TMP_Text fpsCounter;
-    float nextUpdate;
-    float fps;
-    //public SpriteRenderer overlayRender;
+    public TMP_Text fpsCounter;
+    private float nextUpdate;
+    private float fps;
+    public SpriteRenderer overlayRender;
 
     void Awake()
     {
@@ -34,64 +34,64 @@ public class Game : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         SpriteRenderer component = bird.GetComponent<SpriteRenderer>();
         int num = PlayerPrefs.GetInt("icon", 1);
-        int num2 = PlayerPrefs.GetInt("overlay", 1);
+        int num2 = PlayerPrefs.GetInt("overlay", 0);
         if (num == 1)
         {
             if (PlayerPrefs.GetInt("userID", 0) == 1)
             {
-                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-1");
+                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-1");
             }
             else if (PlayerPrefs.GetInt("userID", 0) == 2)
             {
-                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-2");
+                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-2");
             }
             else if (PlayerPrefs.GetInt("userID", 0) == 4)
             {
-                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-3");
+                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-3");
             }
             else if (PlayerPrefs.GetInt("userID", 0) == 6)
             {
-                component.sprite = Resources.Load<Sprite>("icons/icons/bird_-4");
+                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-4");
             }
             else
             {
-                component.sprite = Resources.Load<Sprite>("icons/icons/bird_1");
+                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_1");
             }
         }
         else
         {
-            component.sprite = Resources.Load<Sprite>("icons/icons/bird_" + num);
+            component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_" + num);
         }
         if (num2 == 8)
         {
-            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_8");
-            //overlayRender.transform.localPosition = new Vector3(-0.35f, 0.3f, 0f);
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_8");
+            overlayRender.transform.localPosition = new Vector3(-0.37f, 0.32f, 0f);
         }
         else
         {
-            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_" + num2);
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_" + num2);
         }
         if (component.sprite == null)
         {
-            component.sprite = Resources.Load<Sprite>("icons/icons/bird_1");
+            component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_1");
             PlayerPrefs.SetInt("icon", 1);
         }
-        //if (overlayRender.sprite == null && num2 != 0)
-        //{
-            //overlayRender.sprite = Resources.Load<Sprite>("icons/overlays/overlay_1");
-            //PlayerPrefs.SetInt("overlay", 1);
-        //}
+        if (overlayRender.sprite == null && num2 != 0)
+        {
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_1");
+            PlayerPrefs.SetInt("overlay", 1);
+        }
         PlayerPrefs.Save();
         backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
         screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
         GameObject.Find("HighScoreText").GetComponent<TMP_Text>().text = $"High Score: {highscore}";
         if (PlayerPrefs.GetInt("Setting2", 0) == 1)
         {
-            GameObject leftArrow = new GameObject("LeftArrow");
-            GameObject rightArrow = new GameObject("RightArrow");
-            GameObject jumpArrow = new GameObject("JumpArrow");
-            GameObject restartButton = new GameObject("RestartButton");
-            GameObject backButton = new GameObject("BackButton");
+            GameObject leftArrow = new("LeftArrow");
+            GameObject rightArrow = new("RightArrow");
+            GameObject jumpArrow = new("JumpArrow");
+            GameObject restartButton = new("RestartButton");
+            GameObject backButton = new("BackButton");
             leftArrow.AddComponent<SpriteRenderer>();
             rightArrow.AddComponent<SpriteRenderer>();
             jumpArrow.AddComponent<SpriteRenderer>();
@@ -366,7 +366,7 @@ public class Game : MonoBehaviour
         if (PlayerPrefs.GetInt("Setting4", 0) == 1 && Time.time > nextUpdate)
         {
             fps = 1f / Time.deltaTime;
-            //fpsCounter.text = "FPS: " + Mathf.Round(fps);
+            fpsCounter.text = "FPS: " + Mathf.Round(fps);
             nextUpdate = Time.time + 0.25f;
         }
         if (screenWidth != Camera.main.orthographicSize * 2f * Camera.main.aspect)
@@ -572,9 +572,9 @@ public class Game : MonoBehaviour
 
         rb.gravityScale = (isGrounded ? 0f : 1.5f);
 
-        if (bird.transform.position.y < -4.18f)
+        if (bird.transform.position.y < -4.1359f)
         {
-            bird.transform.position = new Vector2(bird.transform.position.x, -4.18f);
+            bird.transform.position = new Vector2(bird.transform.position.x, -4.1359f);
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         }
         if (jumpArrow != null && jumpArrow.GetComponent<Renderer>() != null)
