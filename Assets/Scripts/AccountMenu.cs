@@ -4,14 +4,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class AccountMenu : MonoBehaviour
 {
     public GameObject loggedInPanel;
     public TMP_Text loggedInText;
+    public Button loggedInChangeUsernameButton;
+    public Button loggedInChangePasswordButton;
     public Button loggedInSaveButton;
     public Button loggedInLoadButton;
     public Button loggedInLogoutButton;
+    public Button loggedInBackButton;
 
     public GameObject loggedOutPanel;
     public Button loggedOutLoginButton;
@@ -56,6 +60,7 @@ public class AccountMenu : MonoBehaviour
             PlayerPrefs.SetInt("overlay", 0);
             SwitchPanel(1);
         });
+        loggedInBackButton.onClick.AddListener(() => SceneManager.LoadSceneAsync("MainMenu"));
         loggedOutLoginButton.onClick.AddListener(() => SwitchPanel(2));
         loggedOutRegisterButton.onClick.AddListener(() => SwitchPanel(3));
         loginRegisterButton.onClick.AddListener(() => SwitchPanel(3));

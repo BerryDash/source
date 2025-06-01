@@ -65,7 +65,7 @@ public class Iconsmenu : MonoBehaviour
             PlayerPrefs.SetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8));
             PlayerPrefs.SetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 9));
             PlayerPrefs.Save();
-            SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadSceneAsync("MainMenu");
         });
         icon1.onClick.AddListener(() => SelectIcon(1));
         icon2.onClick.AddListener(() => SelectIcon(2));

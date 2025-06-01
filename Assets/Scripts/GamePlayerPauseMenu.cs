@@ -11,7 +11,7 @@ public class GamePlayerPauseMenu : MonoBehaviour
     {
         backButton.onClick.AddListener(() =>
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+            UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
         });
         continueButton.onClick.AddListener(Unpause);
     }
