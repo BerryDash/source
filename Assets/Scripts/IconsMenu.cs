@@ -56,7 +56,7 @@ public class Iconsmenu : MonoBehaviour
             defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-3");
         }
         placeholderButton.onClick.AddListener(ToggleKit);
-        backButton.onClick.AddListener(delegate
+        backButton.onClick.AddListener(() =>
         {
             PlayerPrefs.SetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8));
             PlayerPrefs.SetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 9));
