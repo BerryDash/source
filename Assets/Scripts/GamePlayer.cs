@@ -37,22 +37,7 @@ public class GamePlayer : MonoBehaviour
         int num2 = PlayerPrefs.GetInt("overlay", 0);
         if (num == 1)
         {
-            if (PlayerPrefs.GetInt("userID", 0) == 1)
-            {
-                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-1");
-            }
-            else if (PlayerPrefs.GetInt("userID", 0) == 2)
-            {
-                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-2");
-            }
-            else if (PlayerPrefs.GetInt("userID", 0) == 4)
-            {
-                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-3");
-            }
-            else
-            {
-                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_1");
-            }
+            component.sprite = Tools.GetIconForUser(PlayerPrefs.GetInt("userId", 0));
         }
         else
         {

@@ -1,3 +1,4 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,6 +36,8 @@ public class Iconsmenu : MonoBehaviour
 
     private void Start()
     {
+        defaultIcon = Tools.GetIconForUser(PlayerPrefs.GetInt("userId", 0));
+        icon1.transform.GetChild(0).GetComponent<Image>().sprite = defaultIcon;
         SwitchToIcon();
         SelectOverlay(PlayerPrefs.GetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 9)));
         SelectIcon(PlayerPrefs.GetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8)));
@@ -42,18 +45,6 @@ public class Iconsmenu : MonoBehaviour
         {
             SelectOverlay(0);
             placeholderButton.interactable = false;
-        }
-        if (PlayerPrefs.GetInt("userID", 0) == 1)
-        {
-            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-1");
-        }
-        else if (PlayerPrefs.GetInt("userID", 0) == 2)
-        {
-            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-2");
-        }
-        else if (PlayerPrefs.GetInt("userID", 0) == 4)
-        {
-            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-3");
         }
         placeholderButton.onClick.AddListener(ToggleKit);
         backButton.onClick.AddListener(() =>
@@ -164,18 +155,7 @@ public class Iconsmenu : MonoBehaviour
         previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_" + iconID);
         if (iconID == 1)
         {
-            if (PlayerPrefs.GetInt("userID", 0) == 1)
-            {
-                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-1");
-            }
-            else if (PlayerPrefs.GetInt("userID", 0) == 2)
-            {
-                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-2");
-            }
-            else if (PlayerPrefs.GetInt("userID", 0) == 4)
-            {
-                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-3");
-            }
+            previewBird.sprite = defaultIcon;
         }
         if (iconID == 7)
         {
@@ -205,7 +185,7 @@ public class Iconsmenu : MonoBehaviour
         overlay5.interactable = (overlayID != 5);
         overlay6.interactable = (overlayID != 6);
         overlay7.interactable = (overlayID != 7);
-        overlay8.interactable = (overlayID != 8);
+        overlay8.interactable = (!(PlayerPrefs.GetInt("userId", 0) == 1 && PlayerPrefs.GetInt("icon", 0) == 1) && overlayID != 8);
         overlay9.interactable = (overlayID != 9);
         previewOverlay.rectTransform.localPosition = new Vector3(-32f, 44.66f, 0f);
         previewOverlay.gameObject.SetActive(true);
