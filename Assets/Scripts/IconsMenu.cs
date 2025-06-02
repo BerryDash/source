@@ -55,10 +55,6 @@ public class Iconsmenu : MonoBehaviour
         {
             defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-3");
         }
-        else if (PlayerPrefs.GetInt("userID", 0) == 6)
-        {
-            defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-4");
-        }
         placeholderButton.onClick.AddListener(ToggleKit);
         backButton.onClick.AddListener(delegate
         {

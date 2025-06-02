@@ -49,10 +49,6 @@ public class GamePlayer : MonoBehaviour
             {
                 component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-3");
             }
-            else if (PlayerPrefs.GetInt("userID", 0) == 6)
-            {
-                component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-4");
-            }
             else
             {
                 component.sprite = Resources.Load<Sprite>("Icons/Icons/bird_1");
