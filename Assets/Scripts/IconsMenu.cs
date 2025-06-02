@@ -45,15 +45,15 @@ public class Iconsmenu : MonoBehaviour
         }
         if (PlayerPrefs.GetInt("userID", 0) == 1)
         {
-            defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-1");
+            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-1");
         }
         else if (PlayerPrefs.GetInt("userID", 0) == 2)
         {
-            defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-2");
+            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-2");
         }
         else if (PlayerPrefs.GetInt("userID", 0) == 4)
         {
-            defaultIcon = Resources.Load<Sprite>("icons/icons/bird_-3");
+            defaultIcon = Resources.Load<Sprite>("Icons/Icons/bird_-3");
         }
         placeholderButton.onClick.AddListener(ToggleKit);
         backButton.onClick.AddListener(() =>
@@ -161,24 +161,20 @@ public class Iconsmenu : MonoBehaviour
         icon6.interactable = (iconID != 6);
         icon7.interactable = (iconID != 7);
         icon8.interactable = (iconID != 8);
-        previewBird.sprite = Resources.Load<Sprite>("icons/icons/bird_" + iconID);
+        previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_" + iconID);
         if (iconID == 1)
         {
             if (PlayerPrefs.GetInt("userID", 0) == 1)
             {
-                previewBird.sprite = Resources.Load<Sprite>("icons/icons/bird_-1");
+                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-1");
             }
             else if (PlayerPrefs.GetInt("userID", 0) == 2)
             {
-                previewBird.sprite = Resources.Load<Sprite>("icons/icons/bird_-2");
+                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-2");
             }
             else if (PlayerPrefs.GetInt("userID", 0) == 4)
             {
-                previewBird.sprite = Resources.Load<Sprite>("icons/icons/bird_-3");
-            }
-            else if (PlayerPrefs.GetInt("userID", 0) == 6)
-            {
-                previewBird.sprite = Resources.Load<Sprite>("icons/icons/bird_-4");
+                previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_-3");
             }
         }
         if (iconID == 7)
@@ -224,7 +220,7 @@ public class Iconsmenu : MonoBehaviour
         }
         else
         {
-            previewOverlay.sprite = Resources.Load<Sprite>("icons/overlays/overlay_" + overlayID);
+            previewOverlay.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_" + overlayID);
         }
     }
 }
