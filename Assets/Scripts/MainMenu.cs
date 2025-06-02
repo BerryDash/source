@@ -7,9 +7,16 @@ public class MenuScript : MonoBehaviour
 
     void Awake()
     {
-        exitButton.onClick.AddListener(() =>
+        if (!Application.isMobilePlatform || Application.isEditor || Application.platform == RuntimePlatform.WebGLPlayer)
         {
-            Application.Quit();
-        });
+            exitButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            exitButton.onClick.AddListener(() =>
+            {
+                Application.Quit();
+            });
+        }
     }
 }
