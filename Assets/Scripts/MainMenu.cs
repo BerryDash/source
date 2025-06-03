@@ -7,7 +7,7 @@ public class MenuScript : MonoBehaviour
 
     void Awake()
     {
-        if (!Application.isMobilePlatform || Application.isEditor || Application.platform == RuntimePlatform.WebGLPlayer)
+        if (Application.isMobilePlatform || Application.isEditor || Application.platform == RuntimePlatform.WebGLPlayer)
         {
             exitButton.gameObject.SetActive(false);
         }
