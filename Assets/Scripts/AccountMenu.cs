@@ -192,6 +192,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/registerAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
@@ -243,6 +244,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
@@ -295,6 +297,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/changeAccountUsername.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
@@ -342,6 +345,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/changeAccountPassword.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
@@ -398,6 +402,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/saveAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
@@ -434,6 +439,7 @@ public class AccountMenu : MonoBehaviour
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loadAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
