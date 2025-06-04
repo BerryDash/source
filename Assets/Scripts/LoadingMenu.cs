@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,11 @@ public class LoadingMenu : MonoBehaviour
 
     void Awake()
     {
+        if (PlayerPrefs.HasKey("HighScore"))
+        {
+            PlayerPrefs.SetString("HighScoreV2", Math.Max(PlayerPrefs.GetInt("HighScore"), 0).ToString());
+            PlayerPrefs.DeleteKey("HighScore");
+        }
         Application.targetFrameRate = 360;
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("Setting5", 1);
         Screen.fullScreen = PlayerPrefs.GetInt("Setting1", 1) == 1;

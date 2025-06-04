@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Numerics;
 
 public class AccountMenu : MonoBehaviour
 {
@@ -107,7 +108,7 @@ public class AccountMenu : MonoBehaviour
                 PlayerPrefs.DeleteKey("gameSession");
                 PlayerPrefs.DeleteKey("userName");
                 PlayerPrefs.DeleteKey("userId");
-                PlayerPrefs.SetInt("HighScore", 0);
+                PlayerPrefs.SetString("HighScoreV2", "0");
                 PlayerPrefs.SetInt("icon", 1);
                 PlayerPrefs.SetInt("overlay", 0);
                 loggedInPanel.SetActive(false);
@@ -240,7 +241,7 @@ public class AccountMenu : MonoBehaviour
         WWWForm dataForm = new();
         dataForm.AddField("username", loginUsernameInput.text);
         dataForm.AddField("password", loginPasswordInput.text);
-        dataForm.AddField("currentHighScore", PlayerPrefs.GetInt("HighScore", 0).ToString());
+        dataForm.AddField("currentHighScore", PlayerPrefs.GetString("HighScoreV2", "0"));
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -264,13 +265,13 @@ public class AccountMenu : MonoBehaviour
                 string session = array[1];
                 string userName = array[2];
                 int userId = int.Parse(array[3]);
-                int highScore = int.Parse(array[4]);
+                BigInteger highScore = BigInteger.Parse(array[4]);
                 int iconId = int.Parse(array[5]);
                 int overlayId = int.Parse(array[6]);
                 PlayerPrefs.SetString("gameSession", session);
                 PlayerPrefs.SetString("userName", userName);
                 PlayerPrefs.SetInt("userId", userId);
-                PlayerPrefs.SetInt("HighScore", highScore);
+                PlayerPrefs.SetString("HighScoreV2", highScore.ToString());
                 PlayerPrefs.SetInt("icon", iconId);
                 PlayerPrefs.SetInt("overlay", overlayId);
                 SwitchPanel(0);
@@ -396,7 +397,7 @@ public class AccountMenu : MonoBehaviour
         WWWForm dataForm = new();
         dataForm.AddField("userName", PlayerPrefs.GetString("userName", ""));
         dataForm.AddField("gameSession", PlayerPrefs.GetString("gameSession", ""));
-        dataForm.AddField("highScore", PlayerPrefs.GetInt("HighScore", 0).ToString());
+        dataForm.AddField("highScore", PlayerPrefs.GetString("HighScoreV2", "0"));
         dataForm.AddField("icon", PlayerPrefs.GetInt("icon", 1).ToString());
         dataForm.AddField("overlay", PlayerPrefs.GetInt("overlay", 0).ToString());
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/saveAccount.php", dataForm);
@@ -459,7 +460,7 @@ public class AccountMenu : MonoBehaviour
                 var split = response.Split(":");
                 if (split[0] == "1")
                 {
-                    PlayerPrefs.SetInt("HighScore", int.Parse(split[1]));
+                    PlayerPrefs.SetString("HighScoreV2", split[1]);
                     PlayerPrefs.SetInt("icon", int.Parse(split[2]));
                     PlayerPrefs.SetInt("overlay", int.Parse(split[3]));
                     UpdateStatusText(loggedInText, "Loaded account data", Color.green);

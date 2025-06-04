@@ -1,12 +1,13 @@
-﻿using TMPro;
+﻿using System.Numerics;
+using TMPro;
 using UnityEngine;
 
 public class GamePlayer : MonoBehaviour
 {
     private readonly float spawnRate = 1f;
     private float nextSpawnTime;
-    private int score;
-    private int highscore;
+    private BigInteger score;
+    private BigInteger highscore;
     private float boostLeft;
     private float slownessLeft;
     private float screenWidth;
@@ -25,7 +26,7 @@ public class GamePlayer : MonoBehaviour
 
     void Awake()
     {
-        highscore = PlayerPrefs.GetInt("HighScore", 0);
+        highscore = BigInteger.Parse(PlayerPrefs.GetString("HighScoreV2", "0"));
     }
 
     void Start()
@@ -46,7 +47,7 @@ public class GamePlayer : MonoBehaviour
         if (num2 == 8)
         {
             overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_8");
-            overlayRender.transform.localPosition = new Vector3(-0.37f, 0.32f, 0f);
+            overlayRender.transform.localPosition = new UnityEngine.Vector3(-0.37f, 0.32f, 0f);
         }
         else
         {
@@ -85,30 +86,30 @@ public class GamePlayer : MonoBehaviour
             restartButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Restart");
             backButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Back");
 
-            leftArrow.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-            rightArrow.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+            leftArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, 90f);
+            rightArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, -90f);
 
-            leftArrow.transform.position = new Vector3(-screenWidth / 2.5f, -4f, 0f);
-            rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
-            restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
-            backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+            leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
+            rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+            restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+            backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
             if (PlayerPrefs.GetInt("Setting3", 0) == 1)
             {
-                leftArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                rightArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                jumpArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                restartButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                backButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0f);
+                leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
             }
             else
             {
-                leftArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                rightArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                jumpArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                restartButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                backButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0f);
+                leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -2f, 0f);
             }
         }
     }
@@ -163,7 +164,7 @@ public class GamePlayer : MonoBehaviour
             {
                 if (Input.GetMouseButton(0))
                 {
-                    Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    UnityEngine.Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     touchPosition.z = 0f;
                     if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
@@ -180,7 +181,7 @@ public class GamePlayer : MonoBehaviour
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Vector3 point2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    UnityEngine.Vector3 point2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     point2.z = 0f;
                     if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(point2))
                     {
@@ -197,7 +198,7 @@ public class GamePlayer : MonoBehaviour
                 for (int i = 0; i < Input.touchCount; i++)
                 {
                     Touch touchPosition = Input.GetTouch(i);
-                    Vector3 clickPosition = Camera.main.ScreenToWorldPoint(touchPosition.position);
+                    UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(touchPosition.position);
                     clickPosition.z = 0f;
                     if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
@@ -224,30 +225,30 @@ public class GamePlayer : MonoBehaviour
         }
         if (doMoveLeft && !doMoveRight)
         {
-            bird.transform.position += new Vector3(-movespeed, 0f, 0f);
+            bird.transform.position += new UnityEngine.Vector3(-movespeed, 0f, 0f);
             ClampPosition(screenWidth, bird);
-            bird.transform.localScale = new Vector3(1.35f, 1.35f, 1.35f);
+            bird.transform.localScale = new UnityEngine.Vector3(1.35f, 1.35f, 1.35f);
         }
         if (doMoveRight && !doMoveLeft)
         {
-            bird.transform.position += new Vector3(movespeed, 0f, 0f);
+            bird.transform.position += new UnityEngine.Vector3(movespeed, 0f, 0f);
             ClampPosition(screenWidth, bird);
-            bird.transform.localScale = new Vector3(-1.35f, 1.35f, 1.35f);
+            bird.transform.localScale = new UnityEngine.Vector3(-1.35f, 1.35f, 1.35f);
         }
         if (doJump && isGrounded)
         {
             AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
             if (boostLeft > 0f)
             {
-                rb.linearVelocity = Vector2.up * 12f;
+                rb.linearVelocity = UnityEngine.Vector2.up * 12f;
             }
             else if (slownessLeft > 0f)
             {
-                rb.linearVelocity = Vector2.up * 6f;
+                rb.linearVelocity = UnityEngine.Vector2.up * 6f;
             }
             else
             {
-                rb.linearVelocity = Vector2.up * 9f;
+                rb.linearVelocity = UnityEngine.Vector2.up * 9f;
             }
         }
         if (flag4)
@@ -264,7 +265,7 @@ public class GamePlayer : MonoBehaviour
     {
         float halfWidth = screenWidth / 2.17f;
         float clampedX = Mathf.Clamp(bird.transform.position.x, -halfWidth, halfWidth);
-        bird.transform.position = new Vector3(clampedX, bird.transform.position.y, bird.transform.position.z);
+        bird.transform.position = new UnityEngine.Vector3(clampedX, bird.transform.position.y, bird.transform.position.z);
     }
 
     void FixedUpdate()
@@ -334,11 +335,11 @@ public class GamePlayer : MonoBehaviour
 
             float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
             float spawnPositionX = Random.Range(-screenWidth / 2.17f, screenWidth / 2.17f);
-            newBerry.transform.position = new Vector3(spawnPositionX, Camera.main.orthographicSize + 1f, 0f);
+            newBerry.transform.position = new UnityEngine.Vector3(spawnPositionX, Camera.main.orthographicSize + 1f, 0f);
 
             Rigidbody2D rb = newBerry.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0f;
-            rb.linearVelocity = new Vector2(0f, -4f);
+            rb.linearVelocity = new UnityEngine.Vector2(0f, -4f);
         }
     }
 
@@ -361,27 +362,27 @@ public class GamePlayer : MonoBehaviour
                 GameObject jumpArrow = GameObject.Find("JumpArrow");
                 GameObject restartButton = GameObject.Find("RestartButton");
                 GameObject backButton = GameObject.Find("BackButton");
-                leftArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
-                rightArrow.transform.position = new Vector3(screenWidth / 2.5f, -4f, 0f);
-                restartButton.transform.position = new Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
-                backButton.transform.position = new Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+                leftArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+                rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+                restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
+                backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
                 if (PlayerPrefs.GetInt("Setting3", 0) == 1)
                 {
-                    leftArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    rightArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    jumpArrow.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    restartButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    backButton.transform.localScale = new Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -1f, 0f);
+                    leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                    jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
                 }
                 else
                 {
-                    leftArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    rightArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    jumpArrow.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    restartButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    backButton.transform.localScale = new Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    jumpArrow.transform.position = new Vector3(screenWidth / 2.5f, -2f, 0f);
+                    leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
+                    jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -2f, 0f);
                 }
             }
         }
@@ -399,14 +400,14 @@ public class GamePlayer : MonoBehaviour
                 {
                     Destroy(berry);
                 }
-                else if (Vector3.Distance(bird.transform.position, berry.transform.position) < 1.5f)
+                else if (UnityEngine.Vector3.Distance(bird.transform.position, berry.transform.position) < 1.5f)
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Eat"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(berry);
                     score++;
                     UpdateScore(score);
                 }
-                berry.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+                berry.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
             array5 = poisonberries;
             foreach (GameObject gameObject7 in array5)
@@ -415,12 +416,12 @@ public class GamePlayer : MonoBehaviour
                 {
                     Destroy(gameObject7);
                 }
-                else if (Vector3.Distance(bird.transform.position, gameObject7.transform.position) < 1.5f)
+                else if (UnityEngine.Vector3.Distance(bird.transform.position, gameObject7.transform.position) < 1.5f)
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Death"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Respawn();
                 }
-                gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+                gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
             array5 = ultraberries;
             foreach (GameObject gameObject8 in array5)
@@ -429,7 +430,7 @@ public class GamePlayer : MonoBehaviour
                 {
                     Destroy(gameObject8);
                 }
-                else if (Vector3.Distance(bird.transform.position, gameObject8.transform.position) < 1.5f)
+                else if (UnityEngine.Vector3.Distance(bird.transform.position, gameObject8.transform.position) < 1.5f)
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Powerup"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(gameObject8);
@@ -446,7 +447,7 @@ public class GamePlayer : MonoBehaviour
                         UpdateScore(score);
                     }
                 }
-                gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+                gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
             array5 = slownessberries;
             foreach (GameObject gameObject9 in array5)
@@ -455,7 +456,7 @@ public class GamePlayer : MonoBehaviour
                 {
                     Destroy(gameObject9);
                 }
-                else if (Vector3.Distance(bird.transform.position, gameObject9.transform.position) < 1.5f)
+                else if (UnityEngine.Vector3.Distance(bird.transform.position, gameObject9.transform.position) < 1.5f)
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Downgrade"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(gameObject9);
@@ -467,32 +468,32 @@ public class GamePlayer : MonoBehaviour
                         UpdateScore(score);
                     }
                 }
-                gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, -4f);
+                gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
         }
         else
         {
             rb.gravityScale = 0f;
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity = UnityEngine.Vector2.zero;
             GameObject[] array5 = berries;
             for (int i = 0; i < array5.Length; i++)
             {
-                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
             array5 = poisonberries;
             for (int i = 0; i < array5.Length; i++)
             {
-                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
             array5 = ultraberries;
             for (int i = 0; i < array5.Length; i++)
             {
-                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
             array5 = slownessberries;
             for (int i = 0; i < array5.Length; i++)
             {
-                array5[i].GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
         }
         if (!Application.isMobilePlatform && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7)))
@@ -503,10 +504,10 @@ public class GamePlayer : MonoBehaviour
 
     void Respawn()
     {
-        bird.transform.position = new Vector3(0f, -4.3f, 0f);
-        bird.transform.localScale = new Vector3(1.35f, 1.35f, 1.35f);
+        bird.transform.position = new UnityEngine.Vector3(0f, -4.3f, 0f);
+        bird.transform.localScale = new UnityEngine.Vector3(1.35f, 1.35f, 1.35f);
         rb.gravityScale = 0f;
-        rb.linearVelocity = Vector2.zero;
+        rb.linearVelocity = UnityEngine.Vector2.zero;
         score = 0;
         boostLeft = 0f;
         slownessLeft = 0f;
@@ -534,13 +535,13 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void UpdateScore(int score)
+    void UpdateScore(BigInteger score)
     {
         if (score > highscore)
         {
             highscore = score;
         }
-        PlayerPrefs.SetInt("HighScore", highscore);
+        PlayerPrefs.SetString("HighScoreV2", highscore.ToString());
         PlayerPrefs.Save();
         scoreText.text = "Score: " + score;
         highScoreText.text = "High Score: " + highscore;
@@ -551,16 +552,16 @@ public class GamePlayer : MonoBehaviour
         GameObject jumpArrow = GameObject.Find("JumpArrow");
         isGrounded = bird.transform.position.y <= -4.1299996f;
 
-        rb.gravityScale = (isGrounded ? 0f : 1.5f);
+        rb.gravityScale = isGrounded ? 0f : 1.5f;
 
         if (bird.transform.position.y < -4.1359f)
         {
-            bird.transform.position = new Vector2(bird.transform.position.x, -4.1359f);
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            bird.transform.position = new UnityEngine.Vector2(bird.transform.position.x, -4.1359f);
+            rb.linearVelocity = new UnityEngine.Vector2(rb.linearVelocity.x, 0f);
         }
         if (jumpArrow != null && jumpArrow.GetComponent<Renderer>() != null)
         {
-            jumpArrow.GetComponent<Renderer>().material.color = (isGrounded ? Color.white : Color.red);
+            jumpArrow.GetComponent<Renderer>().material.color = isGrounded ? Color.white : Color.red;
         }
     }
 
@@ -592,9 +593,9 @@ public class GamePlayer : MonoBehaviour
         pausePanel.SetActive(value: false);
     }
 
-    void OnApplicationPause()
+    void OnApplicationPause(bool pause)
     {
-        EnablePause();
+        if (pause) EnablePause();
     }
 
     void OnApplicationQuit()
