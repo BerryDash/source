@@ -8,7 +8,8 @@ using UnityEngine.UI;
 public class LoadingMenu : MonoBehaviour
 {
     public TMP_Text text;
-    public Button button;
+    public Button updateButton;
+    public Button continueButton;
 
     void Awake()
     {
@@ -38,9 +39,13 @@ public class LoadingMenu : MonoBehaviour
             QualitySettings.vSyncCount = 0;
         }
         PlayerPrefs.SetString("latestVersion", Application.version);
-        button.onClick.AddListener(() =>
+        updateButton.onClick.AddListener(() =>
         {
             Application.OpenURL("https://berrydash.lncvrt.xyz/download");
+        });
+        continueButton.onClick.AddListener(async () =>
+        {
+            await SceneManager.LoadSceneAsync("MainMenu");
         });
     }
 
@@ -65,10 +70,22 @@ public class LoadingMenu : MonoBehaviour
         if (response == "1")
         {
             await SceneManager.LoadSceneAsync("MainMenu");
-        } else
+        }
+        else if (response == "2")
+        {
+            text.text = "Outdated client! You can still load into the game, but online features may not be available.";
+
+            var updateButtonPos = updateButton.transform.localPosition;
+            updateButtonPos.x = -135;
+            updateButton.transform.localPosition = updateButtonPos;
+
+            updateButton.gameObject.SetActive(true);
+            continueButton.gameObject.SetActive(true);
+        }
+        else
         {
             text.text = "Outdated client! Please update your client to play";
-            button.gameObject.SetActive(true);
+            updateButton.gameObject.SetActive(true);
         }
     }
 
