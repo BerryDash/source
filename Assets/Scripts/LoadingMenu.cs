@@ -13,29 +13,32 @@ public class LoadingMenu : MonoBehaviour
 
     void Awake()
     {
+        if (PlayerPrefs.GetString("latestVersion", Application.version) == "1.4.0-beta1")
+        {
+            PlayerPrefs.DeleteKey("Setting2");
+            PlayerPrefs.DeleteKey("Setting3");
+            PlayerPrefs.SetInt("Setting2", PlayerPrefs.GetInt("Setting4", 0));
+            PlayerPrefs.SetInt("Setting3", PlayerPrefs.GetInt("Setting5", 0));
+            PlayerPrefs.SetString("latestVersion", "1.4.0");
+        }
         if (PlayerPrefs.HasKey("HighScore"))
         {
             PlayerPrefs.SetString("HighScoreV2", Math.Max(PlayerPrefs.GetInt("HighScore"), 0).ToString());
             PlayerPrefs.DeleteKey("HighScore");
         }
-        Application.targetFrameRate = 360;
-        QualitySettings.vSyncCount = PlayerPrefs.GetInt("Setting5", 1);
+        QualitySettings.vSyncCount = PlayerPrefs.GetInt("Setting3", 1) == 1 ? 1 : -1;
         Screen.fullScreen = PlayerPrefs.GetInt("Setting1", 1) == 1;
         if (!Application.isMobilePlatform)
         {
             SetIfNone("Setting1", 1);
             SetIfNone("Setting2", 0);
-            SetIfNone("Setting3", 0);
-            SetIfNone("Setting4", 0);
-            SetIfNone("Setting5", 1);
+            SetIfNone("Setting3", 1);
         }
         else
         {
             SetIfNone("Setting1", 1, true);
             SetIfNone("Setting2", 1, true);
-            SetIfNone("Setting3", 0);
-            SetIfNone("Setting4", 0);
-            SetIfNone("Setting5", 0, true);
+            SetIfNone("Setting3", 0, true);
             QualitySettings.vSyncCount = 0;
         }
         PlayerPrefs.SetString("latestVersion", Application.version);

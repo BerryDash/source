@@ -82,7 +82,7 @@ public class GamePlayer : MonoBehaviour
         backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
         screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
         highScoreText.text = $"High Score: {highscore}";
-        if (PlayerPrefs.GetInt("Setting2", 0) == 1)
+        if (Application.isMobilePlatform)
         {
             GameObject leftArrow = new("LeftArrow");
             GameObject rightArrow = new("RightArrow");
@@ -108,24 +108,13 @@ public class GamePlayer : MonoBehaviour
             rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
             restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
             backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
-            if (PlayerPrefs.GetInt("Setting3", 0) == 1)
-            {
-                leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
-            }
-            else
-            {
-                leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -2f, 0f);
-            }
+
+            leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+            rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+            jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+            restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+            backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+            jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
         }
     }
 
@@ -161,7 +150,7 @@ public class GamePlayer : MonoBehaviour
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.leftButton.isPressed && PlayerPrefs.GetInt("Setting2", 0) == 0) || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed)))
             {
                 doJump = true;
             }
@@ -170,7 +159,7 @@ public class GamePlayer : MonoBehaviour
                 doRestart = true;
             }
         }
-        if (PlayerPrefs.GetInt("Setting2", 0) == 1)
+        if (Application.isMobilePlatform)
         {
             GameObject leftArrow = GameObject.Find("LeftArrow");
             GameObject rightArrow = GameObject.Find("RightArrow");
@@ -357,7 +346,7 @@ public class GamePlayer : MonoBehaviour
 
     void Update()
     {
-        if (PlayerPrefs.GetInt("Setting4", 0) == 1 && Time.time > nextUpdate)
+        if (PlayerPrefs.GetInt("Setting2", 0) == 1 && Time.time > nextUpdate)
         {
             fps = 1f / Time.deltaTime;
             fpsCounter.text = "FPS: " + Mathf.Round(fps);
@@ -367,35 +356,25 @@ public class GamePlayer : MonoBehaviour
         {
             screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
             ClampPosition(screenWidth, bird);
-            if (PlayerPrefs.GetInt("Setting2", 0) == 1)
+            if (Application.isMobilePlatform)
             {
                 GameObject leftArrow = GameObject.Find("LeftArrow");
                 GameObject rightArrow = GameObject.Find("RightArrow");
                 GameObject jumpArrow = GameObject.Find("JumpArrow");
                 GameObject restartButton = GameObject.Find("RestartButton");
                 GameObject backButton = GameObject.Find("BackButton");
-                leftArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+
+                leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
                 rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
                 restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
                 backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
-                if (PlayerPrefs.GetInt("Setting3", 0) == 1)
-                {
-                    leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                    jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
-                }
-                else
-                {
-                    leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 20f, screenWidth / 20f, 1f);
-                    jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -2f, 0f);
-                }
+
+                leftArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                rightArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
+                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
             }
         }
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
