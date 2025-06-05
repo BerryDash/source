@@ -165,7 +165,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: xyz.lncvrt.berrydash.android
-    Standalone: xyz.lncvrt.berrydash.macos
+    Standalone: xyz.lncvrt.berrydash
   buildNumber:
     Standalone: 0
     VisionOS: 0
