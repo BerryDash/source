@@ -84,6 +84,10 @@ public class LeaderboardsMenu : MonoBehaviour
                 {
                     playerOverlayIcon.transform.localPosition = new Vector2(-16.56f, 14.81f);
                 }
+                else if (overlay == "11")
+                {
+                    playerOverlayIcon.transform.localPosition = new Vector2(-14.74451f, 20.39122f);
+                }
                 else if (overlay == "13")
                 {
                     playerOverlayIcon.transform.localPosition = new Vector2(-16.54019f, 14.70365f);
