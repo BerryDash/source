@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class VersionText : MonoBehaviour
 {
+    private TMP_Text text;
     void Awake()
     {
-        gameObject.GetComponent<TMP_Text>().text = "Current: v" + Application.version;
+        text = gameObject.GetComponent<TMP_Text>();
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
+        {
+            text.text = "Current: v" + Application.version;
+        }
     }
 }

@@ -10,16 +10,20 @@ public class LatestVersionText : MonoBehaviour
 
     void Awake()
     {
+        text = gameObject.GetComponent<TMP_Text>();
         updateButton.onClick.AddListener(() =>
         {
             Application.OpenURL("https://berrydash.lncvrt.xyz/download");
         });
-        text = gameObject.GetComponent<TMP_Text>();
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            text.text = "";
+        }
     }
 
     void Start()
     {
-        GetLatestVersion();
+        if (Application.platform != RuntimePlatform.WebGLPlayer) GetLatestVersion();
     }
 
     async void GetLatestVersion()
