@@ -5,25 +5,40 @@ using UnityEngine.UI;
 
 public class LatestVersionText : MonoBehaviour
 {
+    public static LatestVersionText Instance;
+    public TMP_Text text;
     public Button updateButton;
-    private TMP_Text text;
+    private string latest = null;
 
     void Awake()
     {
-        text = gameObject.GetComponent<TMP_Text>();
-        updateButton.onClick.AddListener(() =>
+        if (Instance != null && Instance != this)
         {
-            Application.OpenURL("https://berrydash.lncvrt.xyz/download");
-        });
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        if (updateButton != null)
         {
-            text.text = "";
+            updateButton.onClick.AddListener(() =>
+            {
+                Application.OpenURL("https://berrydash.lncvrt.xyz/download");
+            });
         }
     }
 
     void Start()
     {
-        if (Application.platform != RuntimePlatform.WebGLPlayer) GetLatestVersion();
+        RefreshText();
+        if (Application.platform != RuntimePlatform.WebGLPlayer && latest == null) GetLatestVersion();
+    }
+
+    void OnEnable()
+    {
+        RefreshText();
     }
 
     async void GetLatestVersion()
@@ -35,14 +50,26 @@ public class LatestVersionText : MonoBehaviour
         await request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
         {
-            text.text = "Latest: N/A";
-            return;
+            latest = "-1";
         }
-        string response = request.downloadHandler.text;
-        text.text = "Latest: v" + response;
-        if (response != Application.version)
+        else
         {
-            updateButton.gameObject.SetActive(true);
+            latest = request.downloadHandler.text;
         }
+        RefreshText();
+        if (latest != Application.version && updateButton != null) updateButton.gameObject.SetActive(true);
+    }
+
+    public void RefreshText()
+    {
+        if (text == null) return;
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+            text.text = "";
+        else if (latest == null)
+            text.text = "Latest: Loading...";
+        else if (latest == "-1")
+            text.text = "Latest: N/A";
+        else
+            text.text = "Latest: " + latest;
     }
 }
