@@ -1,9 +1,11 @@
 ﻿using System.Numerics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GamePlayer : MonoBehaviour
 {
+    public static GamePlayer instance;
     private readonly float spawnRate = 1f;
     private float nextSpawnTime;
     private BigInteger score;
@@ -26,6 +28,8 @@ public class GamePlayer : MonoBehaviour
 
     void Awake()
     {
+        UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
+        instance = this;
         highscore = BigInteger.Parse(PlayerPrefs.GetString("HighScoreV2", "0"));
     }
 
@@ -121,8 +125,8 @@ public class GamePlayer : MonoBehaviour
         bool doMoveRight = false;
         bool doMoveLeft = false;
         bool doJump = false;
-        bool flag4 = false;
-        bool flag5 = false;
+        bool doRestart = false;
+        bool doBack = false;
         float movespeed = baseSpeed;
         if (boostLeft > 0f)
         {
@@ -133,24 +137,26 @@ public class GamePlayer : MonoBehaviour
             movespeed = baseSpeed * 0.56f;
         }
         CheckIfGrounded();
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        bool controllerLeft = Gamepad.current != null && (Gamepad.current.leftStick.left.isPressed || Gamepad.current.dpad.left.isPressed || Gamepad.current.rightStick.left.isPressed);
+        bool controllerRight = Gamepad.current != null && (Gamepad.current.leftStick.right.isPressed || Gamepad.current.dpad.right.isPressed || Gamepad.current.rightStick.right.isPressed);
+        bool controllerJump = Gamepad.current != null && (Gamepad.current.leftStick.up.isPressed || Gamepad.current.dpad.up.isPressed || Gamepad.current.rightStick.up.isPressed);
         if (!Application.isMobilePlatform)
         {
-            if (horizontalInput < 0f || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            if (controllerLeft || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
             {
                 doMoveLeft = true;
             }
-            if (horizontalInput > 0f || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            if (controllerRight || Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed)
             {
                 doMoveRight = true;
             }
-            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || (Input.GetMouseButton(0) && PlayerPrefs.GetInt("Setting2", 0) == 0) || Input.GetKey(KeyCode.JoystickButton0))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.IsPressed() && PlayerPrefs.GetInt("Setting2", 0) == 0) || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
             {
                 doJump = true;
             }
-            if (Input.GetKey(KeyCode.R))
+            if (Keyboard.current.rKey.isPressed)
             {
-                flag5 = true;
+                doRestart = true;
             }
         }
         if (PlayerPrefs.GetInt("Setting2", 0) == 1)
@@ -162,9 +168,9 @@ public class GamePlayer : MonoBehaviour
             GameObject backButton = GameObject.Find("BackButton");
             if (!Application.isMobilePlatform)
             {
-                if (Input.GetMouseButton(0))
+                if (Mouse.current.IsPressed())
                 {
-                    UnityEngine.Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    UnityEngine.Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue());
                     touchPosition.z = 0f;
                     if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
@@ -178,27 +184,22 @@ public class GamePlayer : MonoBehaviour
                     {
                         doJump = true;
                     }
-                }
-                if (Input.GetMouseButtonDown(0))
-                {
-                    UnityEngine.Vector3 point2 = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    point2.z = 0f;
-                    if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(point2))
+                    if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        flag5 = true;
+                        doRestart = true;
                     }
-                    if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(point2))
+                    if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        flag4 = true;
+                        doBack = true;
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Input.touchCount; i++)
-                {
-                    Touch touchPosition = Input.GetTouch(i);
-                    UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(touchPosition.position);
+                var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
+                for (int i = 0; i < touches.Count; i++) {
+                    var pos = touches[i].screenPosition;
+                    UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
                     clickPosition.z = 0f;
                     if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
@@ -214,11 +215,11 @@ public class GamePlayer : MonoBehaviour
                     }
                     if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
-                        flag5 = true;
+                        doRestart = true;
                     }
                     if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                     {
-                        flag4 = true;
+                        doBack = true;
                     }
                 }
             }
@@ -251,11 +252,11 @@ public class GamePlayer : MonoBehaviour
                 rb.linearVelocity = UnityEngine.Vector2.up * 9f;
             }
         }
-        if (flag4)
+        if (doBack)
         {
             TogglePause();
         }
-        if (flag5)
+        if (doRestart)
         {
             Respawn();
         }
@@ -496,7 +497,7 @@ public class GamePlayer : MonoBehaviour
                 array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
         }
-        if (!Application.isMobilePlatform && (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7)))
+        if (!Application.isMobilePlatform && (Keyboard.current.escapeKey.wasPressedThisFrame || (Gamepad.current != null && (Gamepad.current.startButton.wasPressedThisFrame || Gamepad.current.buttonEast.wasPressedThisFrame))))
         {
             TogglePause();
         }
@@ -565,7 +566,7 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void TogglePause()
+    public void TogglePause()
     {
         if (pausePanel.activeSelf)
         {
@@ -577,7 +578,7 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void EnablePause()
+    public void EnablePause()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -585,7 +586,7 @@ public class GamePlayer : MonoBehaviour
         pausePanel.SetActive(value: true);
     }
 
-    void DisablePause()
+    public void DisablePause()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

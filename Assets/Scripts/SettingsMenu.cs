@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class SettingsMenu : MonoBehaviour
 {
@@ -33,37 +32,37 @@ public class SettingsMenu : MonoBehaviour
             setting4toggle.isOn = PlayerPrefs.GetInt("Setting4", 0) == 1;
             setting5toggle.interactable = false;
         }
-        setting1toggle.onValueChanged.AddListener((bool value) =>
+        setting1toggle.onValueChanged.AddListener(value =>
         {
             Screen.fullScreen = value;
             PlayerPrefs.SetInt("Setting1", value ? 1 : 0);
         });
-        setting2toggle.onValueChanged.AddListener((bool value) =>
+        setting2toggle.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetInt("Setting2", value ? 1 : 0);
             setting3toggle.interactable = value;
             setting3toggle.isOn = value && setting3toggle.isOn;
             PlayerPrefs.SetInt("Setting3", setting3toggle.isOn ? 1 : 0);
         });
-        setting3toggle.onValueChanged.AddListener((bool value) =>
+        setting3toggle.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetInt("Setting3", value ? 1 : 0);
         });
-        setting4toggle.onValueChanged.AddListener((bool value) =>
+        setting4toggle.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetInt("Setting4", value ? 1 : 0);
         });
-        setting5toggle.onValueChanged.AddListener((bool value) =>
+        setting5toggle.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetInt("Setting5", value ? 1 : 0);
-            QualitySettings.vSyncCount = (value ? 1 : 0);
+            QualitySettings.vSyncCount = value ? 1 : 0;
         });
-        musicSlider.onValueChanged.AddListener((float value) =>
+        musicSlider.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetFloat("musicVolume", value);
             PlayerPrefs.Save();
         });
-        sfxSlider.onValueChanged.AddListener((float value) =>
+        sfxSlider.onValueChanged.AddListener(value =>
         {
             PlayerPrefs.SetFloat("sfxVolume", value);
             PlayerPrefs.Save();
