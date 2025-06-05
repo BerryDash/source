@@ -51,12 +51,12 @@ public class Iconsmenu : MonoBehaviour
             placeholderButton.interactable = false;
         }
         placeholderButton.onClick.AddListener(ToggleKit);
-        backButton.onClick.AddListener(() =>
+        backButton.onClick.AddListener(async () =>
         {
             PlayerPrefs.SetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8));
             PlayerPrefs.SetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 14));
             PlayerPrefs.Save();
-            SceneManager.LoadSceneAsync("MainMenu");
+            await SceneManager.LoadSceneAsync("MainMenu");
         });
         previewBird.GetComponentInParent<Button>().onClick.AddListener(() =>
         {

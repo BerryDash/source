@@ -22,9 +22,9 @@ public class LeaderboardsMenu : MonoBehaviour
         {
             GetTopPlayers(value);
         });
-        backButton.onClick.AddListener(() =>
+        backButton.onClick.AddListener(async () =>
         {
-            SceneManager.LoadScene("MainMenu");
+            await SceneManager.LoadSceneAsync("MainMenu");
         });
         refreshButton.onClick.AddListener(() =>
         {

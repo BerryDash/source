@@ -73,7 +73,7 @@ public class AccountMenu : MonoBehaviour
         loggedInSaveButton.onClick.AddListener(() => SaveAccount());
         loggedInLoadButton.onClick.AddListener(() => LoadAccount());
         loggedInLogoutButton.onClick.AddListener(() => SwitchPanel(1));
-        loggedInBackButton.onClick.AddListener(() => SceneManager.LoadSceneAsync("MainMenu"));
+        loggedInBackButton.onClick.AddListener(async () => await SceneManager.LoadSceneAsync("MainMenu"));
         loggedOutLoginButton.onClick.AddListener(() => SwitchPanel(2));
         loggedOutRegisterButton.onClick.AddListener(() => SwitchPanel(3));
         loggedOutBackButton.onClick = loggedInBackButton.onClick;

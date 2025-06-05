@@ -13,9 +13,9 @@ public class GamePlayerPauseMenu : MonoBehaviour
     {
         musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1f);
-        backButton.onClick.AddListener(() =>
+        backButton.onClick.AddListener(async () =>
         {
-            UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
+            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
         });
         continueButton.onClick.AddListener(GamePlayer.instance.DisablePause);
         musicSlider.onValueChanged.AddListener(value =>
