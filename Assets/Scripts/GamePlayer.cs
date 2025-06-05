@@ -150,7 +150,7 @@ public class GamePlayer : MonoBehaviour
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.IsPressed() && PlayerPrefs.GetInt("Setting2", 0) == 0) || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.leftButton.isPressed && PlayerPrefs.GetInt("Setting2", 0) == 0) || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
             {
                 doJump = true;
             }
@@ -168,7 +168,7 @@ public class GamePlayer : MonoBehaviour
             GameObject backButton = GameObject.Find("BackButton");
             if (!Application.isMobilePlatform)
             {
-                if (Mouse.current.IsPressed())
+                if (Mouse.current.leftButton.isPressed)
                 {
                     UnityEngine.Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue());
                     touchPosition.z = 0f;
