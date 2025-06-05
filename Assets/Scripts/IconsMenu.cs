@@ -1,4 +1,3 @@
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,6 +31,11 @@ public class Iconsmenu : MonoBehaviour
     public Button overlay7;
     public Button overlay8;
     public Button overlay9;
+    public Button overlay10;
+    public Button overlay11;
+    public Button overlay12;
+    public Button overlay13;
+    public Button overlay14;
     public GameObject previewBirdObject;
 
     private void Start()
@@ -39,7 +43,7 @@ public class Iconsmenu : MonoBehaviour
         defaultIcon = Tools.GetIconForUser(PlayerPrefs.GetInt("userId", 0));
         icon1.transform.GetChild(0).GetComponent<Image>().sprite = defaultIcon;
         SwitchToIcon();
-        SelectOverlay(PlayerPrefs.GetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 9)));
+        SelectOverlay(PlayerPrefs.GetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 14)));
         SelectIcon(PlayerPrefs.GetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8)));
         if (PlayerPrefs.GetInt("icon", 0) == 7)
         {
@@ -50,9 +54,22 @@ public class Iconsmenu : MonoBehaviour
         backButton.onClick.AddListener(() =>
         {
             PlayerPrefs.SetInt("icon", Mathf.Clamp(PlayerPrefs.GetInt("icon", 0), 1, 8));
-            PlayerPrefs.SetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 9));
+            PlayerPrefs.SetInt("overlay", Mathf.Clamp(PlayerPrefs.GetInt("overlay", 0), 0, 14));
             PlayerPrefs.Save();
             SceneManager.LoadSceneAsync("MainMenu");
+        });
+        previewBird.GetComponentInParent<Button>().onClick.AddListener(() =>
+        {
+            var scale = previewBird.transform.localScale;
+            if (scale.x == -1)
+            {
+                scale.x = 1;
+            }
+            else
+            {
+                scale.x = -1;
+            }
+            previewBird.transform.localScale = scale;
         });
         icon1.onClick.AddListener(() => SelectIcon(1));
         icon2.onClick.AddListener(() => SelectIcon(2));
@@ -72,45 +89,25 @@ public class Iconsmenu : MonoBehaviour
         overlay7.onClick.AddListener(() => SelectOverlay(7));
         overlay8.onClick.AddListener(() => SelectOverlay(8));
         overlay9.onClick.AddListener(() => SelectOverlay(9));
-    }
-
-    private void Update()
-    {
-        if (!Application.isMobilePlatform)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector2 screenPoint = Input.mousePosition;
-                if (RectTransformUtility.RectangleContainsScreenPoint(previewBirdObject.GetComponent<RectTransform>(), screenPoint))
-                {
-                    float x = previewBirdObject.transform.localScale.x;
-                    previewBirdObject.transform.localScale = new Vector3((x != 1f) ? 1 : (-1), 1f, 1f);
-                }
-            }
-        }
-        else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            Vector2 position = Input.GetTouch(0).position;
-            if (RectTransformUtility.RectangleContainsScreenPoint(previewBirdObject.GetComponent<RectTransform>(), position))
-            {
-                float x2 = previewBirdObject.transform.localScale.x;
-                previewBirdObject.transform.localScale = new Vector3((x2 != 1f) ? 1 : (-1), 1f, 1f);
-            }
-        }
+        overlay10.onClick.AddListener(() => SelectOverlay(10));
+        overlay11.onClick.AddListener(() => SelectOverlay(11));
+        overlay12.onClick.AddListener(() => SelectOverlay(12));
+        overlay13.onClick.AddListener(() => SelectOverlay(13));
+        overlay14.onClick.AddListener(() => SelectOverlay(14));
     }
 
     private void SwitchToIcon()
     {
-        iconsPanel.SetActive(value: true);
-        overlaysPanel.SetActive(value: false);
+        iconsPanel.SetActive(true);
+        overlaysPanel.SetActive(false);
         selectionText.text = "Icon selection";
         placeholderButton.GetComponentInChildren<TMP_Text>().text = "Overlays";
     }
 
     private void SwitchToOverlay()
     {
-        iconsPanel.SetActive(value: false);
-        overlaysPanel.SetActive(value: true);
+        iconsPanel.SetActive(false);
+        overlaysPanel.SetActive(true);
         selectionText.text = "Overlay selection";
         placeholderButton.GetComponentInChildren<TMP_Text>().text = "Icons";
     }
@@ -144,14 +141,14 @@ public class Iconsmenu : MonoBehaviour
     {
         PlayerPrefs.SetInt("icon", iconID);
         PlayerPrefs.Save();
-        icon1.interactable = (iconID != 1);
-        icon2.interactable = (iconID != 2);
-        icon3.interactable = (iconID != 3);
-        icon4.interactable = (iconID != 4);
-        icon5.interactable = (iconID != 5);
-        icon6.interactable = (iconID != 6);
-        icon7.interactable = (iconID != 7);
-        icon8.interactable = (iconID != 8);
+        icon1.interactable = iconID != 1;
+        icon2.interactable = iconID != 2;
+        icon3.interactable = iconID != 3;
+        icon4.interactable = iconID != 4;
+        icon5.interactable = iconID != 5;
+        icon6.interactable = iconID != 6;
+        icon7.interactable = iconID != 7;
+        icon8.interactable = iconID != 8;
         previewBird.sprite = Resources.Load<Sprite>("Icons/Icons/bird_" + iconID);
         if (iconID == 1)
         {
@@ -177,22 +174,36 @@ public class Iconsmenu : MonoBehaviour
         }
         PlayerPrefs.SetInt("overlay", overlayID);
         PlayerPrefs.Save();
-        overlay0.interactable = (overlayID != 0);
-        overlay1.interactable = (overlayID != 1);
-        overlay2.interactable = (overlayID != 2);
-        overlay3.interactable = (overlayID != 3);
-        overlay4.interactable = (overlayID != 4);
-        overlay5.interactable = (overlayID != 5);
-        overlay6.interactable = (overlayID != 6);
-        overlay7.interactable = (overlayID != 7);
-        overlay8.interactable = (!(PlayerPrefs.GetInt("userId", 0) == 1 && PlayerPrefs.GetInt("icon", 0) == 1) && overlayID != 8);
-        overlay9.interactable = (overlayID != 9);
-        previewOverlay.rectTransform.localPosition = new Vector3(-32f, 44.66f, 0f);
+        overlay0.interactable = overlayID != 0;
+        overlay1.interactable = overlayID != 1;
+        overlay2.interactable = overlayID != 2;
+        overlay3.interactable = overlayID != 3;
+        overlay4.interactable = overlayID != 4;
+        overlay5.interactable = overlayID != 5;
+        overlay6.interactable = overlayID != 6;
+        overlay7.interactable = overlayID != 7;
+        overlay8.interactable = !(PlayerPrefs.GetInt("userId", 0) == 1 && PlayerPrefs.GetInt("icon", 0) == 1) && overlayID != 8;
+        overlay9.interactable = overlayID != 9;
+        overlay10.interactable = overlayID != 10;
+        overlay11.interactable = overlayID != 11;
+        overlay12.interactable = overlayID != 12;
+        overlay13.interactable = overlayID != 13;
+        overlay14.interactable = overlayID != 14;
+        previewOverlay.rectTransform.localPosition = new Vector3(-32f, 44.50001f, 0f);
         previewOverlay.gameObject.SetActive(true);
         if (overlayID == 8)
         {
             previewOverlay.rectTransform.localPosition = new Vector3(-35.36f, 31.6f, 0f);
         }
+        else if (overlayID == 11)
+        {
+            previewOverlay.rectTransform.localPosition = new Vector3(-31.44f, 43.50004f, 0f);
+        }
+        else if (overlayID == 13)
+        {
+            previewOverlay.rectTransform.localPosition = new Vector3(-35.28575f, 31.3667f, 0f);
+        }
+
         if (overlayID == 0)
         {
             previewOverlay.gameObject.SetActive(false);

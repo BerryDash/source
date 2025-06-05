@@ -18,7 +18,7 @@ public class LeaderboardsMenu : MonoBehaviour
     private void Awake()
     {
         GetTopPlayers(0);
-        showAmount.onValueChanged.AddListener((int value) =>
+        showAmount.onValueChanged.AddListener(value =>
         {
             GetTopPlayers(value);
         });
@@ -83,6 +83,10 @@ public class LeaderboardsMenu : MonoBehaviour
                 else if (overlay == "8")
                 {
                     playerOverlayIcon.transform.localPosition = new Vector2(-16.56f, 14.81f);
+                }
+                else if (overlay == "13")
+                {
+                    playerOverlayIcon.transform.localPosition = new Vector2(-16.54019f, 14.70365f);
                 }
                 entryInfo.SetActive(true);
             }

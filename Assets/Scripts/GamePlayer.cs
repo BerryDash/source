@@ -50,8 +50,19 @@ public class GamePlayer : MonoBehaviour
         }
         if (num2 == 8)
         {
-            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_8");
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_" + num2);
             overlayRender.transform.localPosition = new UnityEngine.Vector3(-0.37f, 0.32f, 0f);
+        }
+        else if (num2 == 11)
+        {
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_" + num2);
+            overlayRender.transform.localScale = new UnityEngine.Vector3(1.1f, 1.1f, 1.1f); //yea i didnt feel like doing it for all lmao
+            overlayRender.transform.localPosition = new UnityEngine.Vector3(-0.3141809f, 0.4324968f, 0f);
+        }
+        else if (num2 == 13)
+        {
+            overlayRender.sprite = Resources.Load<Sprite>("Icons/Overlays/overlay_" + num2);
+            overlayRender.transform.localPosition = new UnityEngine.Vector3(-0.3559977f, 0.3179995f, 0f);
         }
         else
         {
