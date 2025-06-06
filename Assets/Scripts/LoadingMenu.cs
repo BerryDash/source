@@ -37,8 +37,9 @@ public class LoadingMenu : MonoBehaviour
         else
         {
             SetIfNone("Setting1", 1, true);
-            SetIfNone("Setting2", 1, true);
-            SetIfNone("Setting3", 0, true);
+            SetIfNone("Setting2", 0, true);
+            SetIfNone("Setting3", 1, true);
+            Application.targetFrameRate = 360;
             QualitySettings.vSyncCount = 0;
         }
         PlayerPrefs.SetString("latestVersion", Application.version);
