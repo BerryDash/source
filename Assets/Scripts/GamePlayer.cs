@@ -25,6 +25,11 @@ public class GamePlayer : MonoBehaviour
     private float nextUpdate;
     private float fps;
     public SpriteRenderer overlayRender;
+    public GameObject leftArrow;
+    public GameObject rightArrow;
+    public GameObject jumpArrow;
+    public GameObject restartButton;
+    public GameObject backButton;
 
     void Awake()
     {
@@ -81,14 +86,14 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.Save();
         backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
         screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
-        highScoreText.text = $"High Score: {highscore}";
+        highScoreText.text = $"High Score: {Tools.FormatWithCommas(highscore)}";
         if (Application.isMobilePlatform)
         {
-            GameObject leftArrow = new("LeftArrow");
-            GameObject rightArrow = new("RightArrow");
-            GameObject jumpArrow = new("JumpArrow");
-            GameObject restartButton = new("RestartButton");
-            GameObject backButton = new("BackButton");
+            leftArrow = new("LeftArrow");
+            rightArrow = new("RightArrow");
+            jumpArrow = new("JumpArrow");
+            restartButton = new("RestartButton");
+            backButton = new("BackButton");
             leftArrow.AddComponent<SpriteRenderer>();
             rightArrow.AddComponent<SpriteRenderer>();
             jumpArrow.AddComponent<SpriteRenderer>();
@@ -96,10 +101,15 @@ public class GamePlayer : MonoBehaviour
             backButton.AddComponent<SpriteRenderer>();
 
             leftArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            leftArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
             rightArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            rightArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
             jumpArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            jumpArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
             restartButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Restart");
+            restartButton.GetComponent<SpriteRenderer>().sortingOrder = 1000;
             backButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Back");
+            backButton.GetComponent<SpriteRenderer>().sortingOrder = 1000;
 
             leftArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, 90f);
             rightArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, -90f);
@@ -161,11 +171,6 @@ public class GamePlayer : MonoBehaviour
         }
         if (Application.isMobilePlatform)
         {
-            GameObject leftArrow = GameObject.Find("LeftArrow");
-            GameObject rightArrow = GameObject.Find("RightArrow");
-            GameObject jumpArrow = GameObject.Find("JumpArrow");
-            GameObject restartButton = GameObject.Find("RestartButton");
-            GameObject backButton = GameObject.Find("BackButton");
             if (!Application.isMobilePlatform)
             {
                 if (Mouse.current.leftButton.isPressed)
@@ -197,7 +202,8 @@ public class GamePlayer : MonoBehaviour
             else
             {
                 var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
-                for (int i = 0; i < touches.Count; i++) {
+                for (int i = 0; i < touches.Count; i++)
+                {
                     var pos = touches[i].screenPosition;
                     UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
                     clickPosition.z = 0f;
@@ -358,12 +364,6 @@ public class GamePlayer : MonoBehaviour
             ClampPosition(screenWidth, bird);
             if (Application.isMobilePlatform)
             {
-                GameObject leftArrow = GameObject.Find("LeftArrow");
-                GameObject rightArrow = GameObject.Find("RightArrow");
-                GameObject jumpArrow = GameObject.Find("JumpArrow");
-                GameObject restartButton = GameObject.Find("RestartButton");
-                GameObject backButton = GameObject.Find("BackButton");
-
                 leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
                 rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
                 restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
@@ -534,13 +534,12 @@ public class GamePlayer : MonoBehaviour
         }
         PlayerPrefs.SetString("HighScoreV2", highscore.ToString());
         PlayerPrefs.Save();
-        scoreText.text = "Score: " + score;
-        highScoreText.text = "High Score: " + highscore;
+        scoreText.text = "Score: " + Tools.FormatWithCommas(score);
+        highScoreText.text = "High Score: " + Tools.FormatWithCommas(highscore);
     }
 
     void CheckIfGrounded()
     {
-        GameObject jumpArrow = GameObject.Find("JumpArrow");
         isGrounded = bird.transform.position.y <= -4.1299996f;
 
         rb.gravityScale = isGrounded ? 0f : 1.5f;

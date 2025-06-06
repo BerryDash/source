@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Numerics;
+using UnityEngine;
 
 public static class Tools
 {
@@ -15,9 +16,28 @@ public static class Tools
         else if (user == 4)
         {
             return Resources.Load<Sprite>("Icons/Icons/bird_-3");
-        } else
+        }
+        else
         {
             return Resources.Load<Sprite>("Icons/Icons/bird_1");
         }
+    }
+
+    public static string FormatWithCommas(string number)
+    {
+        try
+        {
+            BigInteger bigInt = BigInteger.Parse(number);
+            return FormatWithCommas(bigInt);
+        }
+        catch
+        {
+            return number;
+        }
+    }
+
+    public static string FormatWithCommas(BigInteger number)
+    {
+        return string.Format("{0:N0}", number);
     }
 }

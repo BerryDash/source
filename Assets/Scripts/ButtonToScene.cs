@@ -8,7 +8,8 @@ public class ButtonToScene : MonoBehaviour
 
     void Awake()
     {
-        gameObject.GetComponent<Button>().onClick.AddListener(async () => {
+        gameObject.GetComponent<Button>().onClick.AddListener(async () =>
+        {
             await SceneManager.LoadSceneAsync(sceneName);
         });
     }
