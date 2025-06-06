@@ -96,12 +96,12 @@ public class LeaderboardsMenu : MonoBehaviour
                 }
                 entryInfo.SetActive(true);
             }
-            refreshButton.interactable = true;
         }
         else
         {
             UpdateStatus(true, "Failed to fetch leaderboard stats");
         }
+        refreshButton.interactable = true;
     }
 
     private void UpdateStatus(bool enabled, string message = "")
