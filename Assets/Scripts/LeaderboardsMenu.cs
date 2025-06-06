@@ -64,6 +64,11 @@ public class LeaderboardsMenu : MonoBehaviour
                 UpdateStatus(true, "Client version too outdated to access servers");
                 return;
             }
+            else if (response == "-1")
+            {
+                UpdateStatus(true, "Server returned no results");
+                return;
+            }
             var splitResponse = response.Split(';');
             for (int i = 0; i < splitResponse.Length; i++)
             {
