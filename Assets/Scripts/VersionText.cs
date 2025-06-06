@@ -11,5 +11,9 @@ public class VersionText : MonoBehaviour
         {
             text.text = "Current: v" + Application.version;
         }
+        else
+        {
+            text.text = "v" + Application.version;
+        }
     }
 }
