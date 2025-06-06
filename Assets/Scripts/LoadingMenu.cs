@@ -63,17 +63,25 @@ public class LoadingMenu : MonoBehaviour
 
     async void CheckUpdate()
     {
-        using UnityWebRequest request = UnityWebRequest.Get("https://berrydash.lncvrt.xyz/database/canLoadClient.php");
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
-        request.SetRequestHeader("ClientVersion", Application.version);
-        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
-        await request.SendWebRequest();
-        if (request.result != UnityWebRequest.Result.Success)
+        string response;
+        if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            text.text = "Failed to check version";
-            return;
+            using UnityWebRequest request = UnityWebRequest.Get("https://berrydash.lncvrt.xyz/database/canLoadClient.php");
+            request.SetRequestHeader("User-Agent", "BerryDashClient");
+            request.SetRequestHeader("ClientVersion", Application.version);
+            request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
+            await request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                text.text = "Failed to check version";
+                return;
+            }
+            response = request.downloadHandler.text;
         }
-        string response = request.downloadHandler.text;
+        else
+        {
+            response = "1";
+        }
         if (response == "1")
         {
             await SceneManager.LoadSceneAsync("MainMenu");
