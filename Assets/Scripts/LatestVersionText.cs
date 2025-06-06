@@ -70,6 +70,6 @@ public class LatestVersionText : MonoBehaviour
         else if (latest == "-1")
             text.text = "Latest: N/A";
         else
-            text.text = "Latest: " + latest;
+            text.text = "Latest: v" + latest;
     }
 }
