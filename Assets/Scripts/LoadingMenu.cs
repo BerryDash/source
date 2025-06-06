@@ -27,12 +27,12 @@ public class LoadingMenu : MonoBehaviour
             PlayerPrefs.DeleteKey("HighScore");
         }
         QualitySettings.vSyncCount = PlayerPrefs.GetInt("Setting3", 1) == 1 ? 1 : -1;
-        Screen.fullScreen = PlayerPrefs.GetInt("Setting1", 1) == 1;
-        if (!Application.isMobilePlatform)
+        if (!Application.isMobilePlatform && Application.platform != RuntimePlatform.WebGLPlayer)
         {
             SetIfNone("Setting1", 1);
             SetIfNone("Setting2", 0);
             SetIfNone("Setting3", 1);
+            Screen.fullScreen = PlayerPrefs.GetInt("Setting1", 1) == 1;
         }
         else
         {
@@ -41,6 +41,9 @@ public class LoadingMenu : MonoBehaviour
             SetIfNone("Setting3", 1, true);
             Application.targetFrameRate = 360;
             QualitySettings.vSyncCount = 0;
+            if (Application.platform == RuntimePlatform.WebGLPlayer) {
+                Screen.fullScreen = false;
+            }
         }
         PlayerPrefs.SetString("latestVersion", Application.version);
         updateButton.onClick.AddListener(() =>
