@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class LeaderboardsMenu : MonoBehaviour
 {
     public GameObject content;
-    public TMP_Dropdown showAmount;
+    public TMP_Dropdown showAmountDropdown;
     public TMP_Text statusText;
     public Button backButton;
     public Button refreshButton;
@@ -18,7 +18,7 @@ public class LeaderboardsMenu : MonoBehaviour
     private void Awake()
     {
         GetTopPlayers(0);
-        showAmount.onValueChanged.AddListener(value =>
+        showAmountDropdown.onValueChanged.AddListener(value =>
         {
             GetTopPlayers(value);
         });
@@ -28,13 +28,14 @@ public class LeaderboardsMenu : MonoBehaviour
         });
         refreshButton.onClick.AddListener(() =>
         {
-            GetTopPlayers(showAmount.value);
+            GetTopPlayers(showAmountDropdown.value);
         });
     }
 
     async void GetTopPlayers(int showAmount)
     {
         refreshButton.interactable = false;
+        showAmountDropdown.interactable = false;
         foreach (Transform item in content.transform)
         {
             if (item.gameObject.activeSelf)
@@ -53,6 +54,16 @@ public class LeaderboardsMenu : MonoBehaviour
         {
             UpdateStatus(false);
             string response = request.downloadHandler.text;
+            if (response == "-999")
+            {
+                UpdateStatus(true, "Server error while fetching data");
+                return;
+            }
+            else if (response == "-998")
+            {
+                UpdateStatus(true, "Client version too outdated to access servers");
+                return;
+            }
             var splitResponse = response.Split(';');
             for (int i = 0; i < splitResponse.Length; i++)
             {
@@ -102,6 +113,7 @@ public class LeaderboardsMenu : MonoBehaviour
             UpdateStatus(true, "Failed to fetch leaderboard stats");
         }
         refreshButton.interactable = true;
+        showAmountDropdown.interactable = true;
     }
 
     private void UpdateStatus(bool enabled, string message = "")

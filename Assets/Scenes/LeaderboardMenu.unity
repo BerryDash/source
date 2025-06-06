@@ -2933,7 +2933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 1097357904}
-  showAmount: {fileID: 1889805704}
+  showAmountDropdown: {fileID: 1889805704}
   statusText: {fileID: 992753025}
   backButton: {fileID: 376603725}
   refreshButton: {fileID: 102792769}
