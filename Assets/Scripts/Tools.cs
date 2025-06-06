@@ -27,8 +27,7 @@ public static class Tools
     {
         try
         {
-            BigInteger bigInt = BigInteger.Parse(number);
-            return FormatWithCommas(bigInt);
+            return FormatWithCommas(BigInteger.Parse(number));
         }
         catch
         {
