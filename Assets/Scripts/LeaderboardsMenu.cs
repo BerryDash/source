@@ -53,8 +53,9 @@ public class LeaderboardsMenu : MonoBehaviour
         {
             UpdateStatus(false);
             string response = request.downloadHandler.text;
-            foreach (var entry in response.Split(";"))
-            {
+            var splitResponse = response.Split(';');
+            for (int i = 0; i < splitResponse.Length; i++) {
+                var entry = splitResponse[i];
                 var split = entry.Split(":");
                 var username = Encoding.UTF8.GetString(Convert.FromBase64String(split[0]));
                 var highScore = split[1];
@@ -68,7 +69,7 @@ public class LeaderboardsMenu : MonoBehaviour
                 var playerOverlayIcon = playerIcon.transform.GetChild(0).GetComponent<Image>();
                 var highScoreText = entryInfo.transform.GetChild(1).GetComponent<TMP_Text>();
 
-                usernameText.text = username;
+                usernameText.text = $"{username} (#{i + 1})";
                 highScoreText.text += highScore;
                 playerIcon.sprite = Resources.Load<Sprite>("Icons/Icons/bird_" + icon);
                 if (icon == "1")
