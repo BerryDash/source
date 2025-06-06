@@ -15,6 +15,7 @@ public class AccountMenu : MonoBehaviour
     public Button loggedInChangePasswordButton;
     public Button loggedInSaveButton;
     public Button loggedInLoadButton;
+    public Button loggedInRefreshLoginButton;
     public Button loggedInLogoutButton;
     public Button loggedInBackButton;
 
@@ -57,6 +58,13 @@ public class AccountMenu : MonoBehaviour
     public Button changePasswordBackButton;
     public Button changePasswordSubmitButton;
 
+    public GameObject refreshLoginPanel;
+    public TMP_Text refreshLoginStatusText;
+    public TMP_InputField refreshLoginUsernameInput;
+    public TMP_InputField refreshLoginPasswordInput;
+    public Button refreshLoginBackButton;
+    public Button refreshLoginSubmitButton;
+
     void Awake()
     {
         if (PlayerPrefs.HasKey("gameSession") && PlayerPrefs.HasKey("userName") && PlayerPrefs.HasKey("userId"))
@@ -72,6 +80,7 @@ public class AccountMenu : MonoBehaviour
         loggedInChangePasswordButton.onClick.AddListener(() => SwitchPanel(5));
         loggedInSaveButton.onClick.AddListener(() => SaveAccount());
         loggedInLoadButton.onClick.AddListener(() => LoadAccount());
+        loggedInRefreshLoginButton.onClick.AddListener(() => SwitchPanel(6));
         loggedInLogoutButton.onClick.AddListener(() => SwitchPanel(1));
         loggedInBackButton.onClick.AddListener(async () => await SceneManager.LoadSceneAsync("MainMenu"));
         loggedOutLoginButton.onClick.AddListener(() => SwitchPanel(2));
@@ -87,6 +96,8 @@ public class AccountMenu : MonoBehaviour
         changeUsernameSubmitButton.onClick.AddListener(() => ChangeUsername());
         changePasswordBackButton.onClick.AddListener(() => SwitchPanel(0));
         changePasswordSubmitButton.onClick.AddListener(() => ChangePassword());
+        refreshLoginBackButton.onClick.AddListener(() => SwitchPanel(0));
+        refreshLoginSubmitButton.onClick.AddListener(() => RefreshLogin());
     }
 
     void SwitchPanel(int panel)
@@ -103,6 +114,7 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(false);
                 changeUsernamePanel.SetActive(false);
                 changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(false);
                 break;
             case 1:
                 PlayerPrefs.DeleteKey("gameSession");
@@ -117,6 +129,7 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(false);
                 changeUsernamePanel.SetActive(false);
                 changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(false);
                 break;
             case 2:
                 loginUsernameInput.text = "";
@@ -128,6 +141,7 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(false);
                 changeUsernamePanel.SetActive(false);
                 changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(false);
                 break;
             case 3:
                 registerUsernameInput.text = "";
@@ -142,6 +156,7 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(true);
                 changeUsernamePanel.SetActive(false);
                 changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(false);
                 break;
             case 4:
                 changeUsernameCurrentUsernameInput.text = "";
@@ -153,6 +168,7 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(false);
                 changeUsernamePanel.SetActive(true);
                 changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(false);
                 break;
             case 5:
                 changePasswordCurrentPasswordInput.text = "";
@@ -165,6 +181,18 @@ public class AccountMenu : MonoBehaviour
                 registerPanel.SetActive(false);
                 changeUsernamePanel.SetActive(false);
                 changePasswordPanel.SetActive(true);
+                refreshLoginPanel.SetActive(false);
+                break;
+            case 6:
+                refreshLoginUsernameInput.text = "";
+                refreshLoginPasswordInput.text = "";
+                loggedInPanel.SetActive(false);
+                loggedOutPanel.SetActive(false);
+                loginPanel.SetActive(false);
+                registerPanel.SetActive(false);
+                changeUsernamePanel.SetActive(false);
+                changePasswordPanel.SetActive(false);
+                refreshLoginPanel.SetActive(true);
                 break;
         }
     }
@@ -242,6 +270,7 @@ public class AccountMenu : MonoBehaviour
         dataForm.AddField("username", loginUsernameInput.text);
         dataForm.AddField("password", loginPasswordInput.text);
         dataForm.AddField("currentHighScore", PlayerPrefs.GetString("HighScoreV2", "0"));
+        dataForm.AddField("loginType", "0");
         using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -473,6 +502,52 @@ public class AccountMenu : MonoBehaviour
         }
         loggedInLoadButton.interactable = true;
         loggedInSaveButton.interactable = true;
+    }
+
+    async void RefreshLogin()
+    {
+        WWWForm dataForm = new();
+        dataForm.AddField("username", refreshLoginUsernameInput.text);
+        dataForm.AddField("password", refreshLoginPasswordInput.text);
+        dataForm.AddField("loginType", "1");
+        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loginAccount.php", dataForm);
+        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
+        await request.SendWebRequest();
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            UpdateStatusText(refreshLoginStatusText, "Failed to make HTTP request", Color.red);
+            return;
+        }
+        string response = request.downloadHandler.text;
+        if (response != "-1")
+        {
+            if (response == "-2")
+            {
+                UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);
+            }
+            else if (response.Split(":")[0] == "1")
+            {
+                string[] array = response.Split(':');
+                string session = array[1];
+                string userName = array[2];
+                int userId = int.Parse(array[3]);
+                PlayerPrefs.SetString("gameSession", session);
+                PlayerPrefs.SetString("userName", userName);
+                PlayerPrefs.SetInt("userId", userId);
+                SwitchPanel(0);
+                UpdateStatusText(refreshLoginStatusText, "", Color.red);
+            }
+            else
+            {
+                UpdateStatusText(refreshLoginStatusText, "Unknown server response", Color.red);
+            }
+        }
+        else
+        {
+            UpdateStatusText(refreshLoginStatusText, "Internal login server error", Color.red);
+        }
     }
 
     void UpdateStatusText(TMP_Text statusText, string message, Color color)
