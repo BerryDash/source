@@ -32,13 +32,15 @@ public class LoadingMenu : MonoBehaviour
             SetIfNone("Setting1", 1);
             SetIfNone("Setting2", 0);
             SetIfNone("Setting3", 1);
+            SetIfNone("Setting4", 0);
             Screen.fullScreen = PlayerPrefs.GetInt("Setting1", 1) == 1;
         }
         else
         {
             SetIfNone("Setting1", 1, true);
-            SetIfNone("Setting2", 0, true);
+            SetIfNone("Setting2", 0);
             SetIfNone("Setting3", 1, true);
+            SetIfNone("Setting4", 0, true);
             Application.targetFrameRate = 360;
             QualitySettings.vSyncCount = 0;
             if (Application.platform == RuntimePlatform.WebGLPlayer) {

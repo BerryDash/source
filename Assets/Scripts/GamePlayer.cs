@@ -572,7 +572,7 @@ public class GamePlayer : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         backgroundMusic.Pause();
-        pausePanel.SetActive(value: true);
+        pausePanel.SetActive(true);
     }
 
     public void DisablePause()
@@ -580,7 +580,7 @@ public class GamePlayer : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         backgroundMusic.Play();
-        pausePanel.SetActive(value: false);
+        pausePanel.SetActive(false);
     }
 
     void OnApplicationPause(bool pause)

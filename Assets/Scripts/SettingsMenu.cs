@@ -6,6 +6,7 @@ public class SettingsMenu : MonoBehaviour
     public Toggle setting1toggle;
     public Toggle setting2toggle;
     public Toggle setting3toggle;
+    public Toggle setting4toggle;
     public Slider musicSlider;
     public Slider sfxSlider;
 
@@ -18,12 +19,14 @@ public class SettingsMenu : MonoBehaviour
             setting1toggle.isOn = PlayerPrefs.GetInt("Setting1", 1) == 1;
             setting2toggle.isOn = PlayerPrefs.GetInt("Setting2", 0) == 1;
             setting3toggle.isOn = PlayerPrefs.GetInt("Setting3", 1) == 1;
+            setting4toggle.isOn = PlayerPrefs.GetInt("Setting4", 0) == 1;
         }
         else
         {
             setting1toggle.interactable = false;
             setting2toggle.isOn = PlayerPrefs.GetInt("Setting2", 0) == 1;
             setting3toggle.interactable = false;
+            setting4toggle.isOn = PlayerPrefs.GetInt("Setting4", 0) == 1;
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
                 setting1toggle.isOn = false;
@@ -42,6 +45,10 @@ public class SettingsMenu : MonoBehaviour
         {
             PlayerPrefs.SetInt("Setting3", value ? 1 : 0);
             QualitySettings.vSyncCount = value ? 1 : -1;
+        });
+        setting4toggle.onValueChanged.AddListener(value =>
+        {
+            PlayerPrefs.SetInt("Setting4", value ? 1 : 0);
         });
         musicSlider.onValueChanged.AddListener(value =>
         {
