@@ -149,7 +149,7 @@ public class GamePlayer : MonoBehaviour
         CheckIfGrounded();
         bool controllerLeft = Gamepad.current != null && (Gamepad.current.leftStick.left.isPressed || Gamepad.current.dpad.left.isPressed || Gamepad.current.rightStick.left.isPressed);
         bool controllerRight = Gamepad.current != null && (Gamepad.current.leftStick.right.isPressed || Gamepad.current.dpad.right.isPressed || Gamepad.current.rightStick.right.isPressed);
-        bool controllerJump = Gamepad.current != null && (Gamepad.current.leftStick.up.isPressed || Gamepad.current.dpad.up.isPressed || Gamepad.current.rightStick.up.isPressed);
+        bool controllerJump = Gamepad.current != null && (Gamepad.current.leftStick.up.isPressed || Gamepad.current.leftStick.down.isPressed || Gamepad.current.dpad.up.isPressed || Gamepad.current.dpad.down.isPressed || Gamepad.current.rightStick.up.isPressed || Gamepad.current.rightStick.down.isPressed);
         if (!Application.isMobilePlatform)
         {
             if (controllerLeft || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed)
@@ -160,7 +160,7 @@ public class GamePlayer : MonoBehaviour
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed)))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed)))
             {
                 doJump = true;
             }
