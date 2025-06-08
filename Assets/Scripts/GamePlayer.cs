@@ -160,7 +160,7 @@ public class GamePlayer : MonoBehaviour
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed)))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || (Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed)))
             {
                 doJump = true;
             }
