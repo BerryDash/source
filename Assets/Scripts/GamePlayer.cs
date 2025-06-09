@@ -96,7 +96,6 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.Save();
         backgroundMusic.volume = PlayerPrefs.GetFloat("musicVolume", 1f);
         screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
-        highScoreText.text = $"High Score: {Tools.FormatWithCommas(highscore)}";
         if (Application.isMobilePlatform)
         {
             leftArrow = new("LeftArrow");
@@ -110,16 +109,22 @@ public class GamePlayer : MonoBehaviour
             restartButton.AddComponent<SpriteRenderer>();
             backButton.AddComponent<SpriteRenderer>();
 
-            leftArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
-            leftArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
-            rightArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
-            rightArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
-            jumpArrow.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Arrow");
-            jumpArrow.GetComponent<SpriteRenderer>().sortingOrder = 1000;
-            restartButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Restart");
-            restartButton.GetComponent<SpriteRenderer>().sortingOrder = 1000;
-            backButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Arrows/Back");
-            backButton.GetComponent<SpriteRenderer>().sortingOrder = 1000;
+            var leftArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
+            var rightArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
+            var jumpArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
+            var restartButtonSprite = leftArrow.GetComponent<SpriteRenderer>();
+            var backButtonSprite = leftArrow.GetComponent<SpriteRenderer>();
+
+            leftArrowSprite.sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            leftArrowSprite.sortingOrder = 1000;
+            rightArrowSprite.sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            rightArrowSprite.sortingOrder = 1000;
+            jumpArrowSprite.sprite = Resources.Load<Sprite>("Arrows/Arrow");
+            jumpArrowSprite.sortingOrder = 1000;
+            restartButtonSprite.sprite = Resources.Load<Sprite>("Arrows/Restart");
+            restartButtonSprite.sortingOrder = 1000;
+            backButtonSprite.sprite = Resources.Load<Sprite>("Arrows/Back");
+            backButtonSprite.sortingOrder = 1000;
 
             leftArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, 90f);
             rightArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, -90f);
