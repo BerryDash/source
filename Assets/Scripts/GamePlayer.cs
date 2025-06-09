@@ -277,7 +277,7 @@ public class GamePlayer : MonoBehaviour
         }
         if (doRestart)
         {
-            Respawn();
+            if (score != 0) Respawn();
         }
     }
 
