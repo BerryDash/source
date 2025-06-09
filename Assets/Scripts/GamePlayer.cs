@@ -10,6 +10,10 @@ public class GamePlayer : MonoBehaviour
     private float nextSpawnTime;
     private BigInteger score;
     private BigInteger highscore;
+    private BigInteger totalNormalBerries;
+    private BigInteger totalPoisonBerries;
+    private BigInteger totalSlowBerries;
+    private BigInteger totalUltraBerries;
     private float boostLeft;
     private float slownessLeft;
     private float screenWidth;
@@ -30,12 +34,18 @@ public class GamePlayer : MonoBehaviour
     public GameObject jumpArrow;
     public GameObject restartButton;
     public GameObject backButton;
+    public float lastMoveTime;
 
     void Awake()
     {
+        lastMoveTime = Time.time;
         UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
         instance = this;
         highscore = BigInteger.Parse(PlayerPrefs.GetString("HighScoreV2", "0"));
+        totalNormalBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalNormalBerries", "0"));
+        totalPoisonBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalPoisonBerries", "0"));
+        totalSlowBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalSlowBerries", "0"));
+        totalUltraBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalUltraBerries", "0"));
     }
 
     void Start()
@@ -232,18 +242,21 @@ public class GamePlayer : MonoBehaviour
         }
         if (doMoveLeft && !doMoveRight)
         {
+            lastMoveTime = Time.time;
             bird.transform.position += new UnityEngine.Vector3(-movespeed, 0f, 0f);
-            ClampPosition(screenWidth, bird);
+            ClampPosition(bird);
             bird.transform.localScale = new UnityEngine.Vector3(1.35f, 1.35f, 1.35f);
         }
         if (doMoveRight && !doMoveLeft)
         {
+            lastMoveTime = Time.time;
             bird.transform.position += new UnityEngine.Vector3(movespeed, 0f, 0f);
-            ClampPosition(screenWidth, bird);
+            ClampPosition(bird);
             bird.transform.localScale = new UnityEngine.Vector3(-1.35f, 1.35f, 1.35f);
         }
         if (doJump && isGrounded)
         {
+            lastMoveTime = Time.time;
             AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
             if (boostLeft > 0f)
             {
@@ -268,11 +281,21 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void ClampPosition(float screenWidth, GameObject bird)
+    void ClampPosition(GameObject obj)
     {
-        float halfWidth = screenWidth / 2.17f;
-        float clampedX = Mathf.Clamp(bird.transform.position.x, -halfWidth, halfWidth);
-        bird.transform.position = new UnityEngine.Vector3(clampedX, bird.transform.position.y, bird.transform.position.z);
+        var cam = Camera.main;
+        var pos = obj.transform.position;
+        var bounds = obj.GetComponent<Renderer>().bounds.extents;
+
+        float zDist = Mathf.Abs(cam.transform.position.z - pos.z);
+
+        UnityEngine.Vector3 min = cam.ViewportToWorldPoint(new UnityEngine.Vector3(0, 0, zDist));
+        UnityEngine.Vector3 max = cam.ViewportToWorldPoint(new UnityEngine.Vector3(1, 1, zDist));
+
+        pos.x = Mathf.Clamp(pos.x, min.x + bounds.x, max.x - bounds.x);
+        pos.y = Mathf.Clamp(pos.y, min.y + bounds.y, max.y - bounds.y);
+
+        obj.transform.position = pos;
     }
 
     void FixedUpdate()
@@ -361,7 +384,7 @@ public class GamePlayer : MonoBehaviour
         if (screenWidth != Camera.main.orthographicSize * 2f * Camera.main.aspect)
         {
             screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
-            ClampPosition(screenWidth, bird);
+            ClampPosition(bird);
             if (Application.isMobilePlatform)
             {
                 leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
@@ -383,6 +406,11 @@ public class GamePlayer : MonoBehaviour
         GameObject[] slownessberries = GameObject.FindGameObjectsWithTag("SlowBerry");
         if (!pausePanel.activeSelf)
         {
+            if (Time.time - lastMoveTime > 20)
+            {
+                lastMoveTime = float.MaxValue;
+                EnablePause();
+            }
             CheckIfGrounded();
             GameObject[] array5 = berries;
             foreach (GameObject berry in array5)
@@ -395,8 +423,8 @@ public class GamePlayer : MonoBehaviour
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Eat"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(berry);
-                    score++;
-                    UpdateScore(score);
+                    totalNormalBerries++;
+                    UpdateStats(1);
                 }
                 berry.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
@@ -411,6 +439,8 @@ public class GamePlayer : MonoBehaviour
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Death"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Respawn();
+                    totalPoisonBerries++;
+                    UpdateStats(0);
                 }
                 gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
             }
@@ -425,17 +455,16 @@ public class GamePlayer : MonoBehaviour
                 {
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Powerup"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(gameObject8);
+                    totalUltraBerries++;
                     if (slownessLeft > 0f)
                     {
                         slownessLeft = 0f;
-                        score++;
-                        UpdateScore(score);
+                        UpdateStats(1);
                     }
                     else
                     {
                         boostLeft += 10f;
-                        score += 5;
-                        UpdateScore(score);
+                        UpdateStats(5);
                     }
                 }
                 gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
@@ -453,10 +482,10 @@ public class GamePlayer : MonoBehaviour
                     Destroy(gameObject9);
                     boostLeft = 0f;
                     slownessLeft = 10f;
+                    totalSlowBerries++;
                     if (score > 0)
                     {
-                        score--;
-                        UpdateScore(score);
+                        UpdateStats(-1);
                     }
                 }
                 gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
@@ -502,7 +531,7 @@ public class GamePlayer : MonoBehaviour
         score = 0;
         boostLeft = 0f;
         slownessLeft = 0f;
-        UpdateScore(score);
+        UpdateStats(0);
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
@@ -526,13 +555,18 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void UpdateScore(BigInteger score)
+    void UpdateStats(BigInteger toAdd)
     {
+        score += toAdd;
         if (score > highscore)
         {
             highscore = score;
         }
         PlayerPrefs.SetString("HighScoreV2", highscore.ToString());
+        PlayerPrefs.SetString("TotalNormalBerries", totalNormalBerries.ToString());
+        PlayerPrefs.SetString("TotalPoisonBerries", totalPoisonBerries.ToString());
+        PlayerPrefs.SetString("TotalSlowBerries", totalSlowBerries.ToString());
+        PlayerPrefs.SetString("TotalUltraBerries", totalUltraBerries.ToString());
         PlayerPrefs.Save();
         scoreText.text = "Score: " + Tools.FormatWithCommas(score);
         highScoreText.text = "High Score: " + Tools.FormatWithCommas(highscore);
@@ -577,6 +611,7 @@ public class GamePlayer : MonoBehaviour
 
     public void DisablePause()
     {
+        lastMoveTime = Time.time;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         backgroundMusic.Play();
