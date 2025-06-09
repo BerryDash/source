@@ -110,10 +110,10 @@ public class GamePlayer : MonoBehaviour
             backButton.AddComponent<SpriteRenderer>();
 
             var leftArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
-            var rightArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
-            var jumpArrowSprite = leftArrow.GetComponent<SpriteRenderer>();
-            var restartButtonSprite = leftArrow.GetComponent<SpriteRenderer>();
-            var backButtonSprite = leftArrow.GetComponent<SpriteRenderer>();
+            var rightArrowSprite = rightArrow.GetComponent<SpriteRenderer>();
+            var jumpArrowSprite = jumpArrow.GetComponent<SpriteRenderer>();
+            var restartButtonSprite = restartButton.GetComponent<SpriteRenderer>();
+            var backButtonSprite = backButton.GetComponent<SpriteRenderer>();
 
             leftArrowSprite.sprite = Resources.Load<Sprite>("Arrows/Arrow");
             leftArrowSprite.sortingOrder = 1000;
