@@ -124,8 +124,9 @@ public class GamePlayer : MonoBehaviour
             leftArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, 90f);
             rightArrow.transform.rotation = UnityEngine.Quaternion.Euler(0f, 0f, -90f);
 
-            leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
-            rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+            leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -3.8f, 0f);
+            rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -3.8f, 0f);
+            jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
             restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
             backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
 
@@ -134,7 +135,6 @@ public class GamePlayer : MonoBehaviour
             jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
             restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
             backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-            jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
         }
     }
 
@@ -387,8 +387,9 @@ public class GamePlayer : MonoBehaviour
             ClampPosition(bird);
             if (Application.isMobilePlatform)
             {
-                leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -4f, 0f);
-                rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -4f, 0f);
+                leftArrow.transform.position = new UnityEngine.Vector3(-screenWidth / 2.5f, -3.8f, 0f);
+                rightArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -3.8f, 0f);
+                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
                 restartButton.transform.position = new UnityEngine.Vector3(screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
                 backButton.transform.position = new UnityEngine.Vector3(-screenWidth / 2.3f, Camera.main.orthographicSize - 1.2f, 0f);
 
@@ -397,7 +398,6 @@ public class GamePlayer : MonoBehaviour
                 jumpArrow.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
                 restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
                 backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
-                jumpArrow.transform.position = new UnityEngine.Vector3(screenWidth / 2.5f, -1f, 0f);
             }
         }
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
