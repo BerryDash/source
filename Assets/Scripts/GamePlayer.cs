@@ -136,6 +136,7 @@ public class GamePlayer : MonoBehaviour
             restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
             backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
         }
+        UpdateStats(0);
     }
 
     void MoveBird()
