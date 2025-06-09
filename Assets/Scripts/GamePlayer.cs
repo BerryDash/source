@@ -570,6 +570,7 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.Save();
         scoreText.text = "Score: " + Tools.FormatWithCommas(score);
         highScoreText.text = "High Score: " + Tools.FormatWithCommas(highscore);
+        if (restartButton != null) restartButton.GetComponent<Renderer>().material.color = score == 0 ? Color.gray : Color.white;
     }
 
     void CheckIfGrounded()
