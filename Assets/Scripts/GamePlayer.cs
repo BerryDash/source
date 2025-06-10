@@ -14,8 +14,10 @@ public class GamePlayer : MonoBehaviour
     private BigInteger totalPoisonBerries;
     private BigInteger totalSlowBerries;
     private BigInteger totalUltraBerries;
+    private BigInteger totalSpeedyBerries;
     private float boostLeft;
     private float slownessLeft;
+    private float speedyLeft;
     private float screenWidth;
     private bool isGrounded;
     public TMP_Text scoreText;
@@ -46,6 +48,7 @@ public class GamePlayer : MonoBehaviour
         totalPoisonBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalPoisonBerries", "0"));
         totalSlowBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalSlowBerries", "0"));
         totalUltraBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalUltraBerries", "0"));
+        totalSpeedyBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalSpeedyBerries", "0"));
     }
 
     void Start()
@@ -154,7 +157,7 @@ public class GamePlayer : MonoBehaviour
         bool doRestart = false;
         bool doBack = false;
         float movespeed = baseSpeed;
-        if (boostLeft > 0f)
+        if (boostLeft > 0f || speedyLeft > 0f)
         {
             movespeed = baseSpeed * 1.39f;
         }
@@ -320,6 +323,11 @@ public class GamePlayer : MonoBehaviour
                 slownessLeft -= Time.deltaTime;
                 boostText.text = "Slowness expires in " + $"{slownessLeft:0.0}" + "s";
             }
+            else if (speedyLeft > 0f)
+            {
+                speedyLeft -= Time.deltaTime;
+                boostText.text = "Speed expires in " + $"{speedyLeft:0.0}" + "s";
+            }
             else
             {
                 boostText.text = "";
@@ -346,26 +354,33 @@ public class GamePlayer : MonoBehaviour
                 spriteRenderer.sprite = Resources.Load<Sprite>("Berries/Berry");
                 newBerry.tag = "Berry";
             }
-            else if (spawnProbability <= 0.8f)
+            else if (spawnProbability <= 0.7f)
             {
                 newBerry = new GameObject("PoisonBerry");
                 spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("Berries/PoisonBerry");
                 newBerry.tag = "PoisonBerry";
             }
-            else if (spawnProbability <= 0.9f)
+            else if (spawnProbability <= 0.8f)
             {
                 newBerry = new GameObject("SlowBerry");
                 spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("Berries/SlowBerry");
                 newBerry.tag = "SlowBerry";
             }
-            else
+            else if (spawnProbability <= 0.9f)
             {
                 newBerry = new GameObject("UltraBerry");
                 spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>("Berries/UltraBerry");
                 newBerry.tag = "UltraBerry";
+            }
+            else
+            {
+                newBerry = new GameObject("SpeedyBerry");
+                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/SpeedyBerry");
+                newBerry.tag = "SpeedyBerry";
             }
             spriteRenderer.sortingOrder = -5;
 
@@ -410,6 +425,7 @@ public class GamePlayer : MonoBehaviour
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
         GameObject[] slownessberries = GameObject.FindGameObjectsWithTag("SlowBerry");
+        GameObject[] speedyberries = GameObject.FindGameObjectsWithTag("SpeedyBerry");
         if (!pausePanel.activeSelf)
         {
             if (Time.time - lastMoveTime > 20)
@@ -432,7 +448,14 @@ public class GamePlayer : MonoBehaviour
                     totalNormalBerries++;
                     UpdateStats(1);
                 }
-                berry.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                if (speedyLeft > 0)
+                {
+                    berry.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -7.5f);
+                }
+                else
+                {
+                    berry.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                }
             }
             array5 = poisonberries;
             foreach (GameObject gameObject7 in array5)
@@ -448,7 +471,14 @@ public class GamePlayer : MonoBehaviour
                     totalPoisonBerries++;
                     UpdateStats(0);
                 }
-                gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                if (speedyLeft > 0)
+                {
+                    gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -7.5f);
+                }
+                else
+                {
+                    gameObject7.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                }
             }
             array5 = ultraberries;
             foreach (GameObject gameObject8 in array5)
@@ -462,6 +492,7 @@ public class GamePlayer : MonoBehaviour
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Powerup"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(gameObject8);
                     totalUltraBerries++;
+                    speedyLeft = 0f;
                     if (slownessLeft > 0f)
                     {
                         slownessLeft = 0f;
@@ -473,7 +504,14 @@ public class GamePlayer : MonoBehaviour
                         UpdateStats(5);
                     }
                 }
-                gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                if (speedyLeft > 0)
+                {
+                    gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -7.5f);
+                }
+                else
+                {
+                    gameObject8.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                }
             }
             array5 = slownessberries;
             foreach (GameObject gameObject9 in array5)
@@ -488,13 +526,47 @@ public class GamePlayer : MonoBehaviour
                     Destroy(gameObject9);
                     boostLeft = 0f;
                     slownessLeft = 10f;
+                    speedyLeft = 0f;
                     totalSlowBerries++;
                     if (score > 0)
                     {
                         UpdateStats(-1);
                     }
                 }
-                gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                if (speedyLeft > 0)
+                {
+                    gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -7.5f);
+                }
+                else
+                {
+                    gameObject9.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                }
+            }
+            array5 = speedyberries;
+            foreach (GameObject gameObject10 in array5)
+            {
+                if (gameObject10.transform.position.y < 0f - Camera.main.orthographicSize - 1f)
+                {
+                    Destroy(gameObject10);
+                }
+                else if (UnityEngine.Vector3.Distance(bird.transform.position, gameObject10.transform.position) < 1.5f)
+                {
+                    AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/SpeedyPowerup"), Camera.main.transform.position, 0.35f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+                    Destroy(gameObject10);
+                    boostLeft = 0f;
+                    slownessLeft = 0f;
+                    speedyLeft = 10f;
+                    totalSpeedyBerries++;
+                    UpdateStats(10);
+                }
+                if (speedyLeft > 0)
+                {
+                    gameObject10.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -7.5f);
+                }
+                else
+                {
+                    gameObject10.GetComponent<Rigidbody2D>().linearVelocity = new UnityEngine.Vector2(0f, -4f);
+                }
             }
         }
         else
@@ -521,6 +593,11 @@ public class GamePlayer : MonoBehaviour
             {
                 array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
             }
+            array5 = speedyberries;
+            for (int i = 0; i < array5.Length; i++)
+            {
+                array5[i].GetComponent<Rigidbody2D>().linearVelocity = UnityEngine.Vector2.zero;
+            }
         }
         if (!Application.isMobilePlatform && (Keyboard.current.escapeKey.wasPressedThisFrame || (Gamepad.current != null && (Gamepad.current.startButton.wasPressedThisFrame || Gamepad.current.buttonEast.wasPressedThisFrame))))
         {
@@ -542,6 +619,7 @@ public class GamePlayer : MonoBehaviour
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
         GameObject[] slownessberries = GameObject.FindGameObjectsWithTag("SlowBerry");
+        GameObject[] speedyberries = GameObject.FindGameObjectsWithTag("SpeedyBerry");
 
         foreach (GameObject b in berries)
         {
@@ -559,6 +637,10 @@ public class GamePlayer : MonoBehaviour
         {
             Destroy(sb);
         }
+        foreach (GameObject syb in speedyberries)
+        {
+            Destroy(syb);
+        }
     }
 
     void UpdateStats(BigInteger toAdd)
@@ -573,6 +655,7 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.SetString("TotalPoisonBerries", totalPoisonBerries.ToString());
         PlayerPrefs.SetString("TotalSlowBerries", totalSlowBerries.ToString());
         PlayerPrefs.SetString("TotalUltraBerries", totalUltraBerries.ToString());
+        PlayerPrefs.SetString("TotalSpeedyBerries", totalSpeedyBerries.ToString());
         PlayerPrefs.Save();
         scoreText.text = "Score: " + Tools.FormatWithCommas(score);
         highScoreText.text = "High Score: " + Tools.FormatWithCommas(highscore);
