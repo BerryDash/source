@@ -182,7 +182,7 @@ public class GamePlayer : MonoBehaviour
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.kKey.isPressed || Keyboard.current.iKey.isPressed || Mouse.current.leftButton.isPressed && !Application.isMobilePlatform || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
+            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.kKey.isPressed || Keyboard.current.iKey.isPressed || Mouse.current.leftButton.isPressed || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
             {
                 doJump = true;
             }
@@ -193,62 +193,31 @@ public class GamePlayer : MonoBehaviour
         }
         if (Application.isMobilePlatform)
         {
-            if (!Application.isMobilePlatform)
+            var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
+            for (int i = 0; i < touches.Count; i++)
             {
-                if (Mouse.current.leftButton.isPressed)
+                var pos = touches[i].screenPosition;
+                UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
+                clickPosition.z = 0f;
+                if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                 {
-                    UnityEngine.Vector3 touchPosition = Camera.main.ScreenToWorldPoint(Pointer.current.position.ReadValue());
-                    touchPosition.z = 0f;
-                    if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        doMoveLeft = true;
-                    }
-                    if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        doMoveRight = true;
-                    }
-                    if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        doJump = true;
-                    }
-                    if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        doRestart = true;
-                    }
-                    if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        doBack = true;
-                    }
+                    doMoveLeft = true;
                 }
-            }
-            else
-            {
-                var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
-                for (int i = 0; i < touches.Count; i++)
+                if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
                 {
-                    var pos = touches[i].screenPosition;
-                    UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
-                    clickPosition.z = 0f;
-                    if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                    {
-                        doMoveLeft = true;
-                    }
-                    if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                    {
-                        doMoveRight = true;
-                    }
-                    if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                    {
-                        doJump = true;
-                    }
-                    if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                    {
-                        doRestart = true;
-                    }
-                    if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                    {
-                        doBack = true;
-                    }
+                    doMoveRight = true;
+                }
+                if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
+                {
+                    doJump = true;
+                }
+                if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
+                {
+                    doRestart = true;
+                }
+                if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
+                {
+                    doBack = true;
                 }
             }
         }
