@@ -191,7 +191,7 @@ public class GamePlayer : MonoBehaviour
                 doRestart = true;
             }
         }
-        if (Application.isMobilePlatform)
+        else
         {
             var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
             for (int i = 0; i < touches.Count; i++)
