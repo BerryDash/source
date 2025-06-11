@@ -26,9 +26,9 @@ public class AccountRefreshLogin : MonoBehaviour
     async void RefreshLogin()
     {
         WWWForm dataForm = new();
-        dataForm.AddField("username", SensitiveInfo.Encrypt(refreshLoginUsernameInput.text));
-        dataForm.AddField("password", SensitiveInfo.Encrypt(refreshLoginPasswordInput.text));
-        dataForm.AddField("loginType", SensitiveInfo.Encrypt("1"));
+        dataForm.AddField("username", SensitiveInfo.Encrypt(refreshLoginUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("password", SensitiveInfo.Encrypt(refreshLoginPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("loginType", SensitiveInfo.Encrypt("1", SensitiveInfo.SERVER_SEND_TRANSFER_KEY)); //Yes II
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -39,7 +39,7 @@ public class AccountRefreshLogin : MonoBehaviour
             AccountHandler.UpdateStatusText(refreshLoginStatusText, "Failed to make HTTP request", Color.red);
             return;
         }
-        string response = request.downloadHandler.text;
+        string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         if (response != "-1")
         {
             if (response == "-2")

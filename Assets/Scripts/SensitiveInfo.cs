@@ -6,12 +6,13 @@ using System.Text;
 public class SensitiveInfo
 {
     public static readonly string SERVER_DATABASE_PREFIX = "https://berrydash.lncvrt.xyz/database/";
-    private static readonly string SERVER_TRANSFER_KEY = "";
+    public static readonly string SERVER_RECEIVE_TRANSFER_KEY = "";
+    public static readonly string SERVER_SEND_TRANSFER_KEY = "";
 
-    public static string Encrypt(string plainText)
+    public static string Encrypt(string plainText, string key)
     {
         using Aes aes = Aes.Create();
-        aes.Key = Encoding.UTF8.GetBytes(SERVER_TRANSFER_KEY);
+        aes.Key = Encoding.UTF8.GetBytes(key);
         aes.Mode = CipherMode.CBC;
         aes.Padding = PaddingMode.PKCS7;
         aes.GenerateIV();
@@ -28,11 +29,11 @@ public class SensitiveInfo
         return Convert.ToBase64String(ms.ToArray());
     }
 
-    public static string Decrypt(string dataB64)
+    public static string Decrypt(string dataB64, string key)
     {
         var data = Convert.FromBase64String(dataB64);
         using Aes aes = Aes.Create();
-        aes.Key = Encoding.UTF8.GetBytes(SERVER_TRANSFER_KEY);
+        aes.Key = Encoding.UTF8.GetBytes(key);
         aes.Mode = CipherMode.CBC;
         aes.Padding = PaddingMode.PKCS7;
 

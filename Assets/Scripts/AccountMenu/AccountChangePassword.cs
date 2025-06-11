@@ -35,10 +35,10 @@ public class AccountChangePassword : MonoBehaviour
             return;
         }
         WWWForm dataForm = new();
-        dataForm.AddField("inputPassword", SensitiveInfo.Encrypt(changePasswordCurrentPasswordInput.text));
-        dataForm.AddField("inputNewPassword", SensitiveInfo.Encrypt(changePasswordNewPasswordInput.text));
-        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession")));
-        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName")));
+        dataForm.AddField("inputPassword", SensitiveInfo.Encrypt(changePasswordCurrentPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("inputNewPassword", SensitiveInfo.Encrypt(changePasswordNewPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountPassword.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -49,7 +49,7 @@ public class AccountChangePassword : MonoBehaviour
             AccountHandler.UpdateStatusText(changePasswordStatusText, "Failed to make HTTP request", Color.red);
             return;
         }
-        string response = request.downloadHandler.text;
+        string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
             case "-1":

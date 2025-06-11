@@ -28,10 +28,10 @@ public class AccountLogin : MonoBehaviour
     async void SubmitLogin()
     {
         WWWForm dataForm = new();
-        dataForm.AddField("username", SensitiveInfo.Encrypt(loginUsernameInput.text));
-        dataForm.AddField("password", SensitiveInfo.Encrypt(loginPasswordInput.text));
-        dataForm.AddField("currentHighScore", SensitiveInfo.Encrypt(PlayerPrefs.GetString("HighScoreV2", "0")));
-        dataForm.AddField("loginType", SensitiveInfo.Encrypt("0"));
+        dataForm.AddField("username", SensitiveInfo.Encrypt(loginUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("password", SensitiveInfo.Encrypt(loginPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("currentHighScore", SensitiveInfo.Encrypt(PlayerPrefs.GetString("HighScoreV2", "0"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("loginType", SensitiveInfo.Encrypt("0", SensitiveInfo.SERVER_SEND_TRANSFER_KEY)); //Yes.
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -42,7 +42,7 @@ public class AccountLogin : MonoBehaviour
             AccountHandler.UpdateStatusText(loginPanelStatusText, "Failed to make HTTP request", Color.red);
             return;
         }
-        string response = request.downloadHandler.text;
+        string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         if (response != "-1")
         {
             if (response == "-2")

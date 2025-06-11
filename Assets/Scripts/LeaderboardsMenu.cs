@@ -45,7 +45,7 @@ public class LeaderboardsMenu : MonoBehaviour
         }
         UpdateStatus(true, "Loading...");
         WWWForm dataForm = new();
-        dataForm.AddField("showAmount", SensitiveInfo.Encrypt(showAmount.ToString()));
+        dataForm.AddField("showAmount", SensitiveInfo.Encrypt(showAmount.ToString(), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "getTopPlayers.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -53,7 +53,7 @@ public class LeaderboardsMenu : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             UpdateStatus(false);
-            string response = request.downloadHandler.text;
+            string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
             if (response == "-999")
             {
                 UpdateStatus(true, "Server error while fetching data");

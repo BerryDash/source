@@ -38,11 +38,11 @@ public class AccountLoggedIn : MonoBehaviour
         loggedInLoadButton.interactable = false;
         loggedInSaveButton.interactable = false;
         WWWForm dataForm = new();
-        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName", "")));
-        dataForm.AddField("gameSession", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession", "")));
-        dataForm.AddField("highScore", SensitiveInfo.Encrypt(PlayerPrefs.GetString("HighScoreV2", "0")));
-        dataForm.AddField("icon", SensitiveInfo.Encrypt(PlayerPrefs.GetInt("icon", 1).ToString()));
-        dataForm.AddField("overlay", SensitiveInfo.Encrypt(PlayerPrefs.GetInt("overlay", 0).ToString()));
+        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName", ""), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("gameSession", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession", ""), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("highScore", SensitiveInfo.Encrypt(PlayerPrefs.GetString("HighScoreV2", "0"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("icon", SensitiveInfo.Encrypt(PlayerPrefs.GetInt("icon", 1).ToString(), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("overlay", SensitiveInfo.Encrypt(PlayerPrefs.GetInt("overlay", 0).ToString(), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "saveAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -53,7 +53,7 @@ public class AccountLoggedIn : MonoBehaviour
             AccountHandler.UpdateStatusText(loggedInText, "Failed to make HTTP request", Color.red);
             return;
         }
-        string response = request.downloadHandler.text;
+        string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
             case "1":
@@ -78,8 +78,8 @@ public class AccountLoggedIn : MonoBehaviour
         loggedInLoadButton.interactable = false;
         loggedInSaveButton.interactable = false;
         WWWForm dataForm = new();
-        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName", "")));
-        dataForm.AddField("gameSession", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession", "")));
+        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName", ""), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
+        dataForm.AddField("gameSession", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession", ""), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loadAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -90,7 +90,7 @@ public class AccountLoggedIn : MonoBehaviour
             AccountHandler.UpdateStatusText(loggedInText, "Failed to make HTTP request", Color.red);
             return;
         }
-        string response = request.downloadHandler.text;
+        string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
             case "-1":
