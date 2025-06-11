@@ -45,8 +45,8 @@ public class LeaderboardsMenu : MonoBehaviour
         }
         UpdateStatus(true, "Loading...");
         WWWForm dataForm = new();
-        dataForm.AddField("showAmount", showAmount);
-        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/getTopPlayers.php", dataForm);
+        dataForm.AddField("showAmount", SensitiveInfo.Encrypt(showAmount.ToString()));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "getTopPlayers.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         await request.SendWebRequest();

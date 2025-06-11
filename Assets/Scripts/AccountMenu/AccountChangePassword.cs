@@ -35,11 +35,11 @@ public class AccountChangePassword : MonoBehaviour
             return;
         }
         WWWForm dataForm = new();
-        dataForm.AddField("inputPassword", changePasswordCurrentPasswordInput.text);
-        dataForm.AddField("inputNewPassword", changePasswordNewPasswordInput.text);
-        dataForm.AddField("session", PlayerPrefs.GetString("gameSession"));
-        dataForm.AddField("userName", PlayerPrefs.GetString("userName"));
-        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/changeAccountPassword.php", dataForm);
+        dataForm.AddField("inputPassword", SensitiveInfo.Encrypt(changePasswordCurrentPasswordInput.text));
+        dataForm.AddField("inputNewPassword", SensitiveInfo.Encrypt(changePasswordNewPasswordInput.text));
+        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession")));
+        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName")));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountPassword.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());

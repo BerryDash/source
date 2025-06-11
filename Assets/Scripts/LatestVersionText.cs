@@ -43,7 +43,7 @@ public class LatestVersionText : MonoBehaviour
 
     async void GetLatestVersion()
     {
-        using UnityWebRequest request = UnityWebRequest.Get("https://berrydash.lncvrt.xyz/database/getLatestVersion.php");
+        using UnityWebRequest request = UnityWebRequest.Get(SensitiveInfo.SERVER_DATABASE_PREFIX + "getLatestVersion.php");
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());

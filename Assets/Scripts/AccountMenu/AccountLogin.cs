@@ -28,11 +28,11 @@ public class AccountLogin : MonoBehaviour
     async void SubmitLogin()
     {
         WWWForm dataForm = new();
-        dataForm.AddField("username", loginUsernameInput.text);
-        dataForm.AddField("password", loginPasswordInput.text);
-        dataForm.AddField("currentHighScore", PlayerPrefs.GetString("HighScoreV2", "0"));
-        dataForm.AddField("loginType", "0");
-        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/loginAccount.php", dataForm);
+        dataForm.AddField("username", SensitiveInfo.Encrypt(loginUsernameInput.text));
+        dataForm.AddField("password", SensitiveInfo.Encrypt(loginPasswordInput.text));
+        dataForm.AddField("currentHighScore", SensitiveInfo.Encrypt(PlayerPrefs.GetString("HighScoreV2", "0")));
+        dataForm.AddField("loginType", SensitiveInfo.Encrypt("0"));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loginAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());

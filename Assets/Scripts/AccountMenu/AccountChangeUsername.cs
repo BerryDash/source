@@ -27,11 +27,11 @@ public class AccountChangeUsername : MonoBehaviour
     async void ChangeUsername()
     {
         WWWForm dataForm = new();
-        dataForm.AddField("inputUserName", changeUsernameCurrentUsernameInput.text);
-        dataForm.AddField("inputNewUserName", changeUsernameNewUsernameInput.text);
-        dataForm.AddField("session", PlayerPrefs.GetString("gameSession"));
-        dataForm.AddField("userName", PlayerPrefs.GetString("userName"));
-        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/changeAccountUsername.php", dataForm);
+        dataForm.AddField("inputUserName", SensitiveInfo.Encrypt(changeUsernameCurrentUsernameInput.text));
+        dataForm.AddField("inputNewUserName", SensitiveInfo.Encrypt(changeUsernameNewUsernameInput.text));
+        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession")));
+        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName")));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountUsername.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());

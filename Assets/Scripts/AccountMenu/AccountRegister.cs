@@ -50,10 +50,10 @@ public class AccountRegister : MonoBehaviour
             return;
         }
         WWWForm dataForm = new();
-        dataForm.AddField("username", registerUsernameInput.text);
-        dataForm.AddField("email", registerEmailInput.text);
-        dataForm.AddField("password", registerPasswordInput.text);
-        using UnityWebRequest request = UnityWebRequest.Post("https://berrydash.lncvrt.xyz/database/registerAccount.php", dataForm);
+        dataForm.AddField("username", SensitiveInfo.Encrypt(registerUsernameInput.text));
+        dataForm.AddField("email", SensitiveInfo.Encrypt(registerEmailInput.text));
+        dataForm.AddField("password", SensitiveInfo.Encrypt(registerPasswordInput.text));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "registerAccount.php", dataForm);
         request.SetRequestHeader("User-Agent", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
