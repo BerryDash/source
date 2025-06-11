@@ -337,11 +337,18 @@ public class GamePlayer : MonoBehaviour
 
     void SpawnBerries()
     {
-        if (!(Time.time >= nextSpawnTime))
+        if (Time.time < nextSpawnTime)
         {
             return;
         }
-        nextSpawnTime = Time.time + 1f / spawnRate;
+        if (speedyLeft > 0)
+        {
+            nextSpawnTime = Time.time + 1f / (spawnRate * 1.875f);
+        }
+        else
+        {
+            nextSpawnTime = Time.time + 1f / spawnRate;
+        }
         float spawnProbability = Random.value;
         if (!pausePanel.activeSelf)
         {
@@ -614,6 +621,7 @@ public class GamePlayer : MonoBehaviour
         score = 0;
         boostLeft = 0f;
         slownessLeft = 0f;
+        speedyLeft = 0f;
         UpdateStats(0);
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
