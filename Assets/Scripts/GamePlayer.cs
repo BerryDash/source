@@ -270,7 +270,7 @@ public class GamePlayer : MonoBehaviour
         {
             lastMoveTime = Time.time;
             AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
-            if (boostLeft > 0f)
+            if (boostLeft > 0f || speedyLeft > 0f)
             {
                 rb.linearVelocity = UnityEngine.Vector2.up * 12f;
             }
