@@ -9,12 +9,14 @@ public class GamePlayer : MonoBehaviour
     private readonly float spawnRate = 1f;
     private float nextSpawnTime;
     private BigInteger score;
+    private BigInteger attempts;
     private BigInteger highscore;
     private BigInteger totalNormalBerries;
     private BigInteger totalPoisonBerries;
     private BigInteger totalSlowBerries;
     private BigInteger totalUltraBerries;
     private BigInteger totalSpeedyBerries;
+    private BigInteger totalAttempts;
     private float boostLeft;
     private float slownessLeft;
     private float speedyLeft;
@@ -49,6 +51,7 @@ public class GamePlayer : MonoBehaviour
         totalSlowBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalSlowBerries", "0"));
         totalUltraBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalUltraBerries", "0"));
         totalSpeedyBerries = BigInteger.Parse(PlayerPrefs.GetString("TotalSpeedyBerries", "0"));
+        totalAttempts = BigInteger.Parse(PlayerPrefs.GetString("TotalAttempts", "0"));
     }
 
     void Start()
@@ -144,7 +147,7 @@ public class GamePlayer : MonoBehaviour
             restartButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
             backButton.transform.localScale = new UnityEngine.Vector3(screenWidth / 14f, screenWidth / 14f, 1f);
         }
-        UpdateStats(0);
+        UpdateStats(0, 1);
     }
 
     void MoveBird()
@@ -453,7 +456,7 @@ public class GamePlayer : MonoBehaviour
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Eat"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Destroy(berry);
                     totalNormalBerries++;
-                    UpdateStats(1);
+                    UpdateStats(1, 0);
                 }
                 if (speedyLeft > 0)
                 {
@@ -476,7 +479,7 @@ public class GamePlayer : MonoBehaviour
                     AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Death"), Camera.main.transform.position, 1.2f * PlayerPrefs.GetFloat("sfxVolume", 1f));
                     Respawn();
                     totalPoisonBerries++;
-                    UpdateStats(0);
+                    UpdateStats(0, 0);
                 }
                 if (speedyLeft > 0)
                 {
@@ -503,12 +506,12 @@ public class GamePlayer : MonoBehaviour
                     if (slownessLeft > 0f)
                     {
                         slownessLeft = 0f;
-                        UpdateStats(1);
+                        UpdateStats(1, 0);
                     }
                     else
                     {
                         boostLeft += 10f;
-                        UpdateStats(5);
+                        UpdateStats(5, 0);
                     }
                 }
                 if (speedyLeft > 0)
@@ -537,7 +540,7 @@ public class GamePlayer : MonoBehaviour
                     totalSlowBerries++;
                     if (score > 0)
                     {
-                        UpdateStats(-1);
+                        UpdateStats(-1, 0);
                     }
                 }
                 if (speedyLeft > 0)
@@ -564,7 +567,7 @@ public class GamePlayer : MonoBehaviour
                     slownessLeft = 0f;
                     speedyLeft = 10f;
                     totalSpeedyBerries++;
-                    UpdateStats(10);
+                    UpdateStats(10, 0);
                 }
                 if (speedyLeft > 0)
                 {
@@ -622,7 +625,7 @@ public class GamePlayer : MonoBehaviour
         boostLeft = 0f;
         slownessLeft = 0f;
         speedyLeft = 0f;
-        UpdateStats(0);
+        UpdateStats(0, 1);
         GameObject[] berries = GameObject.FindGameObjectsWithTag("Berry");
         GameObject[] poisonberries = GameObject.FindGameObjectsWithTag("PoisonBerry");
         GameObject[] ultraberries = GameObject.FindGameObjectsWithTag("UltraBerry");
@@ -651,9 +654,11 @@ public class GamePlayer : MonoBehaviour
         }
     }
 
-    void UpdateStats(BigInteger toAdd)
+    void UpdateStats(BigInteger scoreAddAmount, BigInteger attemptAddAmount)
     {
-        score += toAdd;
+        score += scoreAddAmount;
+        totalAttempts += attemptAddAmount;
+        attempts += attemptAddAmount;
         if (score > highscore)
         {
             highscore = score;
@@ -664,9 +669,10 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.SetString("TotalSlowBerries", totalSlowBerries.ToString());
         PlayerPrefs.SetString("TotalUltraBerries", totalUltraBerries.ToString());
         PlayerPrefs.SetString("TotalSpeedyBerries", totalSpeedyBerries.ToString());
+        PlayerPrefs.SetString("TotalAttempts", totalAttempts.ToString());
         PlayerPrefs.Save();
-        scoreText.text = "Score: " + Tools.FormatWithCommas(score);
-        highScoreText.text = "High Score: " + Tools.FormatWithCommas(highscore);
+        scoreText.text = $"Score: {Tools.FormatWithCommas(score)} \u2022 Attempts: {attempts}";
+        highScoreText.text = $"High Score: {Tools.FormatWithCommas(highscore)} \u2022 Total Attempts: {totalAttempts}";
         if (restartButton != null) restartButton.GetComponent<Renderer>().material.color = score == 0 ? Color.gray : Color.white;
     }
 

@@ -634,7 +634,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 290}
-  m_SizeDelta: {x: 1280, y: 50}
+  m_SizeDelta: {x: 1280, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &432923591
 MonoBehaviour:
@@ -656,7 +656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Score: 0'
+  m_text: 'Score: 0 \u2022 Attempts: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
@@ -686,7 +686,7 @@ MonoBehaviour:
   m_fontSize: 72
   m_fontSizeBase: 72
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -1258,6 +1258,7 @@ MonoBehaviour:
   jumpArrow: {fileID: 0}
   restartButton: {fileID: 0}
   backButton: {fileID: 0}
+  lastMoveTime: 0
 --- !u!1 &527090675
 GameObject:
   m_ObjectHideFlags: 0
@@ -2638,7 +2639,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 219.99997}
-  m_SizeDelta: {x: 1280, y: 50}
+  m_SizeDelta: {x: 1280, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1606868532
 MonoBehaviour:
@@ -2660,7 +2661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'High Score: 0'
+  m_text: 'High Score: 0 \u2022 Total Attempts: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
   m_sharedMaterial: {fileID: -1476194838487357290, guid: 4fd546dd0900395408d2de20f5025882, type: 2}
@@ -2690,9 +2691,9 @@ MonoBehaviour:
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 36
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
