@@ -40,7 +40,7 @@ public class LoadingMenu : MonoBehaviour
             SetIfNone("Setting1", 1, true);
             SetIfNone("Setting2", 0);
             SetIfNone("Setting3", 1, true);
-            SetIfNone("Setting4", 0, true);
+            SetIfNone("Setting4", 0);
             Application.targetFrameRate = 360;
             QualitySettings.vSyncCount = 0;
             if (Application.platform == RuntimePlatform.WebGLPlayer) {
@@ -68,7 +68,7 @@ public class LoadingMenu : MonoBehaviour
         string response;
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            using UnityWebRequest request = UnityWebRequest.Get(SensitiveInfo.SERVER_DATABASE_PREFIX + "canLoadClient.php");
+            using UnityWebRequest request = UnityWebRequest.Get("https://berrydash.lncvrt.xyz/database/canLoadClient.php");
             request.SetRequestHeader("User-Agent", "BerryDashClient");
             request.SetRequestHeader("ClientVersion", Application.version);
             request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
