@@ -671,8 +671,8 @@ public class GamePlayer : MonoBehaviour
         PlayerPrefs.SetString("TotalSpeedyBerries", totalSpeedyBerries.ToString());
         PlayerPrefs.SetString("TotalAttempts", totalAttempts.ToString());
         PlayerPrefs.Save();
-        scoreText.text = $"Score: {Tools.FormatWithCommas(score)} \u2022 Attempts: {attempts}";
-        highScoreText.text = $"High Score: {Tools.FormatWithCommas(highscore)} \u2022 Total Attempts: {totalAttempts}";
+        scoreText.text = $"Score: {Tools.FormatWithCommas(score)} \\u2022 Attempts: {attempts}";
+        highScoreText.text = $"High Score: {Tools.FormatWithCommas(highscore)} \\u2022 Total Attempts: {totalAttempts}";
         if (restartButton != null) restartButton.GetComponent<Renderer>().material.color = score == 0 ? Color.gray : Color.white;
     }
 
