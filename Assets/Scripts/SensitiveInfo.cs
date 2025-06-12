@@ -12,22 +12,30 @@ public class SensitiveInfo
 
     public static string Encrypt(string plainText, string key)
     {
-        using Aes aes = Aes.Create();
-        aes.Key = Encoding.UTF8.GetBytes(key);
-        aes.Mode = CipherMode.CBC;
-        aes.Padding = PaddingMode.PKCS7;
-        aes.GenerateIV();
-
-        using MemoryStream ms = new();
-        ms.Write(aes.IV, 0, aes.IV.Length);
-
-        using (var cryptoStream = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
-        using (var writer = new StreamWriter(cryptoStream))
+        try
         {
-            writer.Write(plainText);
-        }
+            using Aes aes = Aes.Create();
+            aes.Key = Encoding.UTF8.GetBytes(key);
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            aes.GenerateIV();
 
-        return Convert.ToBase64String(ms.ToArray());
+            using MemoryStream ms = new();
+            ms.Write(aes.IV, 0, aes.IV.Length);
+
+            using (var cryptoStream = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+            using (var writer = new StreamWriter(cryptoStream))
+            {
+                writer.Write(plainText);
+            }
+
+            return Convert.ToBase64String(ms.ToArray());
+        }
+        catch
+        {
+            Application.Quit();
+            return "-997"; //the server returns this if theres an issue with encryption/decryption so the client will too ig
+        }
     }
 
     public static string Decrypt(string dataB64, string key)
