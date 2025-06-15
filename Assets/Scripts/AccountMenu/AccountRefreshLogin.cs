@@ -40,47 +40,32 @@ public class AccountRefreshLogin : MonoBehaviour
             return;
         }
         string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
-        if (response != "-1")
+        if (response == "-999")
         {
-            if (response == "-999")
-            {
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Server error while fetching data", Color.red);
-                return;
-            }
-            else if (response == "-998")
-            {
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Client version too outdated to access servers", Color.red);
-                return;
-            }
-            else if (response == "-997")
-            {
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Encryption/decryption issues", Color.red);
-                return;
-            }
-            else if (response == "-2")
-            {
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);
-            }
-            else if (response.Split(":")[0] == "1")
-            {
-                string[] array = response.Split(':');
-                string session = array[1];
-                string userName = array[2];
-                int userId = int.Parse(array[3]);
-                PlayerPrefs.SetString("gameSession", session);
-                PlayerPrefs.SetString("userName", userName);
-                PlayerPrefs.SetInt("userId", userId);
-                AccountHandler.instance.SwitchPanel(0);
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "", Color.red);
-            }
-            else
-            {
-                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Unknown server response", Color.red);
-            }
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Server error while fetching data", Color.red);
+            return;
+        }
+        else if (response == "-998")
+        {
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Client version too outdated to access servers", Color.red);
+            return;
+        }
+        else if (response == "-997")
+        {
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Encryption/decryption issues", Color.red);
+            return;
+        }
+        else if (response == "-1")
+        {
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);
+        }
+        else if (response == "1")
+        {
+            AccountHandler.instance.SwitchPanel(0);
         }
         else
         {
-            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Internal login server error", Color.red);
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Unknown server response", Color.red);
         }
     }
 }
