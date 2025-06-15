@@ -115,10 +115,7 @@ public class AccountLoggedIn : MonoBehaviour
                 AccountHandler.UpdateStatusText(loggedInText, "Encryption/decryption issues", Color.red);
                 break;
             case "-1":
-                AccountHandler.UpdateStatusText(loggedInText, "Internal login server error", Color.red);
-                break;
-            case "-2":
-                AccountHandler.instance.SwitchPanel(0);
+                AccountHandler.UpdateStatusText(loggedInText, "Failed to find info about your user (refresh login?)", Color.red);
                 break;
             default:
                 var split = response.Split(":");
