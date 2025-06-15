@@ -62,24 +62,18 @@ public class AccountChangePassword : MonoBehaviour
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "Encryption/decryption issues", Color.red);
                 break;
             case "-1":
-                AccountHandler.UpdateStatusText(changePasswordStatusText, "Internal login server error", Color.red);
-                break;
-            case "-2":
-                AccountHandler.UpdateStatusText(changePasswordStatusText, "New Password, Password, or username is empty", Color.red);
-                break;
-            case "-3":
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "New Password is too short or too long", Color.red);
                 break;
-            case "-4":
-                AccountHandler.UpdateStatusText(changePasswordStatusText, "Username must be 3-16 characters, letters and numbers only", Color.red);
+            case "-2":
+                AccountHandler.UpdateStatusText(changePasswordStatusText, "Password must have 8 characters, one number and one letter", Color.red);
                 break;
-            case "-5":
+            case "-3":
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "Incorrect current password", Color.red);
                 break;
-            case "-6":
-                AccountHandler.UpdateStatusText(changePasswordStatusText, "Current username is incorrect", Color.red);
+            case "-4":
+                AccountHandler.UpdateStatusText(changePasswordStatusText, "Failed to find info about your user (refresh login?)", Color.red);
                 break;
-            case "-7":
+            case "-5":
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "New password cannot be the same as your old password", Color.red);
                 break;
         }
