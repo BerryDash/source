@@ -59,16 +59,14 @@ public class AccountChangeUsername : MonoBehaviour
                 AccountHandler.UpdateStatusText(AccountHandler.instance.accountLoggedIn.loggedInText, "Username changed successfully", Color.green);
                 break;
             case "-1":
-                AccountHandler.UpdateStatusText(changeUsernameStatusText, "Internal login server error", Color.red);
+                AccountHandler.UpdateStatusText(changeUsernameStatusText, "New Username must be 3-16 characters, letters and numbers only", Color.red);
                 break;
             case "-2":
-                AccountHandler.UpdateStatusText(changeUsernameStatusText, "New Username is too short or too long", Color.red);
+                AccountHandler.UpdateStatusText(changeUsernameStatusText, "New username already exists", Color.red);
                 break;
             case "-3":
-                AccountHandler.UpdateStatusText(changeUsernameStatusText, "New Username does not match the required format", Color.red);
-                break;
-            case "-4":
-                AccountHandler.UpdateStatusText(changeUsernameStatusText, "New username already exists", Color.red);
+                AccountHandler.instance.SwitchPanel(0);
+                AccountHandler.UpdateStatusText(AccountHandler.instance.accountLoggedIn.loggedInText, "Failed to find info about your user (refresh login?)", Color.red);
                 break;
             default:
                 AccountHandler.UpdateStatusText(changeUsernameStatusText, "Unknown server response", Color.red);
