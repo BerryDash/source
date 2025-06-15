@@ -79,27 +79,15 @@ public class AccountRegister : MonoBehaviour
                 AccountHandler.instance.SwitchPanel(2);
                 break;
             case "-1":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Internal login server error", Color.red);
-                break;
-            case "-2":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Incomplete form data", Color.red);
-                break;
-            case "-3":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Username not valid", Color.red);
-                break;
-            case "-4":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Email not valid", Color.red);
-                break;
-            case "-5":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Password must have 8 characters, one number and one letter", Color.red);
-                break;
-            case "-6":
-                AccountHandler.UpdateStatusText(registerPanelStatusText, "Username too long or short", Color.red);
-                break;
-            case "-7":
                 AccountHandler.UpdateStatusText(registerPanelStatusText, "Username must be 3-16 characters, letters and numbers only", Color.red);
                 break;
-            case "-8":
+            case "-2":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Email not valid", Color.red);
+                break;
+            case "-3":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Password must have 8 characters, one number and one letter", Color.red);
+                break;
+            case "-4":
                 AccountHandler.UpdateStatusText(registerPanelStatusText, "Username or email already exists", Color.red);
                 break;
             default:
