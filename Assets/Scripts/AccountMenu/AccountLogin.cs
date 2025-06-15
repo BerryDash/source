@@ -64,6 +64,12 @@ public class AccountLogin : MonoBehaviour
                 PlayerPrefs.SetString("HighScoreV2", highScore.ToString());
                 PlayerPrefs.SetInt("icon", iconId);
                 PlayerPrefs.SetInt("overlay", overlayId);
+                PlayerPrefs.SetString("TotalNormalBerries", array[7]);
+                PlayerPrefs.SetString("TotalPoisonBerries", array[8]);
+                PlayerPrefs.SetString("TotalSlowBerries", array[9]);
+                PlayerPrefs.SetString("TotalUltraBerries", array[10]);
+                PlayerPrefs.SetString("TotalSpeedyBerries", array[11]);
+                PlayerPrefs.SetString("TotalAttempts", array[12]);
                 AccountHandler.instance.SwitchPanel(0);
                 AccountHandler.UpdateStatusText(loginPanelStatusText, "", Color.red);
             }
