@@ -75,10 +75,7 @@ public class AccountLoggedIn : MonoBehaviour
                 AccountHandler.UpdateStatusText(loggedInText, "Synced account", Color.green);
                 break;
             case "-1":
-                AccountHandler.UpdateStatusText(loggedInText, "Internal login server error", Color.red);
-                break;
-            case "-2":
-                AccountHandler.instance.SwitchPanel(0);
+                AccountHandler.UpdateStatusText(loggedInText, "Failed to find info about your user (refresh login?)", Color.red);
                 break;
             default:
                 AccountHandler.UpdateStatusText(loggedInText, "Unknown server response", Color.red);
