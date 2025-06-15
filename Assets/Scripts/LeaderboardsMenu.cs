@@ -44,11 +44,12 @@ public class LeaderboardsMenu : MonoBehaviour
             }
         }
         UpdateStatus(true, "Loading...");
-        WWWForm dataForm = new();
-        dataForm.AddField("showAmount", SensitiveInfo.Encrypt(showAmount.ToString(), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "getTopPlayers.php", dataForm);
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        EncryptedWWWForm dataForm = new();
+        dataForm.AddField("showAmount", showAmount.ToString());
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "getTopPlayers.php", dataForm.GetWWWForm());
+        request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
+        request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {

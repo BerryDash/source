@@ -49,12 +49,12 @@ public class AccountRegister : MonoBehaviour
             AccountHandler.UpdateStatusText(registerPanelStatusText, "Username must be 3-16 characters, letters and numbers only", Color.red);
             return;
         }
-        WWWForm dataForm = new();
-        dataForm.AddField("username", SensitiveInfo.Encrypt(registerUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("email", SensitiveInfo.Encrypt(registerEmailInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("password", SensitiveInfo.Encrypt(registerPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "registerAccount.php", dataForm);
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        EncryptedWWWForm dataForm = new();
+        dataForm.AddField("username", registerUsernameInput.text);
+        dataForm.AddField("email", registerEmailInput.text);
+        dataForm.AddField("password", registerPasswordInput.text);
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "registerAccount.php", dataForm.GetWWWForm());
+        request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();

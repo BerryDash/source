@@ -25,12 +25,12 @@ public class AccountRefreshLogin : MonoBehaviour
 
     async void RefreshLogin()
     {
-        WWWForm dataForm = new();
-        dataForm.AddField("username", SensitiveInfo.Encrypt(refreshLoginUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("password", SensitiveInfo.Encrypt(refreshLoginPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("loginType", SensitiveInfo.Encrypt("1", SensitiveInfo.SERVER_SEND_TRANSFER_KEY)); //Yes II
-        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loginAccount.php", dataForm);
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        EncryptedWWWForm dataForm = new();
+        dataForm.AddField("username", refreshLoginUsernameInput.text);
+        dataForm.AddField("password", refreshLoginPasswordInput.text);
+        dataForm.AddField("loginType", "1");
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "loginAccount.php", dataForm.GetWWWForm());
+        request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();

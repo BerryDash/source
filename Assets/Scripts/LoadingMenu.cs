@@ -69,7 +69,7 @@ public class LoadingMenu : MonoBehaviour
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
             using UnityWebRequest request = UnityWebRequest.Get(SensitiveInfo.SERVER_DATABASE_PREFIX + "canLoadClient.php");
-            request.SetRequestHeader("User-Agent", "BerryDashClient");
+            request.SetRequestHeader("Requester", "BerryDashClient");
             request.SetRequestHeader("ClientVersion", Application.version);
             request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
             await request.SendWebRequest();

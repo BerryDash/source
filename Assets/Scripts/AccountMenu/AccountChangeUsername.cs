@@ -26,13 +26,13 @@ public class AccountChangeUsername : MonoBehaviour
 
     async void ChangeUsername()
     {
-        WWWForm dataForm = new();
-        dataForm.AddField("inputUserName", SensitiveInfo.Encrypt(changeUsernameCurrentUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("inputNewUserName", SensitiveInfo.Encrypt(changeUsernameNewUsernameInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountUsername.php", dataForm);
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        EncryptedWWWForm dataForm = new();
+        dataForm.AddField("inputUserName", changeUsernameCurrentUsernameInput.text);
+        dataForm.AddField("inputNewUserName", changeUsernameNewUsernameInput.text);
+        dataForm.AddField("session", PlayerPrefs.GetString("gameSession"));
+        dataForm.AddField("userName", PlayerPrefs.GetString("userName"));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountUsername.php", dataForm.GetWWWForm());
+        request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();

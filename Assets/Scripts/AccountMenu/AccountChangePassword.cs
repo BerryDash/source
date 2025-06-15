@@ -34,13 +34,13 @@ public class AccountChangePassword : MonoBehaviour
             AccountHandler.UpdateStatusText(changePasswordStatusText, "Passwords do not match", Color.red);
             return;
         }
-        WWWForm dataForm = new();
-        dataForm.AddField("inputPassword", SensitiveInfo.Encrypt(changePasswordCurrentPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("inputNewPassword", SensitiveInfo.Encrypt(changePasswordNewPasswordInput.text, SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("session", SensitiveInfo.Encrypt(PlayerPrefs.GetString("gameSession"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        dataForm.AddField("userName", SensitiveInfo.Encrypt(PlayerPrefs.GetString("userName"), SensitiveInfo.SERVER_SEND_TRANSFER_KEY));
-        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountPassword.php", dataForm);
-        request.SetRequestHeader("User-Agent", "BerryDashClient");
+        EncryptedWWWForm dataForm = new();
+        dataForm.AddField("inputPassword", changePasswordCurrentPasswordInput.text);
+        dataForm.AddField("inputNewPassword", changePasswordNewPasswordInput.text);
+        dataForm.AddField("session", PlayerPrefs.GetString("gameSession"));
+        dataForm.AddField("userName", PlayerPrefs.GetString("userName"));
+        using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "changeAccountPassword.php", dataForm.GetWWWForm());
+        request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
         request.SetRequestHeader("ClientPlatform", Application.platform.ToString());
         await request.SendWebRequest();
