@@ -66,6 +66,15 @@ public class AccountRegister : MonoBehaviour
         string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
+            case "-999":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Server error while fetching data", Color.red);
+                break;
+            case "-998":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Client version too outdated to access servers", Color.red);
+                break;
+            case "-997":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Encryption/decryption issues", Color.red);
+                break;
             case "1":
                 AccountHandler.instance.SwitchPanel(2);
                 break;

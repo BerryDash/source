@@ -62,6 +62,15 @@ public class AccountLoggedIn : MonoBehaviour
         string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
+            case "-999":
+                AccountHandler.UpdateStatusText(loggedInText, "Server error while fetching data", Color.red);
+                break;
+            case "-998":
+                AccountHandler.UpdateStatusText(loggedInText, "Client version too outdated to access servers", Color.red);
+                break;
+            case "-997":
+                AccountHandler.UpdateStatusText(loggedInText, "Encryption/decryption issues", Color.red);
+                break;
             case "1":
                 AccountHandler.UpdateStatusText(loggedInText, "Synced account", Color.green);
                 break;
@@ -99,6 +108,15 @@ public class AccountLoggedIn : MonoBehaviour
         string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         switch (response)
         {
+            case "-999":
+                AccountHandler.UpdateStatusText(loggedInText, "Server error while fetching data", Color.red);
+                break;
+            case "-998":
+                AccountHandler.UpdateStatusText(loggedInText, "Client version too outdated to access servers", Color.red);
+                break;
+            case "-997":
+                AccountHandler.UpdateStatusText(loggedInText, "Encryption/decryption issues", Color.red);
+                break;
             case "-1":
                 AccountHandler.UpdateStatusText(loggedInText, "Internal login server error", Color.red);
                 break;

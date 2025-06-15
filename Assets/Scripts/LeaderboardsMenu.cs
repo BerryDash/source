@@ -65,6 +65,11 @@ public class LeaderboardsMenu : MonoBehaviour
                 UpdateStatus(true, "Client version too outdated to access servers");
                 return;
             }
+            else if (response == "-997")
+            {
+                UpdateStatus(true, "Encryption/decryption issues");
+                return;
+            }
             else if (response == "-1")
             {
                 UpdateStatus(true, "Server returned no results");

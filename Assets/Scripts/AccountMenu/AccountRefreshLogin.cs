@@ -42,7 +42,22 @@ public class AccountRefreshLogin : MonoBehaviour
         string response = SensitiveInfo.Decrypt(request.downloadHandler.text, SensitiveInfo.SERVER_RECEIVE_TRANSFER_KEY);
         if (response != "-1")
         {
-            if (response == "-2")
+            if (response == "-999")
+            {
+                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Server error while fetching data", Color.red);
+                return;
+            }
+            else if (response == "-998")
+            {
+                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Client version too outdated to access servers", Color.red);
+                return;
+            }
+            else if (response == "-997")
+            {
+                AccountHandler.UpdateStatusText(refreshLoginStatusText, "Encryption/decryption issues", Color.red);
+                return;
+            }
+            else if (response == "-2")
             {
                 AccountHandler.UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);
             }
