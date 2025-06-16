@@ -59,9 +59,17 @@ public class AccountRefreshLogin : MonoBehaviour
         {
             AccountHandler.UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);
         }
-        else if (response == "1")
+        else if (response.Split(":")[0] == "1")
         {
+            string[] array = response.Split(':');
+            string session = array[1];
+            string userName = array[2];
+            int userId = int.Parse(array[3]);
+            PlayerPrefs.SetString("gameSession", session);
+            PlayerPrefs.SetString("userName", userName);
+            PlayerPrefs.SetInt("userId", userId);
             AccountHandler.instance.SwitchPanel(0);
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "", Color.red);
         }
         else
         {
