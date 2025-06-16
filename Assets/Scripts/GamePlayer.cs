@@ -42,6 +42,20 @@ public class GamePlayer : MonoBehaviour
 
     void Awake()
     {
+        var backgroundColor = PlayerPrefs.GetString("BackgroundColor", "58;58;58").Split(";");
+        try
+        {
+            Camera.main.backgroundColor = new Color(
+                int.Parse(backgroundColor[0])/255f,
+                int.Parse(backgroundColor[1])/255f,
+                int.Parse(backgroundColor[2])/255f
+            );
+        }
+        catch
+        {
+            Debug.LogError("Invalid BackgroundColor format");
+        }
+
         lastMoveTime = Time.time;
         UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
         instance = this;
