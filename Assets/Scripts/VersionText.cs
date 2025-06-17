@@ -9,11 +9,11 @@ public class VersionText : MonoBehaviour
         text = gameObject.GetComponent<TMP_Text>();
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
-            text.text = "Current: v" + Application.version;
+            text.text = "Current: v" + "2.11";
         }
         else
         {
-            text.text = "v" + Application.version;
+            text.text = "v" + "2.11";
         }
     }
 }

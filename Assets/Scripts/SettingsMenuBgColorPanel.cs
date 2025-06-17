@@ -13,7 +13,7 @@ public class SettingsMenuBgColorPanel : MonoBehaviour
 
     void Awake()
     {
-        var backgroundColor = PlayerPrefs.GetString("BackgroundColor", "58;58;58").Split(";");
+        var backgroundColor = PlayerPrefs.GetString("BirdColor", "255;255;255").Split(";");
         try
         {
             rSlider.value = int.Parse(backgroundColor[0]);
@@ -22,8 +22,8 @@ public class SettingsMenuBgColorPanel : MonoBehaviour
         }
         catch
         {
-            Debug.LogError("Invalid BackgroundColor format");
-            rSlider.value = 58; gSlider.value = 58; bSlider.value = 58;
+            Debug.LogError("Invalid BirdColor format");
+            rSlider.value = 255; gSlider.value = 255; bSlider.value = 255;
         }
         SlidersChanged();
 
@@ -40,14 +40,14 @@ public class SettingsMenuBgColorPanel : MonoBehaviour
                 gSlider.SetValueWithoutNotify(col.g * 255f);
                 bSlider.SetValueWithoutNotify(col.b * 255f);
                 previewImage.color = col;
-                PlayerPrefs.SetString("BackgroundColor", $"{(int)(col.r * 255)};{(int)(col.g * 255)};{(int)(col.b * 255)}");
+                PlayerPrefs.SetString("BirdColor", $"{(int)(col.r * 255)};{(int)(col.g * 255)};{(int)(col.b * 255)}");
                 PlayerPrefs.Save();
             }
         });
 
         resetButton.onClick.AddListener(() =>
         {
-            hexValue.text = "#3a3a3a";
+            hexValue.text = "#FFFFFF";
         });
     }
 
@@ -56,7 +56,7 @@ public class SettingsMenuBgColorPanel : MonoBehaviour
         var col = new Color(rSlider.value/255f, gSlider.value/255f, bSlider.value/255f);
         previewImage.color = col;
         hexValue.SetTextWithoutNotify($"#{ColorUtility.ToHtmlStringRGB(col)}");
-        PlayerPrefs.SetString("BackgroundColor", $"{(int)rSlider.value};{(int)gSlider.value};{(int)bSlider.value}");
+        PlayerPrefs.SetString("BirdColor", $"{(int)rSlider.value};{(int)gSlider.value};{(int)bSlider.value}");
         PlayerPrefs.Save();
     }
 }

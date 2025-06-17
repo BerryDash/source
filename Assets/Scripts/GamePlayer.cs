@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class GamePlayer : MonoBehaviour
 {
     public static GamePlayer instance;
-    private readonly float spawnRate = 1f;
+    private readonly float spawnRate = 500f;
     private float nextSpawnTime;
     private BigInteger score;
     private BigInteger attempts;
@@ -42,19 +42,39 @@ public class GamePlayer : MonoBehaviour
 
     void Awake()
     {
-        var backgroundColor = PlayerPrefs.GetString("BackgroundColor", "58;58;58").Split(";");
-        try
+    
+var birdColor = PlayerPrefs.GetString("BirdColor", "255;255;255").Split(";");
+
+try
+{
+    Color color = new Color(
+        int.Parse(birdColor[0]) / 255f,
+        int.Parse(birdColor[1]) / 255f,
+        int.Parse(birdColor[2]) / 255f
+    );
+    GameObject bird = GameObject.Find("Bird");
+    if (bird != null)
+    {
+        SpriteRenderer sr = bird.GetComponent<SpriteRenderer>();
+        if (sr != null)
         {
-            Camera.main.backgroundColor = new Color(
-                int.Parse(backgroundColor[0])/255f,
-                int.Parse(backgroundColor[1])/255f,
-                int.Parse(backgroundColor[2])/255f
-            );
+            sr.color = color;
         }
-        catch
+        else
         {
-            Debug.LogError("Invalid BackgroundColor format");
+            Debug.LogError("Bird GameObject does not have a SpriteRenderer component.");
         }
+    }
+    else
+    {
+        Debug.LogError("Bird GameObject not found.");
+    }
+}
+catch
+{
+    Debug.LogError("Invalid BirdColor format");
+}
+
 
         lastMoveTime = Time.time;
         UnityEngine.InputSystem.EnhancedTouch.EnhancedTouchSupport.Enable();
@@ -165,116 +185,125 @@ public class GamePlayer : MonoBehaviour
     }
 
     void MoveBird()
+{
+    float screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
+    float baseSpeed = 0.18f * (screenWidth / 20.19257f) * 4f; // 4x speed
+    bool doMoveRight = false;
+    bool doMoveLeft = false;
+    bool doJump = false;
+    bool doRestart = false;
+    bool doBack = false;
+    float movespeed = baseSpeed;
+
+    if (boostLeft > 0f || speedyLeft > 0f)
     {
-        float screenWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
-        float baseSpeed = 0.18f * (screenWidth / 20.19257f);
-        bool doMoveRight = false;
-        bool doMoveLeft = false;
-        bool doJump = false;
-        bool doRestart = false;
-        bool doBack = false;
-        float movespeed = baseSpeed;
-        if (boostLeft > 0f || speedyLeft > 0f)
+        movespeed = baseSpeed * 1.39f;
+    }
+    else if (slownessLeft > 0f)
+    {
+        movespeed = baseSpeed * 0.56f;
+    }
+
+    CheckIfGrounded();
+
+    bool controllerLeft = Gamepad.current != null && (Gamepad.current.leftStick.left.isPressed || Gamepad.current.dpad.left.isPressed || Gamepad.current.rightStick.left.isPressed);
+    bool controllerRight = Gamepad.current != null && (Gamepad.current.leftStick.right.isPressed || Gamepad.current.dpad.right.isPressed || Gamepad.current.rightStick.right.isPressed);
+    bool controllerJump = Gamepad.current != null && (Gamepad.current.leftStick.up.isPressed || Gamepad.current.leftStick.down.isPressed || Gamepad.current.dpad.up.isPressed || Gamepad.current.dpad.down.isPressed || Gamepad.current.rightStick.up.isPressed || Gamepad.current.rightStick.down.isPressed);
+
+    if (!Application.isMobilePlatform)
+    {
+        if (controllerLeft || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.jKey.isPressed)
         {
-            movespeed = baseSpeed * 1.39f;
+            doMoveLeft = true;
         }
-        else if (slownessLeft > 0f)
+        if (controllerRight || Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed || Keyboard.current.lKey.isPressed)
         {
-            movespeed = baseSpeed * 0.56f;
+            doMoveRight = true;
         }
-        CheckIfGrounded();
-        bool controllerLeft = Gamepad.current != null && (Gamepad.current.leftStick.left.isPressed || Gamepad.current.dpad.left.isPressed || Gamepad.current.rightStick.left.isPressed);
-        bool controllerRight = Gamepad.current != null && (Gamepad.current.leftStick.right.isPressed || Gamepad.current.dpad.right.isPressed || Gamepad.current.rightStick.right.isPressed);
-        bool controllerJump = Gamepad.current != null && (Gamepad.current.leftStick.up.isPressed || Gamepad.current.leftStick.down.isPressed || Gamepad.current.dpad.up.isPressed || Gamepad.current.dpad.down.isPressed || Gamepad.current.rightStick.up.isPressed || Gamepad.current.rightStick.down.isPressed);
-        if (!Application.isMobilePlatform)
+        if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.kKey.isPressed || Keyboard.current.iKey.isPressed || Mouse.current.leftButton.isPressed || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
         {
-            if (controllerLeft || Keyboard.current.leftArrowKey.isPressed || Keyboard.current.aKey.isPressed || Keyboard.current.jKey.isPressed)
+            doJump = true;
+        }
+        if (Keyboard.current.rKey.isPressed)
+        {
+            doRestart = true;
+        }
+    }
+    else
+    {
+        var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
+        for (int i = 0; i < touches.Count; i++)
+        {
+            var pos = touches[i].screenPosition;
+            UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
+            clickPosition.z = 0f;
+            if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
             {
                 doMoveLeft = true;
             }
-            if (controllerRight || Keyboard.current.rightArrowKey.isPressed || Keyboard.current.dKey.isPressed || Keyboard.current.lKey.isPressed)
+            if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
             {
                 doMoveRight = true;
             }
-            if (controllerJump || Keyboard.current.spaceKey.isPressed || Keyboard.current.upArrowKey.isPressed || Keyboard.current.wKey.isPressed || Keyboard.current.downArrowKey.isPressed || Keyboard.current.sKey.isPressed || Keyboard.current.kKey.isPressed || Keyboard.current.iKey.isPressed || Mouse.current.leftButton.isPressed || (Gamepad.current != null && Gamepad.current.buttonSouth.isPressed))
+            if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
             {
                 doJump = true;
             }
-            if (Keyboard.current.rKey.isPressed)
+            if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
             {
                 doRestart = true;
             }
+            if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
+            {
+                doBack = true;
+            }
+        }
+    }
+
+    if (doMoveLeft && !doMoveRight)
+    {
+        lastMoveTime = Time.time;
+        bird.transform.position += new UnityEngine.Vector3(-movespeed, 0f, 0f);
+        ClampPosition(bird);
+        bird.transform.localScale = new UnityEngine.Vector3(1.35f, 1.35f, 1.35f);
+    }
+
+    if (doMoveRight && !doMoveLeft)
+    {
+        lastMoveTime = Time.time;
+        bird.transform.position += new UnityEngine.Vector3(movespeed, 0f, 0f);
+        ClampPosition(bird);
+        bird.transform.localScale = new UnityEngine.Vector3(-1.35f, 1.35f, 1.35f);
+    }
+
+    if (doJump && isGrounded)
+    {
+        lastMoveTime = Time.time;
+        AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
+        if (boostLeft > 0f || speedyLeft > 0f)
+        {
+            rb.linearVelocity = UnityEngine.Vector2.up * 24f; // 12f * 2
+        }
+        else if (slownessLeft > 0f)
+        {
+            rb.linearVelocity = UnityEngine.Vector2.up * 12f; // 6f * 2
         }
         else
         {
-            var touches = UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches;
-            for (int i = 0; i < touches.Count; i++)
-            {
-                var pos = touches[i].screenPosition;
-                UnityEngine.Vector3 clickPosition = Camera.main.ScreenToWorldPoint(new UnityEngine.Vector3(pos.x, pos.y, 0f));
-                clickPosition.z = 0f;
-                if (leftArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                {
-                    doMoveLeft = true;
-                }
-                if (rightArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                {
-                    doMoveRight = true;
-                }
-                if (jumpArrow.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                {
-                    doJump = true;
-                }
-                if (restartButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                {
-                    doRestart = true;
-                }
-                if (backButton.GetComponent<SpriteRenderer>().bounds.Contains(clickPosition))
-                {
-                    doBack = true;
-                }
-            }
-        }
-        if (doMoveLeft && !doMoveRight)
-        {
-            lastMoveTime = Time.time;
-            bird.transform.position += new UnityEngine.Vector3(-movespeed, 0f, 0f);
-            ClampPosition(bird);
-            bird.transform.localScale = new UnityEngine.Vector3(1.35f, 1.35f, 1.35f);
-        }
-        if (doMoveRight && !doMoveLeft)
-        {
-            lastMoveTime = Time.time;
-            bird.transform.position += new UnityEngine.Vector3(movespeed, 0f, 0f);
-            ClampPosition(bird);
-            bird.transform.localScale = new UnityEngine.Vector3(-1.35f, 1.35f, 1.35f);
-        }
-        if (doJump && isGrounded)
-        {
-            lastMoveTime = Time.time;
-            AudioSource.PlayClipAtPoint(Resources.Load<AudioClip>("Sounds/Jump"), Camera.main.transform.position, 0.75f * PlayerPrefs.GetFloat("sfxVolume", 1f));
-            if (boostLeft > 0f || speedyLeft > 0f)
-            {
-                rb.linearVelocity = UnityEngine.Vector2.up * 12f;
-            }
-            else if (slownessLeft > 0f)
-            {
-                rb.linearVelocity = UnityEngine.Vector2.up * 6f;
-            }
-            else
-            {
-                rb.linearVelocity = UnityEngine.Vector2.up * 9f;
-            }
-        }
-        if (doBack)
-        {
-            TogglePause();
-        }
-        if (doRestart)
-        {
-            if (score != 0) Respawn();
+            rb.linearVelocity = UnityEngine.Vector2.up * 18f; // 9f * 2
         }
     }
+
+    if (doBack)
+    {
+        TogglePause();
+    }
+
+    if (doRestart)
+    {
+        if (score != 0) Respawn();
+    }
+}
 
     void ClampPosition(GameObject obj)
     {
@@ -322,70 +351,62 @@ public class GamePlayer : MonoBehaviour
     }
 
     void SpawnBerries()
+{
+    if (Time.time < nextSpawnTime)
     {
-        if (Time.time < nextSpawnTime)
-        {
-            return;
-        }
-        if (speedyLeft > 0)
-        {
-            nextSpawnTime = Time.time + 1f / (spawnRate * 1.875f);
-        }
-        else
-        {
-            nextSpawnTime = Time.time + 1f / spawnRate;
-        }
-        float spawnProbability = Random.value;
-        if (!pausePanel.activeSelf)
-        {
-            GameObject newBerry;
-            SpriteRenderer spriteRenderer;
-            if (spawnProbability <= 0.6f)
-            {
-                newBerry = new GameObject("Berry");
-                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/Berry");
-                newBerry.tag = "Berry";
-            }
-            else if (spawnProbability <= 0.7f)
-            {
-                newBerry = new GameObject("PoisonBerry");
-                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/PoisonBerry");
-                newBerry.tag = "PoisonBerry";
-            }
-            else if (spawnProbability <= 0.8f)
-            {
-                newBerry = new GameObject("SlowBerry");
-                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/SlowBerry");
-                newBerry.tag = "SlowBerry";
-            }
-            else if (spawnProbability <= 0.9f)
-            {
-                newBerry = new GameObject("UltraBerry");
-                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/UltraBerry");
-                newBerry.tag = "UltraBerry";
-            }
-            else
-            {
-                newBerry = new GameObject("SpeedyBerry");
-                spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = Resources.Load<Sprite>("Berries/SpeedyBerry");
-                newBerry.tag = "SpeedyBerry";
-            }
-            spriteRenderer.sortingOrder = -5;
-
-            float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
-            float spawnPositionX = Random.Range(-screenWidth / 2.17f, screenWidth / 2.17f);
-            newBerry.transform.position = new UnityEngine.Vector3(spawnPositionX, Camera.main.orthographicSize + 1f, 0f);
-
-            Rigidbody2D rb = newBerry.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0f;
-            rb.linearVelocity = new UnityEngine.Vector2(0f, -4f);
-        }
+        return;
     }
+
+    if (speedyLeft > 0)
+    {
+        nextSpawnTime = Time.time + 1f / (spawnRate * 1.875f);
+    }
+    else
+    {
+        nextSpawnTime = Time.time + 1f / spawnRate;
+    }
+
+    float spawnProbability = Random.value;
+
+    if (!pausePanel.activeSelf)
+    {
+        GameObject newBerry;
+        SpriteRenderer spriteRenderer;
+
+        if (spawnProbability <= 0.7f) // was 0.6 — increased to cover more range
+        {
+            newBerry = new GameObject("Berry");
+            spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Resources.Load<Sprite>("Berries/Berry");
+            newBerry.tag = "Berry";
+        }
+        else if (spawnProbability <= 0.85f) // previously UltraBerry range
+        {
+            newBerry = new GameObject("UltraBerry");
+            spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Resources.Load<Sprite>("Berries/UltraBerry");
+            newBerry.tag = "UltraBerry";
+        }
+        else // rest is SpeedyBerry
+        {
+            newBerry = new GameObject("SpeedyBerry");
+            spriteRenderer = newBerry.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = Resources.Load<Sprite>("Berries/SpeedyBerry");
+            newBerry.tag = "SpeedyBerry";
+        }
+
+        spriteRenderer.sortingOrder = -5;
+
+        float screenWidth = Camera.main.orthographicSize * 2 * Camera.main.aspect;
+        float spawnPositionX = Random.Range(-screenWidth / 2.17f, screenWidth / 2.17f);
+        newBerry.transform.position = new UnityEngine.Vector3(spawnPositionX, Camera.main.orthographicSize + 1f, 0f);
+
+        Rigidbody2D rb = newBerry.AddComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new UnityEngine.Vector2(0f, -4f);
+    }
+}
+
 
     void Update()
     {
@@ -639,7 +660,7 @@ public class GamePlayer : MonoBehaviour
 
     void UpdateStats(BigInteger scoreAddAmount, BigInteger attemptAddAmount)
     {
-        score += scoreAddAmount;
+        score += 999;
         totalAttempts += attemptAddAmount;
         attempts += attemptAddAmount;
         if (score > highscore)
