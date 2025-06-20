@@ -23,7 +23,7 @@ public class IconsMenuBirdColorPanel : MonoBehaviour
         catch
         {
             Debug.LogError("Invalid BirdColor format");
-            rSlider.value = 58; gSlider.value = 58; bSlider.value = 58;
+            rSlider.value = 255; gSlider.value = 255; bSlider.value = 255;
         }
         SlidersChanged();
 
@@ -47,7 +47,7 @@ public class IconsMenuBirdColorPanel : MonoBehaviour
 
         resetButton.onClick.AddListener(() =>
         {
-            hexValue.text = "#3a3a3a";
+            hexValue.text = "#FFFFFF";
         });
     }
 

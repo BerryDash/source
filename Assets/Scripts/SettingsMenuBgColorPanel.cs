@@ -47,7 +47,7 @@ public class SettingsMenuBgColorPanel : MonoBehaviour
 
         resetButton.onClick.AddListener(() =>
         {
-            hexValue.text = "#3a3a3a";
+            hexValue.text = "#3A3A3A";
         });
     }
 
