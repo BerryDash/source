@@ -23,5 +23,13 @@ public class AccountLoggedOut : MonoBehaviour
         PlayerPrefs.SetString("HighScoreV2", "0");
         PlayerPrefs.SetInt("icon", 1);
         PlayerPrefs.SetInt("overlay", 0);
+        PlayerPrefs.DeleteKey("TotalNormalBerries");
+        PlayerPrefs.DeleteKey("TotalPoisonBerries");
+        PlayerPrefs.DeleteKey("TotalSlowBerries");
+        PlayerPrefs.DeleteKey("TotalUltraBerries");
+        PlayerPrefs.DeleteKey("TotalSpeedyBerries");
+        PlayerPrefs.DeleteKey("TotalAttempts");
+        PlayerPrefs.DeleteKey("BirdColor");
+        PlayerPrefs.DeleteKey("OverlayColor");
     }
 }
