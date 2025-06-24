@@ -70,7 +70,7 @@ public class ChatroomMenu : MonoBehaviour
                 ShowStatus("Encryption/decryption issues");
                 break;
             case "-1":
-                ShowStatus("Authentication error.");
+                ShowStatus("Authentication error");
                 break;
             case "1":
                 StopCoroutine(refreshLoopRoutine);
@@ -142,9 +142,6 @@ public class ChatroomMenu : MonoBehaviour
                 break;
             case "-997":
                 ShowStatus("Encryption/decryption issues");
-                break;
-            case "-1":
-                ShowStatus("Authentication error.");
                 break;
             default:
                 var split = response.Split(':');
