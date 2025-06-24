@@ -144,6 +144,9 @@ public class LeaderboardsMenu : MonoBehaviour
                     var birdR = split[5];
                     var birdG = split[6];
                     var birdB = split[7];
+                    var overlayR = split[8];
+                    var overlayG = split[9];
+                    var overlayB = split[10];
 
                     var entryInfo = Instantiate(scoreSampleObject, scoreContent.transform);
                     var usernameText = entryInfo.transform.GetChild(0).GetComponent<TMP_Text>();
@@ -178,9 +181,11 @@ public class LeaderboardsMenu : MonoBehaviour
                     try
                     {
                         playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
+                        playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
                     } catch (Exception)
                     {
                         playerIcon.color = Color.white;
+                        playerOverlayIcon.color = Color.white;
                     }
                     entryInfo.SetActive(true);
                 }
@@ -250,6 +255,9 @@ public class LeaderboardsMenu : MonoBehaviour
                     var birdR = split[5];
                     var birdG = split[6];
                     var birdB = split[7];
+                    var overlayR = split[8];
+                    var overlayG = split[9];
+                    var overlayB = split[10];
 
                     var entryInfo = Instantiate(berrySampleObject, berryContent.transform);
                     var usernameText = entryInfo.transform.GetChild(0).GetComponent<TMP_Text>();
@@ -284,9 +292,11 @@ public class LeaderboardsMenu : MonoBehaviour
                     try
                     {
                         playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
+                        playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
                     } catch (Exception)
                     {
                         playerIcon.color = Color.white;
+                        playerOverlayIcon.color = Color.white;
                     }
                     entryInfo.SetActive(true);
                 }

@@ -84,6 +84,7 @@ public class AccountLogin : MonoBehaviour
             PlayerPrefs.SetString("TotalSpeedyBerries", array[11]);
             PlayerPrefs.SetString("TotalAttempts", array[12]);
             PlayerPrefs.SetString("BirdColor", $"{array[13]};{array[14]};{array[15]}");
+            PlayerPrefs.SetString("OverlayColor", $"{array[16]};{array[17]};{array[18]}");
             AccountHandler.instance.SwitchPanel(0);
             AccountHandler.UpdateStatusText(loginPanelStatusText, "", Color.red);
         }

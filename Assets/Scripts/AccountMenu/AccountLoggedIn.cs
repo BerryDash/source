@@ -52,6 +52,9 @@ public class AccountLoggedIn : MonoBehaviour
         dataForm.AddField("birdR", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[0]);
         dataForm.AddField("birdG", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[1]);
         dataForm.AddField("birdB", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[2]);
+        dataForm.AddField("overlayR", PlayerPrefs.GetString("OverlayColor", "255;255;255").Split(';')[0]);
+        dataForm.AddField("overlayG", PlayerPrefs.GetString("OverlayColor", "255;255;255").Split(';')[1]);
+        dataForm.AddField("overlayB", PlayerPrefs.GetString("OverlayColor", "255;255;255").Split(';')[2]);
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "saveAccount.php", dataForm.GetWWWForm());
         request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -134,6 +137,7 @@ public class AccountLoggedIn : MonoBehaviour
                     PlayerPrefs.SetString("TotalSpeedyBerries", split[8]);
                     PlayerPrefs.SetString("TotalAttempts", split[9]);
                     PlayerPrefs.SetString("BirdColor", $"{split[10]};{split[11]};{split[12]}");
+                    PlayerPrefs.SetString("OverlayColor", $"{split[13]};{split[14]};{split[15]}");
                     AccountHandler.UpdateStatusText(loggedInText, "Loaded account data", Color.green);
                 }
                 else

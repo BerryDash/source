@@ -167,6 +167,9 @@ public class ChatroomMenu : MonoBehaviour
                         var birdR = rowSplit[6];
                         var birdG = rowSplit[7];
                         var birdB = rowSplit[8];
+                        var overlayR = rowSplit[9];
+                        var overlayG = rowSplit[10];
+                        var overlayB = rowSplit[11];
 
                         if (content.transform.Find("ChatroomRow_" + id) != null)
                         {
@@ -211,9 +214,11 @@ public class ChatroomMenu : MonoBehaviour
                         try
                         {
                             playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
+                            playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
                         } catch (Exception)
                         {
                             playerIcon.color = Color.white;
+                            playerOverlayIcon.color = Color.white;
                         }
                         rowInfo.name = "ChatroomRow_" + id;
                         rowInfo.SetActive(true);

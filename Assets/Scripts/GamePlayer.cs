@@ -44,6 +44,7 @@ public class GamePlayer : MonoBehaviour
     {
         var backgroundColor = PlayerPrefs.GetString("BackgroundColor", "58;58;58").Split(";");
         var birdColor = PlayerPrefs.GetString("BirdColor", "255;255;255").Split(";");
+        var overlayColor = PlayerPrefs.GetString("OverlayColor", "255;255;255").Split(";");
         try
         {
             Camera.main.backgroundColor = new Color(
@@ -55,6 +56,11 @@ public class GamePlayer : MonoBehaviour
                 int.Parse(birdColor[0])/255f,
                 int.Parse(birdColor[1])/255f,
                 int.Parse(birdColor[2])/255f
+            );
+            bird.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(
+                int.Parse(overlayColor[0])/255f,
+                int.Parse(overlayColor[1])/255f,
+                int.Parse(overlayColor[2])/255f
             );
         }
         catch
