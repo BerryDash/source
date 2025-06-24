@@ -22,6 +22,12 @@ public class ChatroomMenu : MonoBehaviour
 
     void Start()
     {
+        if (!PlayerPrefs.HasKey("gameSession") || !PlayerPrefs.HasKey("userName") || !PlayerPrefs.HasKey("userId"))
+        {
+            sendButton.interactable = false;
+            messageInputField.interactable = false;
+            ShowStatus("Warning: You are not logged in. Please log in to send messages.");
+        }
         backButton.onClick.AddListener(async () => await SceneManager.LoadSceneAsync("MainMenu"));
         sendButton.onClick.AddListener(async () => await HandleMessageSubmit());
         messageInputField.textComponent.textWrappingMode = TextWrappingModes.Normal;
@@ -38,6 +44,7 @@ public class ChatroomMenu : MonoBehaviour
 
     async Task HandleMessageSubmit()
     {
+        if (!sendButton.interactable) return;
         var text = messageInputField.text.Clone() as string;
         messageInputField.text = string.Empty;
         if (string.IsNullOrEmpty(text))
