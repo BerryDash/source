@@ -90,6 +90,17 @@ public class LoadingMenu : MonoBehaviour
         }
         else if (response == "2")
         {
+            text.text = "Outdated client! You can still play the game and access the servers, but it isn't recommended.";
+
+            var updateButtonPos = updateButton.transform.localPosition;
+            updateButtonPos.x = -135;
+            updateButton.transform.localPosition = updateButtonPos;
+
+            updateButton.gameObject.SetActive(true);
+            continueButton.gameObject.SetActive(true);
+        }
+        else if (response == "3")
+        {
             text.text = "Outdated client! You can still load into the game, but online features may not be available.";
 
             var updateButtonPos = updateButton.transform.localPosition;
