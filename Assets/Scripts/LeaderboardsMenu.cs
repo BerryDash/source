@@ -141,6 +141,9 @@ public class LeaderboardsMenu : MonoBehaviour
                     var icon = split[2];
                     var overlay = split[3];
                     var uid = split[4];
+                    var birdR = split[5];
+                    var birdG = split[6];
+                    var birdB = split[7];
 
                     var entryInfo = Instantiate(scoreSampleObject, scoreContent.transform);
                     var usernameText = entryInfo.transform.GetChild(0).GetComponent<TMP_Text>();
@@ -171,6 +174,13 @@ public class LeaderboardsMenu : MonoBehaviour
                     else if (overlay == "13")
                     {
                         playerOverlayIcon.transform.localPosition = new Vector2(-16.54019f, 14.70365f);
+                    }
+                    try
+                    {
+                        playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
+                    } catch (Exception)
+                    {
+                        playerIcon.color = Color.white;
                     }
                     entryInfo.SetActive(true);
                 }
@@ -237,6 +247,9 @@ public class LeaderboardsMenu : MonoBehaviour
                     var icon = split[2];
                     var overlay = split[3];
                     var uid = split[4];
+                    var birdR = split[5];
+                    var birdG = split[6];
+                    var birdB = split[7];
 
                     var entryInfo = Instantiate(berrySampleObject, berryContent.transform);
                     var usernameText = entryInfo.transform.GetChild(0).GetComponent<TMP_Text>();
@@ -267,6 +280,13 @@ public class LeaderboardsMenu : MonoBehaviour
                     else if (overlay == "13")
                     {
                         playerOverlayIcon.transform.localPosition = new Vector2(-16.54019f, 14.70365f);
+                    }
+                    try
+                    {
+                        playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
+                    } catch (Exception)
+                    {
+                        playerIcon.color = Color.white;
                     }
                     entryInfo.SetActive(true);
                 }

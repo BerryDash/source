@@ -49,6 +49,9 @@ public class AccountLoggedIn : MonoBehaviour
         dataForm.AddField("totalUltraBerries", PlayerPrefs.GetString("TotalUltraBerries", "0"));
         dataForm.AddField("totalSpeedyBerries", PlayerPrefs.GetString("TotalSpeedyBerries", "0"));
         dataForm.AddField("totalAttempts", PlayerPrefs.GetString("TotalAttempts", "0"));
+        dataForm.AddField("birdR", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[0]);
+        dataForm.AddField("birdG", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[1]);
+        dataForm.AddField("birdB", PlayerPrefs.GetString("BirdColor", "255;255;255").Split(';')[2]);
         using UnityWebRequest request = UnityWebRequest.Post(SensitiveInfo.SERVER_DATABASE_PREFIX + "saveAccount.php", dataForm.GetWWWForm());
         request.SetRequestHeader("Requester", "BerryDashClient");
         request.SetRequestHeader("ClientVersion", Application.version);
@@ -130,6 +133,7 @@ public class AccountLoggedIn : MonoBehaviour
                     PlayerPrefs.SetString("TotalUltraBerries", split[7]);
                     PlayerPrefs.SetString("TotalSpeedyBerries", split[8]);
                     PlayerPrefs.SetString("TotalAttempts", split[9]);
+                    PlayerPrefs.SetString("BirdColor", $"{split[10]};{split[11]};{split[12]}");
                     AccountHandler.UpdateStatusText(loggedInText, "Loaded account data", Color.green);
                 }
                 else
