@@ -18,6 +18,7 @@ public class ChatroomMenu : MonoBehaviour
     public GameObject sampleObject;
     private string statusMessage;
     private Coroutine statusRoutine;
+    private Coroutine refreshLoopRoutine;
 
     void Start()
     {
@@ -25,12 +26,7 @@ public class ChatroomMenu : MonoBehaviour
         sendButton.onClick.AddListener(async () => await HandleMessageSubmit());
         messageInputField.textComponent.textWrappingMode = TextWrappingModes.Normal;
         messageInputField.onSubmit.AddListener(async (_) => await HandleMessageSubmit());
-        StartCoroutine(Loop());
-    }
-
-    void OnSceneUnloaded()
-    {
-        StopAllCoroutines();
+        refreshLoopRoutine = StartCoroutine(Loop());
     }
 
     IEnumerator Loop() {
@@ -77,8 +73,8 @@ public class ChatroomMenu : MonoBehaviour
                 ShowStatus("Authentication error.");
                 break;
             case "1":
-                StopCoroutine(Loop());
-                StartCoroutine(Loop());
+                StopCoroutine(refreshLoopRoutine);
+                refreshLoopRoutine = StartCoroutine(Loop());
                 content.transform.localPosition = new Vector2(0f, 0f);
                 break;
         }
