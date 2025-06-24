@@ -54,6 +54,7 @@ public class SettingsMenu : MonoBehaviour
         {
             PlayerPrefs.SetFloat("musicVolume", value);
             PlayerPrefs.Save();
+            MenuMusic.Instance.GetComponent<AudioSource>().volume = value;
         });
         sfxSlider.onValueChanged.AddListener(value =>
         {
