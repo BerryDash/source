@@ -9,37 +9,40 @@ using UnityEngine.UI;
 public class LeaderboardsMenu : MonoBehaviour
 {
     public TMP_Text statusText;
+    public Button backButton;
+    public Button refreshButton;
 
     public GameObject selectionPanel;
     public Button selectionScoreButton;
     public Button selectionBerryButton;
-    public Button selectionBackButton;
 
     public GameObject scorePanel;
     public GameObject scoreContent;
-    public Button scoreBackButton;
-    public Button scoreRefreshButton;
     public GameObject scoreSampleObject;
 
     public GameObject berryPanel;
     public GameObject berryContent;
     public TMP_Dropdown berryShowTypeDropdown;
-    public Button berryBackButton;
-    public Button berryRefreshButton;
     public GameObject berrySampleObject;
 
     void Awake()
     {
         selectionScoreButton.onClick.AddListener(() => SwitchMenu(1));
         selectionBerryButton.onClick.AddListener(() => SwitchMenu(2));
-        selectionBackButton.onClick.AddListener(async () => await SceneManager.LoadSceneAsync("MainMenu"));
-
-        scoreBackButton.onClick.AddListener(() => SwitchMenu(0));
-        scoreRefreshButton.onClick.AddListener(() => GetTopPlayersScore());
 
         berryShowTypeDropdown.onValueChanged.AddListener(value => GetTopPlayersBerry(value));
-        berryBackButton.onClick.AddListener(() => SwitchMenu(0));
-        berryRefreshButton.onClick.AddListener(() => GetTopPlayersBerry(berryShowTypeDropdown.value));
+
+
+        backButton.onClick.AddListener(async () =>
+        {
+            if (selectionPanel.activeSelf) await SceneManager.LoadSceneAsync("MainMenu");
+            else if (scorePanel.activeSelf || berryPanel.activeSelf) SwitchMenu(0);
+        });
+        refreshButton.onClick.AddListener(() =>
+        {
+            if (scorePanel.activeSelf) GetTopPlayersScore();
+            else if (berryPanel.activeSelf) GetTopPlayersBerry(berryShowTypeDropdown.value);
+        });
     }
 
     void SwitchMenu(int menu) {
@@ -62,17 +65,22 @@ public class LeaderboardsMenu : MonoBehaviour
         switch (menu)
         {
             case 0:
+                refreshButton.gameObject.SetActive(false);
                 selectionPanel.SetActive(true);
                 scorePanel.SetActive(false);
                 berryPanel.SetActive(false);
                 break;
             case 1:
+                refreshButton.transform.localPosition = new Vector2(-402.5f, -282.33f);
+                refreshButton.gameObject.SetActive(true);
                 GetTopPlayersScore();
                 selectionPanel.SetActive(false);
                 scorePanel.SetActive(true);
                 berryPanel.SetActive(false);
                 break;
             case 2:
+                refreshButton.transform.localPosition = new Vector2(402.5f, 282.33f);
+                refreshButton.gameObject.SetActive(true);
                 berryShowTypeDropdown.value = 0;
                 GetTopPlayersBerry(0);
                 selectionPanel.SetActive(false);
@@ -84,8 +92,8 @@ public class LeaderboardsMenu : MonoBehaviour
 
     async void GetTopPlayersScore()
     {
-        scoreBackButton.interactable = false;
-        scoreRefreshButton.interactable = false;
+        backButton.interactable = false;
+        refreshButton.interactable = false;
         foreach (Transform item in scoreContent.transform)
         {
             if (item.gameObject.activeSelf)
@@ -172,15 +180,15 @@ public class LeaderboardsMenu : MonoBehaviour
         {
             UpdateStatus(true, "Failed to fetch leaderboard stats");
         }
-        scoreBackButton.interactable = true;
-        scoreRefreshButton.interactable = true;
+        backButton.interactable = true;
+        refreshButton.interactable = true;
     }
 
     async void GetTopPlayersBerry(int showAmount)
     {
         berryShowTypeDropdown.interactable = false;
-        berryBackButton.interactable = false;
-        berryRefreshButton.interactable = false;
+        backButton.interactable = false;
+        refreshButton.interactable = false;
         foreach (Transform item in berryContent.transform)
         {
             if (item.gameObject.activeSelf)
@@ -269,8 +277,8 @@ public class LeaderboardsMenu : MonoBehaviour
             UpdateStatus(true, "Failed to fetch leaderboard stats");
         }
         berryShowTypeDropdown.interactable = true;
-        berryBackButton.interactable = true;
-        berryRefreshButton.interactable = true;
+        backButton.interactable = true;
+        refreshButton.interactable = true;
     }
 
     private void UpdateStatus(bool enabled, string message = "")
