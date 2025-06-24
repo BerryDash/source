@@ -6287,6 +6287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loggedInText: {fileID: 1811333580}
+  accountLoggedOut: {fileID: 983419245}
   loggedInChangeUsernameButton: {fileID: 1572018539}
   loggedInChangePasswordButton: {fileID: 501899887}
   loggedInSaveButton: {fileID: 1394498766}
@@ -6590,6 +6591,7 @@ MonoBehaviour:
   loggedOutLoginButton: {fileID: 1842378620}
   loggedOutRegisterButton: {fileID: 1888048651}
   loggedOutBackButton: {fileID: 1848992338}
+  clearValues: 0
 --- !u!1 &989136372
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class AccountLoggedIn : MonoBehaviour
 {
     public TMP_Text loggedInText;
+    public AccountLoggedOut accountLoggedOut;
     public Button loggedInChangeUsernameButton;
     public Button loggedInChangePasswordButton;
     public Button loggedInSaveButton;
@@ -22,7 +23,10 @@ public class AccountLoggedIn : MonoBehaviour
         loggedInSaveButton.onClick.AddListener(() => SaveAccount());
         loggedInLoadButton.onClick.AddListener(() => LoadAccount());
         loggedInRefreshLoginButton.onClick.AddListener(() => AccountHandler.instance.SwitchPanel(6));
-        loggedInLogoutButton.onClick.AddListener(() => AccountHandler.instance.SwitchPanel(1));
+        loggedInLogoutButton.onClick.AddListener(() => {
+            accountLoggedOut.clearValues = true;
+            AccountHandler.instance.SwitchPanel(1);
+        });
         loggedInBackButton.onClick.AddListener(async () => await SceneManager.LoadSceneAsync("MainMenu"));
     }
 
