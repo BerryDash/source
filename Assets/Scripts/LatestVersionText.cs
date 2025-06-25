@@ -55,9 +55,9 @@ public class LatestVersionText : MonoBehaviour
         else
         {
             latest = request.downloadHandler.text;
+            updateButton.gameObject.SetActive(latest != Application.version);
         }
         RefreshText();
-        if (latest != Application.version && updateButton != null) updateButton.gameObject.SetActive(true);
     }
 
     public void RefreshText()
