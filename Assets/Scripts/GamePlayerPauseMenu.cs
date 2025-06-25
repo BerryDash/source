@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class GamePlayerPauseMenu : MonoBehaviour
 {
+    public static GamePlayerPauseMenu Instance;
     public Button backButton;
     public Button continueButton;
     public Button editUiButton;
@@ -15,9 +16,11 @@ public class GamePlayerPauseMenu : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text highScoreText;
     public TMP_Text boostText;
+    public bool editingUI = false;
 
     void Awake()
     {
+        Instance = this;
         musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1f);
         backButton.onClick.AddListener(async () =>
@@ -38,16 +41,7 @@ public class GamePlayerPauseMenu : MonoBehaviour
         });
         editUiButton.onClick.AddListener(() =>
         {
-            musicSlider.gameObject.SetActive(!musicSlider.gameObject.activeSelf);
-            sfxSlider.gameObject.SetActive(!sfxSlider.gameObject.activeSelf);
-            backButton.gameObject.SetActive(!backButton.gameObject.activeSelf);
-            continueButton.gameObject.SetActive(!continueButton.gameObject.activeSelf);
-            editUiButton.transform.GetChild(0).GetComponent<TMP_Text>().text = editUiButton.transform.GetChild(0).GetComponent<TMP_Text>().text == "Edit UI" ? "Done" : "Edit UI";
-            resetUiButton.gameObject.SetActive(!resetUiButton.gameObject.activeSelf);
-            fpsText.GetComponent<DraggableUI>().canDrag = !fpsText.GetComponent<DraggableUI>().canDrag;
-            scoreText.GetComponent<DraggableUI>().canDrag = !scoreText.GetComponent<DraggableUI>().canDrag;
-            highScoreText.GetComponent<DraggableUI>().canDrag = !highScoreText.GetComponent<DraggableUI>().canDrag;
-            boostText.GetComponent<DraggableUI>().canDrag = !boostText.GetComponent<DraggableUI>().canDrag;
+            ToggleEditingUI();
         });
         resetUiButton.onClick.AddListener(() =>
         {
@@ -60,5 +54,20 @@ public class GamePlayerPauseMenu : MonoBehaviour
             PlayerPrefs.DeleteKey("DraggedUIHighScoreText");
             PlayerPrefs.DeleteKey("DraggedUIBoostText");
         });
+    }
+
+    public void ToggleEditingUI()
+    {
+        editingUI = !editingUI;
+        musicSlider.gameObject.SetActive(!musicSlider.gameObject.activeSelf);
+        sfxSlider.gameObject.SetActive(!sfxSlider.gameObject.activeSelf);
+        backButton.gameObject.SetActive(!backButton.gameObject.activeSelf);
+        continueButton.gameObject.SetActive(!continueButton.gameObject.activeSelf);
+        editUiButton.transform.GetChild(0).GetComponent<TMP_Text>().text = editUiButton.transform.GetChild(0).GetComponent<TMP_Text>().text == "Edit UI" ? "Done" : "Edit UI";
+        resetUiButton.gameObject.SetActive(!resetUiButton.gameObject.activeSelf);
+        fpsText.GetComponent<DraggableUI>().canDrag = !fpsText.GetComponent<DraggableUI>().canDrag;
+        scoreText.GetComponent<DraggableUI>().canDrag = !scoreText.GetComponent<DraggableUI>().canDrag;
+        highScoreText.GetComponent<DraggableUI>().canDrag = !highScoreText.GetComponent<DraggableUI>().canDrag;
+        boostText.GetComponent<DraggableUI>().canDrag = !boostText.GetComponent<DraggableUI>().canDrag;
     }
 }

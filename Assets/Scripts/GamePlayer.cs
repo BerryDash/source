@@ -715,6 +715,7 @@ public class GamePlayer : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         backgroundMusic.Play();
         pausePanel.SetActive(false);
+        if (GamePlayerPauseMenu.Instance.editingUI == true) GamePlayerPauseMenu.Instance.ToggleEditingUI();
     }
 
     void OnApplicationPause(bool pause)
