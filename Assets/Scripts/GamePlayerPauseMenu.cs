@@ -45,10 +45,10 @@ public class GamePlayerPauseMenu : MonoBehaviour
         });
         resetUiButton.onClick.AddListener(() =>
         {
-            fpsText.transform.localPosition = new Vector2(-432.5f, 375f);
-            scoreText.transform.localPosition = new Vector2(0f, 290f);
-            highScoreText.transform.localPosition = new Vector2(0f, 220f);
-            boostText.transform.localPosition = new Vector2(0f, 170f);
+            ((RectTransform)fpsText.transform).anchoredPosition = new Vector2(210f, -35f);
+            ((RectTransform)scoreText.transform).anchoredPosition = new Vector2(0f, -70f);
+            ((RectTransform)highScoreText.transform).anchoredPosition = new Vector2(0f, -140f);
+            ((RectTransform)boostText.transform).anchoredPosition = new Vector2(0f, -190f);
             PlayerPrefs.DeleteKey("DraggedUIFPSText");
             PlayerPrefs.DeleteKey("DraggedUIScoreText");
             PlayerPrefs.DeleteKey("DraggedUIHighScoreText");
