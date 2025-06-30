@@ -53,7 +53,7 @@ public class IconsMenuBirdColorPanel : MonoBehaviour
 
     void SlidersChanged()
     {
-        var col = new Color(rSlider.value/255f, gSlider.value/255f, bSlider.value/255f);
+        var col = new Color(rSlider.value / 255f, gSlider.value / 255f, bSlider.value / 255f);
         previewImage.color = col;
         hexValue.SetTextWithoutNotify($"#{ColorUtility.ToHtmlStringRGB(col)}");
         PlayerPrefs.SetString("BirdColor", $"{(int)rSlider.value};{(int)gSlider.value};{(int)bSlider.value}");

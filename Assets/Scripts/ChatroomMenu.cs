@@ -35,8 +35,10 @@ public class ChatroomMenu : MonoBehaviour
         refreshLoopRoutine = StartCoroutine(Loop());
     }
 
-    IEnumerator Loop() {
-        while (true) {
+    IEnumerator Loop()
+    {
+        while (true)
+        {
             Refresh();
             yield return new WaitForSeconds(3f);
         }
@@ -75,6 +77,9 @@ public class ChatroomMenu : MonoBehaviour
                 break;
             case "-997":
                 ShowStatus("Encryption/decryption issues");
+                break;
+            case "-996":
+                ShowStatus("Can't send requests on self-built instance");
                 break;
             case "-1":
                 ShowStatus("Authentication error");
@@ -150,6 +155,9 @@ public class ChatroomMenu : MonoBehaviour
             case "-997":
                 ShowStatus("Encryption/decryption issues");
                 break;
+            case "-996":
+                ShowStatus("Can't send requests on self-built instance");
+                break;
             default:
                 var split = response.Split(':');
                 if (split[0] == "1")
@@ -215,7 +223,8 @@ public class ChatroomMenu : MonoBehaviour
                         {
                             playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
                             playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
-                        } catch (Exception)
+                        }
+                        catch (Exception)
                         {
                             playerIcon.color = Color.white;
                             playerOverlayIcon.color = Color.white;

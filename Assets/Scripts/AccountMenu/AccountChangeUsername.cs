@@ -53,6 +53,9 @@ public class AccountChangeUsername : MonoBehaviour
             case "-997":
                 AccountHandler.UpdateStatusText(changeUsernameStatusText, "Encryption/decryption issues", Color.red);
                 break;
+            case "-996":
+                AccountHandler.UpdateStatusText(changeUsernameStatusText, "Can't send requests on self-built instance", Color.red);
+                break;
             case "1":
                 PlayerPrefs.SetString("userName", changeUsernameNewUsernameInput.text);
                 AccountHandler.instance.SwitchPanel(0);

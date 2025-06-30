@@ -55,6 +55,11 @@ public class AccountRefreshLogin : MonoBehaviour
             AccountHandler.UpdateStatusText(refreshLoginStatusText, "Encryption/decryption issues", Color.red);
             return;
         }
+        else if (response == "-996")
+        {
+            AccountHandler.UpdateStatusText(refreshLoginStatusText, "Can't send requests on self-built instance", Color.red);
+            return;
+        }
         else if (response == "-1")
         {
             AccountHandler.UpdateStatusText(refreshLoginStatusText, "Incorrect username or password", Color.red);

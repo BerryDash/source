@@ -43,7 +43,8 @@ public class LoadingMenu : MonoBehaviour
             SetIfNone("Setting4", 0);
             Application.targetFrameRate = 360;
             QualitySettings.vSyncCount = 0;
-            if (Application.platform == RuntimePlatform.WebGLPlayer) {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
                 Screen.fullScreen = false;
             }
         }

@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "BerryDash-source.sln"
+    "dotnet.defaultSolution": "BerryDash-src.sln"
 }

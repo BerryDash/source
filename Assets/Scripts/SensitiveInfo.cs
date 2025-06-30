@@ -12,6 +12,7 @@ public class SensitiveInfo
 
     public static string Encrypt(string plainText, string key)
     {
+        if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty) return null;
         try
         {
             using Aes aes = Aes.Create();
@@ -40,6 +41,10 @@ public class SensitiveInfo
 
     public static string Decrypt(string dataB64, string key)
     {
+        if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty)
+        {
+            return "-996";
+        }
         try
         {
             var data = Convert.FromBase64String(dataB64);

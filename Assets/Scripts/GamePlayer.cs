@@ -48,19 +48,19 @@ public class GamePlayer : MonoBehaviour
         try
         {
             Camera.main.backgroundColor = new Color(
-                int.Parse(backgroundColor[0])/255f,
-                int.Parse(backgroundColor[1])/255f,
-                int.Parse(backgroundColor[2])/255f
+                int.Parse(backgroundColor[0]) / 255f,
+                int.Parse(backgroundColor[1]) / 255f,
+                int.Parse(backgroundColor[2]) / 255f
             );
             bird.GetComponent<SpriteRenderer>().color = new Color(
-                int.Parse(birdColor[0])/255f,
-                int.Parse(birdColor[1])/255f,
-                int.Parse(birdColor[2])/255f
+                int.Parse(birdColor[0]) / 255f,
+                int.Parse(birdColor[1]) / 255f,
+                int.Parse(birdColor[2]) / 255f
             );
             bird.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(
-                int.Parse(overlayColor[0])/255f,
-                int.Parse(overlayColor[1])/255f,
-                int.Parse(overlayColor[2])/255f
+                int.Parse(overlayColor[0]) / 255f,
+                int.Parse(overlayColor[1]) / 255f,
+                int.Parse(overlayColor[2]) / 255f
             );
         }
         catch

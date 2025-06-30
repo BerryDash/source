@@ -23,7 +23,8 @@ public class AccountLoggedIn : MonoBehaviour
         loggedInSaveButton.onClick.AddListener(() => SaveAccount());
         loggedInLoadButton.onClick.AddListener(() => LoadAccount());
         loggedInRefreshLoginButton.onClick.AddListener(() => AccountHandler.instance.SwitchPanel(6));
-        loggedInLogoutButton.onClick.AddListener(() => {
+        loggedInLogoutButton.onClick.AddListener(() =>
+        {
             accountLoggedOut.clearValues = true;
             AccountHandler.instance.SwitchPanel(1);
         });
@@ -81,6 +82,9 @@ public class AccountLoggedIn : MonoBehaviour
             case "-997":
                 AccountHandler.UpdateStatusText(loggedInText, "Encryption/decryption issues", Color.red);
                 break;
+            case "-996":
+                AccountHandler.UpdateStatusText(loggedInText, "Can't send requests on self-built instance", Color.red);
+                break;
             case "1":
                 AccountHandler.UpdateStatusText(loggedInText, "Synced account", Color.green);
                 break;
@@ -123,6 +127,9 @@ public class AccountLoggedIn : MonoBehaviour
                 break;
             case "-997":
                 AccountHandler.UpdateStatusText(loggedInText, "Encryption/decryption issues", Color.red);
+                break;
+            case "-996":
+                AccountHandler.UpdateStatusText(loggedInText, "Can't send requests on self-built instance", Color.red);
                 break;
             case "-1":
                 AccountHandler.UpdateStatusText(loggedInText, "Failed to find info about your user (refresh login?)", Color.red);

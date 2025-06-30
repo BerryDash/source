@@ -75,6 +75,9 @@ public class AccountRegister : MonoBehaviour
             case "-997":
                 AccountHandler.UpdateStatusText(registerPanelStatusText, "Encryption/decryption issues", Color.red);
                 break;
+            case "-996":
+                AccountHandler.UpdateStatusText(registerPanelStatusText, "Can't send requests on self-built instance", Color.red);
+                break;
             case "1":
                 AccountHandler.instance.SwitchPanel(2);
                 break;

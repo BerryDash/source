@@ -61,6 +61,9 @@ public class AccountChangePassword : MonoBehaviour
             case "-997":
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "Encryption/decryption issues", Color.red);
                 break;
+            case "-996":
+                AccountHandler.UpdateStatusText(changePasswordStatusText, "Can't send requests on self-built instance", Color.red);
+                break;
             case "-1":
                 AccountHandler.UpdateStatusText(changePasswordStatusText, "New Password is too short or too long", Color.red);
                 break;

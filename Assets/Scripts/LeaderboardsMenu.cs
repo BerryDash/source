@@ -45,7 +45,8 @@ public class LeaderboardsMenu : MonoBehaviour
         });
     }
 
-    void SwitchMenu(int menu) {
+    void SwitchMenu(int menu)
+    {
         UpdateStatus(false, "");
         foreach (Transform item in scoreContent.transform)
         {
@@ -125,6 +126,10 @@ public class LeaderboardsMenu : MonoBehaviour
             {
                 UpdateStatus(true, "Encryption/decryption issues");
             }
+            else if (response == "-996")
+            {
+                UpdateStatus(true, "Can't send requests on self-built instance");
+            }
             else if (response == "-1")
             {
                 UpdateStatus(true, "No entries for this leaderboard found!");
@@ -182,7 +187,8 @@ public class LeaderboardsMenu : MonoBehaviour
                     {
                         playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
                         playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
-                    } catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         playerIcon.color = Color.white;
                         playerOverlayIcon.color = Color.white;
@@ -235,6 +241,10 @@ public class LeaderboardsMenu : MonoBehaviour
             else if (response == "-997")
             {
                 UpdateStatus(true, "Encryption/decryption issues");
+            }
+            else if (response == "-996")
+            {
+                UpdateStatus(true, "Can't send requests on self-built instance");
             }
             else if (response == "-1")
             {
@@ -293,7 +303,8 @@ public class LeaderboardsMenu : MonoBehaviour
                     {
                         playerIcon.color = new Color32(byte.Parse(birdR), byte.Parse(birdG), byte.Parse(birdB), 255);
                         playerOverlayIcon.color = new Color32(byte.Parse(overlayR), byte.Parse(overlayG), byte.Parse(overlayB), 255);
-                    } catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         playerIcon.color = Color.white;
                         playerOverlayIcon.color = Color.white;

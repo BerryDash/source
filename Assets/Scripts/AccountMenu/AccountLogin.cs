@@ -58,6 +58,11 @@ public class AccountLogin : MonoBehaviour
             AccountHandler.UpdateStatusText(loginPanelStatusText, "Encryption/decryption issues", Color.red);
             return;
         }
+        else if (response == "-996")
+        {
+            AccountHandler.UpdateStatusText(loginPanelStatusText, "Can't send requests on self-built instance", Color.red);
+            return;
+        }
         else if (response == "-1")
         {
             AccountHandler.UpdateStatusText(loginPanelStatusText, "Incorrect username or password", Color.red);
