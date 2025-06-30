@@ -48,18 +48,24 @@ public class LeaderboardsMenu : MonoBehaviour
     void SwitchMenu(int menu)
     {
         UpdateStatus(false, "");
-        foreach (Transform item in scoreContent.transform)
+        if (scorePanel.activeSelf)
         {
-            if (item.gameObject.activeSelf)
+            foreach (Transform item in scoreContent.transform)
             {
-                Destroy(item.gameObject);
+                if (item.gameObject.activeSelf)
+                {
+                    Destroy(item.gameObject);
+                }
             }
         }
-        foreach (Transform item in berryContent.transform)
+        else if (berryPanel.activeSelf)
         {
-            if (item.gameObject.activeSelf)
+            foreach (Transform item in berryContent.transform)
             {
-                Destroy(item.gameObject);
+                if (item.gameObject.activeSelf)
+                {
+                    Destroy(item.gameObject);
+                }
             }
         }
 
