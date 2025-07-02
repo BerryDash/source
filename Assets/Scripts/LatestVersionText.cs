@@ -33,7 +33,7 @@ public class LatestVersionText : MonoBehaviour
     void Start()
     {
         RefreshText();
-        if (Application.platform != RuntimePlatform.WebGLPlayer && latest == null) GetLatestVersion();
+        if (latest == null) GetLatestVersion();
     }
 
     void OnEnable()
@@ -63,9 +63,7 @@ public class LatestVersionText : MonoBehaviour
     public void RefreshText()
     {
         if (text == null) return;
-        if (Application.platform == RuntimePlatform.WebGLPlayer)
-            text.text = "";
-        else if (latest == null)
+        if (latest == null)
             text.text = "Latest: Loading...";
         else if (latest == "-1")
             text.text = "Latest: N/A";

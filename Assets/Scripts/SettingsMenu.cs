@@ -14,7 +14,7 @@ public class SettingsMenu : MonoBehaviour
     {
         musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f);
         sfxSlider.value = PlayerPrefs.GetFloat("sfxVolume", 1f);
-        if (!Application.isMobilePlatform && Application.platform != RuntimePlatform.WebGLPlayer)
+        if (!Application.isMobilePlatform)
         {
             setting1toggle.isOn = PlayerPrefs.GetInt("Setting1", 1) == 1;
             setting2toggle.isOn = PlayerPrefs.GetInt("Setting2", 0) == 1;
@@ -27,10 +27,6 @@ public class SettingsMenu : MonoBehaviour
             setting2toggle.isOn = PlayerPrefs.GetInt("Setting2", 0) == 1;
             setting3toggle.interactable = false;
             setting4toggle.isOn = PlayerPrefs.GetInt("Setting4", 0) == 1;
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                setting1toggle.isOn = false;
-            }
         }
         setting1toggle.onValueChanged.AddListener(value =>
         {
