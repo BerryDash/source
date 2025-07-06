@@ -15,7 +15,7 @@ public class MenuScript : MonoBehaviour
         LatestVersionText.Instance.updateButton = updateButton;
         LatestVersionText.Instance.RefreshText();
 
-        if (Application.isMobilePlatform || Application.isEditor || Application.platform == RuntimePlatform.WebGLPlayer)
+        if (Application.isMobilePlatform || Application.isEditor)
         {
             exitButton.gameObject.SetActive(false);
         }

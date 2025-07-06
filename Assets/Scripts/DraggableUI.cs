@@ -49,8 +49,7 @@ public class DraggableUI : MonoBehaviour, IDragHandler, IBeginDragHandler
     public void OnEnable()
     {
         string key = "DraggedUI" + uiName;
-        if (PlayerPrefs.HasKey(key) && TryParseVector3(PlayerPrefs.GetString(key), out Vector3 savedPos))
-            transform.localPosition = savedPos;
+        if (PlayerPrefs.HasKey(key) && TryParseVector3(PlayerPrefs.GetString(key), out Vector3 savedPos)) transform.localPosition = savedPos;
     }
 
     public void Update()
