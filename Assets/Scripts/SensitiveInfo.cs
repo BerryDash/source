@@ -13,7 +13,11 @@ public class SensitiveInfo
 
     public static string Encrypt(string plainText, string key)
     {
-        if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty) return null;
+        if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty)
+        {
+            Debug.LogError("Failed to encrypt: Encryption/Decryption keys not present");
+            return null;
+        }
         try
         {
             using Aes aes = Aes.Create();
@@ -42,7 +46,11 @@ public class SensitiveInfo
 
     public static byte[] EncryptRaw(string text, string key)
     {
-        if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty) return null;
+        if (BAZOOKA_MANAGER_KEY.Trim() == string.Empty)
+        {
+            Debug.LogError("Failed to encrypt: Encryption/Decryption keys not present");
+            return null;
+        }
         try
         {
             using Aes aes = Aes.Create();
@@ -73,6 +81,7 @@ public class SensitiveInfo
     {
         if (SERVER_RECEIVE_TRANSFER_KEY.Trim() == string.Empty || SERVER_SEND_TRANSFER_KEY.Trim() == string.Empty)
         {
+            Debug.LogError("Failed to decrypt: Encryption/Decryption keys not present");
             return "-996";
         }
         try
@@ -104,6 +113,7 @@ public class SensitiveInfo
     {
         if (BAZOOKA_MANAGER_KEY.Trim() == string.Empty)
         {
+            Debug.LogError("Failed to decrypt: Encryption/Decryption keys not present");
             return null;
         }
         try
